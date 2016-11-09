@@ -17,20 +17,14 @@ def loci():
 @app.route('/_plot')
 def plot():
     eq=request.args.get('eq',0,type=str)
-    if 'arg' in eq:
+    try:
         LHS,RHS=eq.split('=')
-        p1,p2 = get_line_simple_arg(LHS,RHS)
-        typ='ray'
-        return jsonify(result=[p1,p2],type=typ)
-    else:
-        LHS,RHS=eq.split('=')
-        typ,lines=get_lines(LHS,RHS)
-        lines=[str(x).replace('**','^') for x in lines]
-        print(typ,lines)
-        if lines:
-            return jsonify(result=lines,type=typ)
-        else:
-            abort(500)
+        line=get_implicit(LHS,RHS,latx=True)
+        repr(line)
+        print(line)
+        return jsonify(result=line)
+    except:
+        abort(500)
 
 @app.route('/operations-argand')
 def operations():

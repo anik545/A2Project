@@ -5,9 +5,8 @@ var options = {
     keypad:false,
     settingsMenu:false
 }
-
 var calculator = Desmos.Calculator(elt,options);
-var reset = calculator.getState
+var reset = calculator.getState;
 
 calculator.setExpression({id:'graph1', latex:'y= tan x'});
 
@@ -16,6 +15,8 @@ var h = $('#calculator').height();
 var x_ax=w/20;
 var y_ax=h/20;
 
+var ander = 1
+
 var plots = -1
 
 function addplot(){
@@ -23,6 +24,8 @@ var eq = $('input[name="in"]').val()
 $.getJSON($SCRIPT_ROOT + '/_plot', {
     eq: eq
 }, function(data) {
+    console.log(data.result);
+    a=data.result
     plots += 1;
     $('#expressions tbody').append(
         '<tr id="row'+plots+'">'+
@@ -36,10 +39,14 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
                 '<input type="button" class="btn btn-block" name="del" id="del'+plots+'" value="X">'+
             '</td>'+
         '</tr>'
-        )
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"expressions"])
+    );
 
-    calculator.setExpression({id:plots,latex:data.result})
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"expressions"]);
+
+    r=data.result;
+    r=r.replace('\\','\\\\')
+    console.log(r)
+    calculator.setExpression({id:plots,latex:r});
 
 });
 return false;

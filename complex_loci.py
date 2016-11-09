@@ -15,9 +15,11 @@ def mod_to_abs(eq):
                     return ''.join(eq_list[:x+1] + list(mod_to_abs(eq_list[x+1:y])) + eq_list[y:])
 
 def parse_arg(inner):
-    z=Symbol('Z',real=False)
-    locs={'Z':z}
-    sympify(eq,locs)
+    print(inner)
+    x,y=symbols('x y',real=True)
+    locs={'x':x,'y':y}
+    in_eq = sympify(inner,locs)
+    return str(2*atan((sqrt(re(in_eq)**2+im(in_eq)**2)-re(in_eq))/im(in_eq)))
 
 
 def parse(eq):
@@ -32,64 +34,43 @@ def parse(eq):
     eq=''.join(eq_list)
     eq=eq.replace('Z','(x+y*I)')
 
+    if 'arg' in eq:
+        a,b = eq.find('arg(')+4,eq.find('arg(')+4
+        found=0
+        while found>=0:
+            found += 1 if eq[b]=='(' else 0
+            found -= 1 if eq[b]==')' else 0
+            b+=1
+        eq = eq[:a-4] + parse_arg(eq[a:b-1]) + eq[b:]
+
     return eq
 
-
-#TODO add support for arg, use equation: 2atan((sqrt(x^2+y^2)-x)/y)
-
-def get_lines(lhs,rhs):
+def get_implicit(lhs,rhs,latx=False):
 
     x,y=symbols('x y',real=True)
     locs={'x':x,'y':y}
 
-    #LHS
     lhs=parse(lhs)
     lhs=sympify(lhs,locals=locs)
-    print(lhs)
 
-    #RHS
     rhs=parse(rhs)
     rhs=sympify(rhs,locals=locs)
-    print(rhs)
 
-    solns=list(solve(lhs-rhs,locs['y']))
-    if solns:
-        typ='func'
+    eq = lhs-rhs
+    eq = eq.simplify()
+    if latx:
+        return ((latex(eq))+'=0').replace('atan','arctan')
     else:
-        solns=list(solve(lhs-rhs,locs['x']))
-        solns=[float(x) for x in solns]
-        typ='vert'
-    return typ,solns
-
-
-#TODO figure out when the input is this type of equation
-#maybe evaluate everything inside arg, sympify, if div
-def get_line_simple_arg(lhs,rhs):
-    lhs,rhs=parse(lhs),parse(rhs)
-    if 'arg' in lhs:
-        lhs=lhs.replace('arg((','').replace(')','')
-        angle=sympify(rhs)
-        expr=sympify(lhs).subs('x',0).subs('y',0)
-    else:
-        rhs=rhs.replace('arg(','').replace(')','')
-        angle=sympify(lhs)
-        expr=sympify(rhs).subs('x',0).subs('y',0)
-    p1=[float(-re(expr)),float(-im(expr))]
-    print(p1,angle)
-    x,y=symbols('x y',real=True)
-    solns_dict=solve([atan2(y,x)-angle,x**2+y**2-1])
-    p2=[float(solns_dict[0][x]+p1[0]),float(solns_dict[0][y]+p1[1])]
-    print(p1,p2)
-    return (p1,p2)
-
+        pprint(eq)
+        return str(eq)+'=0'
 
 if __name__ == '__main__':
-    equation="2|z-5i|=2|z-5|"
-    LHS,RHS=equation.split('=')
+    #a = parse_arg('x+y*I/(x+y*I-4)')
+    #print(a)
     t1=time.time()
-    lines=get_lines(LHS,RHS)
+    b=get_implicit('arg(z)','pi/4',latx=True)
     t2=time.time()
-    print(t2-t1,'ms')
-    print(lines)
-
+    print(b)
+    pprint(b)
+    print('time: ',t2-t1,' seconds')
     #print(complexify(LHS+'-'+RHS))
