@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matrix Calculator</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static',filename='styles/a.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+</head>
+<body>
+<div id="outer">
+    <div id="inner">
+        <div align="center" id="matrices">
+            <form class="pure-form" method="post" action="matrix">
+                <div id="A-input">
+                    <input type="text" name="A00" size="3" class="in" value="{{ request.form['A00'] }}">
+                    <input type="text" name="A01" size="3" class="in" value="{{ request.form['A01'] }}">
+                    <input type="text" name="A02" size="3" class="in" value="{{ request.form['A02'] }}">
+                    <br>
+                    <input type="text" name="A10" size="3" class="in" value="{{ request.form['A10'] }}">
+                    <input type="text" name="A11" size="3" class="in" value="{{ request.form['A11'] }}">
+                    <input type="text" name="A12" size="3" class="in" value="{{ request.form['A12'] }}">
+                    <br>
+                    <input type="text" name="A20" size="3" class="in" value="{{ request.form['A20'] }}">
+                    <input type="text" name="A21" size="3" class="in" value="{{ request.form['A21'] }}">
+                    <input type="text" name="A22" size="3" class="in" value="{{ request.form['A22'] }}">
+                    <br>
+                    <input type="submit" value="Determinant" name="a-submit" class="pure-button">
+                    <br>
+                    <input type="submit" value="Inverse" name="a-submit" class="pure-button">
+                    <br>
+                    <input type="submit" value="Transpose" name="a-submit" class="pure-button">
+                    <br>
+                    <input type="submit" value="Triangle" name="a-submit" class="pure-button">
+                    <br>
+                </div>
+
+                <div id="operators">
+                    <input type="submit" value="X" name="submit" class="pure-button op-btn">
+                    <br>
+                    <input type="submit" value="+" name="submit" class="pure-button op-btn">
+                    <br>
+                    <input type="submit" value="-" name="submit" class="pure-button op-btn">
+                    <br>
+                    <input type="button" value="Clear All" onclick="window.location.reload()"
+                           class="pure-button clear-btn">
+                </div>
+
+                <div id="B-input">
+                    <input type="text" name="B00" size="3" class="in" value="{{ request.form['B00'] }}">
+                    <input type="text" name="B01" size="3" class="in" value="{{ request.form['B01'] }}">
+                    <input type="text" name="B02" size="3" class="in" value="{{ request.form['B02'] }}">
+                    <br>
+                    <input type="text" name="B10" size="3" class="in" value="{{ request.form['B10'] }}">
+                    <input type="text" name="B11" size="3" class="in" value="{{ request.form['B11'] }}">
+                    <input type="text" name="B12" size="3" class="in" value="{{ request.form['B12'] }}">
+                    <br>
+                    <input type="text" name="B20" size="3" class="in" value="{{ request.form['B20'] }}">
+                    <input type="text" name="B21" size="3" class="in" value="{{ request.form['B21'] }}">
+                    <input type="text" name="B22" size="3" class="in" value="{{ request.form['B22'] }}">
+                    <br>
+                    <input type="submit" value="Determinant" name="b-submit" class="pure-button">
+                    <br>
+                    <input type="submit" value="Inverse" name="b-submit" class="pure-button">
+                    <br>
+                    <input type="submit" value="Transpose" name="b-submit" class="pure-button">
+                    <br>
+                    <input type="submit" value="Triangle" name="b-submit" class="pure-button">
+                    <br>
+                </div>
+            </form>
+        </div>
+
+        <div id="answer" align="center">
+            {% if det_result %}
+            <p id="det"> Determinant: {{ det_result }} </p>
+            {% endif %}
+
+            {% if Error %}
+            <p id="error"> {{ Error }} </p>
+            {% endif %}
+
+            {% if matrix_result %}
+            <p>Result:</p>
+            <table class="matrix">
+                {% for row in matrix_result %}
+                <tr>
+                    {% for value in row %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
