@@ -1,21 +1,18 @@
 
 var elt = document.getElementById('calculator');
 var options = {
-    expressions:false,
+    expressions:true,
+    expressionsCollapsed:true,
     keypad:false,
     settingsMenu:false
 }
 var calculator = Desmos.Calculator(elt,options);
-var reset = calculator.getState;
-
-calculator.setExpression({id:'graph1', latex:'y= tan x'});
+var reset = calculator.getState();
 
 var w = $('#calculator').width();
 var h = $('#calculator').height();
 var x_ax=w/20;
 var y_ax=h/20;
-
-var ander = 1
 
 var plots = -1
 
@@ -24,9 +21,8 @@ var eq = $('input[name="in"]').val()
 $.getJSON($SCRIPT_ROOT + '/_plot', {
     eq: eq
 }, function(data) {
-    console.log(data.result);
-    a=data.result
     plots += 1;
+    //TODO check if i is in string, an draise error if it is --> dont plot
     $('#expressions tbody').append(
         '<tr id="row'+plots+'">'+
             '<td>'+
@@ -43,10 +39,9 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
 
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"expressions"]);
 
-    r=data.result;
-    r=r.replace('\\','\\\\')
-    console.log(r)
-    calculator.setExpression({id:plots,latex:r});
+    var result = data.result;
+    console.log(result)
+    calculator.setExpression({id:plots,latex:result});
 
 });
 return false;
@@ -68,7 +63,7 @@ $(document).ready(function() {
     });
     $('#expressions').on('click','[type=button]',function(){
         var plot_no = $(this).attr('id').replace('del','');
-        $('#row'+id).remove();
+        $('#row'+plot_no).remove();
         calculator.removeExpression({id:parseInt(plot_no)})
     });
     $('#expressions').on('click','[type=checkbox]',function(){

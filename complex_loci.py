@@ -2,37 +2,46 @@ from sympy import *
 import time
 
 #TODO instead of subbing Abs(), find sqrt(re(x)+im(x)) instead.
-def mod_to_abs(eq):
-    eq_list=[str(x) for x in eq]
-    if '|' not in eq:
-        return eq
-    for x,char in enumerate(eq_list):
-        if char=='|':
-            eq_list[x]='Abs('
-            for y,char2 in reversed(list(enumerate(eq))):
-                if char2=='|':
-                    eq_list[y]=')'
-                    return ''.join(eq_list[:x+1] + list(mod_to_abs(eq_list[x+1:y])) + eq_list[y:])
+def mod_to_abs(inner):
+
+    print(inner)
+    x,y=symbols('x y',real=True)
+    locs={'x':x,'y':y}
+    in_eq = sympify(inner,locs)
+    return str(sqrt(im(in_eq)**2+re(in_eq)**2))
+
+
+
 
 def parse_arg(inner):
     print(inner)
     x,y=symbols('x y',real=True)
     locs={'x':x,'y':y}
     in_eq = sympify(inner,locs)
+    print(str(2*atan((sqrt(re(in_eq)**2+im(in_eq)**2)-re(in_eq))/im(in_eq))))
     return str(2*atan((sqrt(re(in_eq)**2+im(in_eq)**2)-re(in_eq))/im(in_eq)))
 
 
 def parse(eq):
-    eq=mod_to_abs(eq)
-    eq=eq.replace('z','Z')
+
+
+
+    eq=eq.replace('z','Z').replace('^','**')
     eq_list=list(eq)
     eq_list=['I' if ch=='i' and eq_list[n-1] not in ['p','P'] else ch for n,ch in enumerate(eq_list)]
     nums=['1','2','3','4','5','6','7','8','9','0']
     for n,ch in enumerate(eq_list):
-        if (ch=='Z' or ch=='I' or ch=='A') and (eq_list[n-1] in nums):
+        if (ch in ['Z','I','A','a','p','P']) and (eq_list[n-1] in nums) and n>0:
             eq_list.insert(n,'*')
     eq=''.join(eq_list)
     eq=eq.replace('Z','(x+y*I)')
+
+    print('middle: ',eq)
+
+    if '|' in eq:
+        a=eq.find("|")
+        b=eq.find('|',a+1)
+        eq = eq[:a] + mod_to_abs(eq[a+1:b]) + eq[b+1:]
 
     if 'arg' in eq:
         a,b = eq.find('arg(')+4,eq.find('arg(')+4
@@ -42,7 +51,7 @@ def parse(eq):
             found -= 1 if eq[b]==')' else 0
             b+=1
         eq = eq[:a-4] + parse_arg(eq[a:b-1]) + eq[b:]
-
+    print('final: ',eq)
     return eq
 
 def get_implicit(lhs,rhs,latx=False):

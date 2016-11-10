@@ -20,10 +20,12 @@ def plot():
     try:
         LHS,RHS=eq.split('=')
         line=get_implicit(LHS,RHS,latx=True)
-        repr(line)
+        if ' i ' in line:
+            raise TypeError
         print(line)
         return jsonify(result=line)
-    except:
+    except Exception as e:
+        print(e)
         abort(500)
 
 @app.route('/operations-argand')
