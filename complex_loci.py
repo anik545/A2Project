@@ -3,8 +3,6 @@ import time
 
 #TODO instead of subbing Abs(), find sqrt(re(x)+im(x)) instead.
 def mod_to_abs(inner):
-
-    print(inner)
     x,y=symbols('x y',real=True)
     locs={'x':x,'y':y}
     in_eq = sympify(inner,locs)
@@ -14,18 +12,13 @@ def mod_to_abs(inner):
 
 
 def parse_arg(inner):
-    print(inner)
     x,y=symbols('x y',real=True)
     locs={'x':x,'y':y}
     in_eq = sympify(inner,locs)
-    print(str(2*atan((sqrt(re(in_eq)**2+im(in_eq)**2)-re(in_eq))/im(in_eq))))
     return str(2*atan((sqrt(re(in_eq)**2+im(in_eq)**2)-re(in_eq))/im(in_eq)))
 
 
 def parse(eq):
-
-
-
     eq=eq.replace('z','Z').replace('^','**')
     eq_list=list(eq)
     eq_list=['I' if ch=='i' and eq_list[n-1] not in ['p','P'] else ch for n,ch in enumerate(eq_list)]
@@ -35,8 +28,6 @@ def parse(eq):
             eq_list.insert(n,'*')
     eq=''.join(eq_list)
     eq=eq.replace('Z','(x+y*I)')
-
-    print('middle: ',eq)
 
     if '|' in eq:
         a=eq.find("|")
@@ -51,7 +42,6 @@ def parse(eq):
             found -= 1 if eq[b]==')' else 0
             b+=1
         eq = eq[:a-4] + parse_arg(eq[a:b-1]) + eq[b:]
-    print('final: ',eq)
     return eq
 
 def get_implicit(lhs,rhs,latx=False):
@@ -70,7 +60,6 @@ def get_implicit(lhs,rhs,latx=False):
     if latx:
         return ((latex(eq))+'=0').replace('atan','arctan')
     else:
-        pprint(eq)
         return str(eq)+'=0'
 
 if __name__ == '__main__':
