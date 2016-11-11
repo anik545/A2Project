@@ -9,11 +9,6 @@ var options = {
 var calculator = Desmos.Calculator(elt,options);
 var reset = calculator.getState();
 
-var w = $('#calculator').width();
-var h = $('#calculator').height();
-var x_ax=w/20;
-var y_ax=h/20;
-
 var plots = -1
 
 function addplot(){
@@ -22,7 +17,6 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
     eq: eq
 }, function(data) {
     plots += 1;
-    //TODO check if i is in string, an draise error if it is --> dont plot
     $('#expressions tbody').append(
         '<tr id="row'+plots+'">'+
             '<td>'+
@@ -43,6 +37,9 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
     console.log(result)
     calculator.setExpression({id:plots,latex:result});
 
+}).fail(function(){
+    alert('Please enter a valid equation')
+    $('#eq_in').blur()
 });
 return false;
 

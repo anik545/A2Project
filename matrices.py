@@ -8,8 +8,8 @@ class MatrixError(Exception):
     """ An exception class for Matrix """
     pass
 
-class Matrix(object):
 
+class Matrix(object):
     def __init__(self, rows):
         self.y = len(rows)
         self.x = len(rows[0])
