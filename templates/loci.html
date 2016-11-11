@@ -65,11 +65,7 @@ visibility:hidden; position:absolute; top:0; left: 0"></div>
     </div>
 
     <script type=text/javascript>
-        $SCRIPT_ROOT = {
-            {
-                request.script_root | tojson | safe
-            }
-        };
+        $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
     </script>
 
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/loci_plot.js') }}">
