@@ -7,6 +7,7 @@ var options = {
     settingsMenu:false
 }
 var calculator = Desmos.Calculator(elt,options);
+calculator.setGraphSettings({xAxisLabel:'Re',yAxisLabel:'Im'})
 var reset = calculator.getState();
 
 var plots = -1

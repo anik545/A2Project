@@ -4,7 +4,7 @@ import time
 # TODO instead of subbing Abs(), find sqrt(re(x)+im(x)) instead.
 
 
-def mod_to_abs(inner):
+def parse_mod(inner):
     x, y = symbols('x y', real=True)
     locs = {'x': x, 'y': y}
     in_eq = sympify(inner, locs)
@@ -25,7 +25,7 @@ def parse(eq):
                not in ['p', 'P'] else ch for n, ch in enumerate(eq_list)]
     nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     for n, ch in enumerate(eq_list):
-        if (ch in ['Z', 'I', 'A', 'a', 'p', 'P']) and (eq_list[n - 1] in nums) and n > 0:
+        if (ch in ['Z', 'I', 'A', 'a', 'p', 'P','(']) and (eq_list[n - 1] in nums) and n > 0:
             eq_list.insert(n, '*')
     eq = ''.join(eq_list)
     eq = eq.replace('Z', '(x+y*I)')
@@ -33,7 +33,7 @@ def parse(eq):
     if '|' in eq:
         a = eq.find("|")
         b = eq.find('|', a + 1)
-        eq = eq[:a] + mod_to_abs(eq[a + 1:b]) + eq[b + 1:]
+        eq = eq[:a] + parse_mod(eq[a + 1:b]) + eq[b + 1:]
 
     if 'arg' in eq:
         a, b = eq.find('arg(') + 4, eq.find('arg(') + 4
@@ -65,12 +65,9 @@ def get_implicit(lhs, rhs, latx=False):
         return str(eq) + '=0'
 
 if __name__ == '__main__':
-    #a = parse_arg('x+y*I/(x+y*I-4)')
-    # print(a)
     t1 = time.time()
     b = get_implicit('arg(z)', 'pi/4', latx=True)
     t2 = time.time()
     print(b)
     pprint(b)
     print('time: ', t2 - t1, ' seconds')
-    # print(complexify(LHS+'-'+RHS))
