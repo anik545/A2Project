@@ -23,7 +23,9 @@ def plot():
     try:
         LHS, RHS = eq.split('=')
         line = get_implicit(LHS, RHS, latx=True)
+        print(line)
         if ' i ' in line:
+            print('i in line')
             raise TypeError
         print(line)
         return jsonify(result=line)

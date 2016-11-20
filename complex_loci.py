@@ -22,7 +22,7 @@ def parse(eq):
     eq = eq.replace('z', 'Z').replace('^', '**')
     eq_list = list(eq)
     eq_list = ['I' if ch == 'i' and eq_list[n - 1]
-               not in ['p', 'P'] else ch for n, ch in enumerate(eq_list)]
+               not in ['p', 'P','s','S'] else ch for n, ch in enumerate(eq_list)]
     nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     for n, ch in enumerate(eq_list):
         if (ch in ['Z', 'I', 'A', 'a', 'p', 'P','(']) and (eq_list[n - 1] in nums) and n > 0:
