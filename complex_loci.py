@@ -45,8 +45,22 @@ def parse(eq):
         eq = eq[:a - 4] + parse_arg(eq[a:b - 1]) + eq[b:]
     return eq
 
+def parse_inequality(eq):
+    if '<=' in eq:
+        return '<='
+    elif '>=' in eq:
+        return '>='
+    elif '>' in eq:
+        return '>'
+    elif '<' in eq:
+        return '<'
+    else:
+        return '='
 
-def get_implicit(lhs, rhs, latx=False):
+def get_implicit(eq, latx=False):
+
+    op = parse_inequality(eq)
+    lhs,rhs = eq.split(op)
 
     x, y = symbols('x y', real=True)
     locs = {'x': x, 'y': y}
@@ -60,9 +74,9 @@ def get_implicit(lhs, rhs, latx=False):
     eq = lhs - rhs
     eq = eq.simplify()
     if latx:
-        return ((latex(eq)) + ' = 0').replace('atan', 'arctan')
+        return ((latex(eq)) + ''+op+' 0').replace('atan', 'arctan')
     else:
-        return str(eq) + '=0'
+        return str(eq) + op + '0'
 
 if __name__ == '__main__':
     t1 = time.time()

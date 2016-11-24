@@ -21,8 +21,7 @@ def loci():
 def plot():
     eq = request.args.get('eq', 0, type=str)
     try:
-        LHS, RHS = eq.split('=')
-        line = get_implicit(LHS, RHS, latx=True)
+        line = get_implicit(eq, latx=True)
         print(line)
         if ' i ' in line:
             print('i in line')

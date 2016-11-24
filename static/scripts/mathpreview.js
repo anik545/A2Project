@@ -1,5 +1,5 @@
 var Preview = {
-  delay: 150,        // delay after keystroke before updating
+  delay: 50,        // delay after keystroke before updating
   preview: null,     // filled in by Init below
   buffer: null,      // filled in by Init below
   timeout: null,     // store setTimout id
