@@ -39,8 +39,9 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
     calculator.setExpression({id:plots,latex:result});
 
 }).fail(function(){
-    alert('Please enter a valid equation')
     $('#eq_in').blur()
+    alert('Please enter a valid equation')
+    $('#eq_in').focus()
 });
 return false;
 
@@ -48,7 +49,7 @@ return false;
 
 
 $(document).ready(function() {
-    $('#eq_in').on('keyup', function(e) {
+    $('#eq_in').on('keydown', function(e) {
         if (e.keyCode===13) {
             addplot();
         }});
