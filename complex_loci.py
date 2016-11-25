@@ -80,7 +80,7 @@ def get_implicit(eq, latx=False):
 
 if __name__ == '__main__':
     t1 = time.time()
-    b = get_implicit('arg(z)', 'pi/4', latx=True)
+    b = get_implicit('arg(z) = pi/4', latx=True)
     t2 = time.time()
     print(b)
     pprint(b)

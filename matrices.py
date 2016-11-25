@@ -75,7 +75,7 @@ class Matrix(object):
         return Matrix([[str(rows[y][x]) for x in range(self.x)] for y in range(self.y)])
 
     def get_dimensions(self):
-        return [self.y, self.x]
+        return (self.y, self.x)
 
     def get_rows(self):
         return self.rows
