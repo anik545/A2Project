@@ -160,10 +160,10 @@ class Matrix(object):
         if det == 0:
             raise MatrixError
         c_t = self.adjoint().get_rows()
-
+        print(c_t,det,type(det))
         for x in range(len(c_t)):
             for y in range(len(c_t[0])):
-                c_t[x][y] = fractions.Fraction(c_t[x][y] / det)
+                c_t[x][y] = fractions.Fraction(c_t[x][y] / det).limit_denominator()
         return Matrix(c_t)
 
     @staticmethod
@@ -173,16 +173,5 @@ class Matrix(object):
         return Matrix(id_mat)
 
 if __name__ == '__main__':
-    a = Matrix([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]])
-    b = Matrix([[0, 0, 1], [0, 1, 0], [1, 0, 0]])
-    c = a + b
-    d = Matrix([[1, 2, 3], [3, 1, 4], [1, 6, 8]])
-
-    d.adjoint().display()
-    print()
-    d.display()
-    print()
-    d.inverse().display()
-    print()
-    d.display()
-    print()
+    a=Matrix([[5, 3, 4], [10, 7, 2], [10, 3, 7]])
+    a.inverse().display()
