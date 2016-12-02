@@ -1,0 +1,33 @@
+<head>
+    <meta charset="utf-8">
+    <title>Complex Numbers</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+    </script>
+
+    <script	src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/complex_q.css') }}"
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <form class="form-inline">
+
+<!-- need two inputs for each q -> input for imaginary and real parts
+     except mod_arg_question, two inputs, one for mod and one for arg
+-->
+
+    {% for n,q in questions %}
+    {{ q.get_question() }}
+    <br>
+    {% endfor %}
+
+    <input class="btn btn-primary btn-lg btn-block" href="{{ url_for('matrix_blueprint.matrix') }}" type="submit" value="Submit Answers">
+    </form>
+
+</body>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Complex Numbers</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+    </script>
+
+    <script	src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/mat_q.css') }}"
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <form class="form-inline">
+    {% for n,q in questions %}
+        <div class="out_question">
+            <div class="question">
+                {{ q.get_question().replace('[','(').replace(']',')') }}
+            </div>
+            <div class="answer">
+                {% if q.mat_ans %}
+                    {% for a in range(q.get_ans_dim()[0]) %}
+                        {% for b in range(q.get_ans_dim()[1]) %}
+                            <input name="{{ n|string+a|string+b|string }}" type="text" class="form-control input" size=3>
+                        {% endfor %}
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    <input name="{{ n|string }}" type="text" class="form-control input" size=3>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+    <input class="btn btn-primary btn-lg btn-block" type="submit" value="Submit Answers">
+    </form>
+
+</body>
