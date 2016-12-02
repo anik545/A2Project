@@ -6,14 +6,14 @@ import random
 class MatrixQuestion(object):
     def __init__(self,q_type,small=True,size=3,max_num=10):
         self.question_type = q_type
+        self.mat_ans=True
         if q_type == 'inv':
             self.question,self.answer = inv_question(size)
         elif q_type == 'det':
+            self.mat_ans=False
             self.question,self.answer = det_question(size)
-        elif q_type == 'sub':
-            self.question,self.answer = add_sub_question(max_num,op='sub')
-        elif q_type == 'add':
-            self.question,self.answer = add_sub_question(max_num,op='add')
+        elif q_type in ['sub','add','add_sub']:
+            self.question,self.answer = add_sub_question(max_num,op=q_type)
         elif q_type == 'mul':
             self.question,self.answer = mult_question(small,max_num)
         else:
@@ -30,7 +30,10 @@ class MatrixQuestion(object):
             return self.answer
 
     def get_ans_dim(self):
-        return self.ans_dim
+        if type(self.answer) == Matrix:
+            return self.answer.get_dimensions()
+        else:
+            return 0
 
 def mult_question(small=True,max_num=10):
     s1 = (1,2) if small else (3,4)
@@ -57,9 +60,19 @@ def add_sub_question(max_num=10,op='add'):
     if op=='add':
         answer = m1+m2
         question = 'Calculate `'+str(m1.get_rows())+' + '+str(m2.get_rows())+'`'
-    else:
+    elif op=='sub':
         answer = m1-m2
         question = 'Calculate `'+str(m1.get_rows())+' - '+str(m2.get_rows())+'`'
+    else:
+        rand_op=random.choice(['+','-'])
+        if rand_op == '+':
+            answer = m1+m2
+            question = 'Calculate `'+str(m1.get_rows())+' + '+str(m2.get_rows())+'`'
+        else:
+            answer = m1-m2
+            question = 'Calculate `'+str(m1.get_rows())+' - '+str(m2.get_rows())+'`'
+
+
     return (question,answer)
 
 def det_question(size=3):
@@ -71,13 +84,13 @@ def det_question(size=3):
 def inv_question(size=3):
     while True:
         mat=Matrix([[random.randint(1,10) for x in range(size)] for y in range(size)])
-        if mat.determinant != 0:
+        if mat.determinant() != 0:
             break
-    answer=mat.inverse()
+    answer=mat.inverse().tostr()
     question = 'Find the Inverse of `'+str(mat.get_rows())+'`'
     return (question,answer)
 
 if __name__ == '__main__':
-    qs = [MatrixQuestion(q_type='det',size=2) for x in range(10)]
+    qs = [MatrixQuestion(q_type='inv',size=4) for x in range(10)]
     for x in qs:
         print(x.get_question(),'---',x.get_answer())

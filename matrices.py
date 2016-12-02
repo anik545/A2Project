@@ -160,7 +160,6 @@ class Matrix(object):
         if det == 0:
             raise MatrixError
         c_t = self.adjoint().get_rows()
-        print(c_t,det,type(det))
         for x in range(len(c_t)):
             for y in range(len(c_t[0])):
                 c_t[x][y] = fractions.Fraction(c_t[x][y] / det).limit_denominator()

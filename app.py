@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, abort
 from complex_loci import *
+from matrix_questions import MatrixQuestion
 
 from views.matrix import matrix_blueprint
 
@@ -37,6 +38,16 @@ def plot():
 def operations():
     return render_template('operations.html')
 
+@app.route('/questions')
+def questions():
+    return render_template('questions.html')
+
+@app.route('/questions/mat_questions')
+def mat_questions():
+    q_type = request.args.get('q_type',None)
+    q_number = request.args.get('n',10)
+    questions = [MatrixQuestion(q_type) for x in range(q_number)]
+    return render_template('mat_questions.html',q_type=q_type,questions=enumerate(questions))
 
 @app.route('/ttt')
 def ttt():
