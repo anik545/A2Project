@@ -46,7 +46,7 @@ def div_question(maxnum=10):
     b=random.randint(1,maxnum)+random.randint(1,maxnum)*1j
     ans=a/b
     answer=round(im(ans),2)*1j+round(re(ans),2)
-    question = "Calculate `"+str(a).replace('j','i')+" / "+str(b).replace('j','i')+"`"
+    question = "Calculate `"+str(a).replace('j','i')+" / "+str(b).replace('j','i')+"` (2 decimal places)"
     return (question,answer)
 
 def mod_arg_question(maxnum=10):
@@ -56,3 +56,6 @@ def mod_arg_question(maxnum=10):
     answer=(mod,arg)
     question = 'Find, to two decimal places, the modulus and argument of  `'+str(a).replace('j','i')+'`'
     return (question,answer)
+
+if __name__=='__main__':
+    print(ComplexQuestion('div').get_question())

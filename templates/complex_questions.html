@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <head>
     <meta charset="utf-8">
     <title>Complex Numbers</title>
@@ -10,24 +12,35 @@
     <script	src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
     </script>
 
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/complex_q.css') }}"
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/questions.css') }}"
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
-    <form class="form-inline">
-
+    <form class="form-inline" action="{{ url_for('show_answers',ans=answers,topic='complex') }}" method="post">
 <!-- need two inputs for each q -> input for imaginary and real parts
      except mod_arg_question, two inputs, one for mod and one for arg
 -->
-
     {% for n,q in questions %}
-    {{ q.get_question() }}
-    <br>
+    <div class="out_question">
+        <div class="question">
+            {{ q.get_question().replace('(1i','(i').replace('+1i','+i') }}
+        </div>
+        <div class="answer">
+            {% if q.question_type != 'mod_arg' %}
+                <input type="text" name="{{ n|string+'re'}}" class="form-control input"> `+` &nbsp;
+                <input type="text" name="{{ n|string+'im'}}"   class="form-control input">  `i`
+            {% else %}
+                mod: <input type="text" name="{{ n|string+'re'}}" class="form-control input">
+                arg: <input type="text" name="{{ n|string+'im'}}"   class="form-control input">
+            {% endif %}
+
+        </div>
+    </div>
     {% endfor %}
-
-    <input class="btn btn-primary btn-lg btn-block" href="{{ url_for('matrix_blueprint.matrix') }}" type="submit" value="Submit Answers">
+    <div class="col-lg-12">
+    <input class="btn btn-primary btn-lg btn-block submit" type="submit" value="Submit Answers">
     </form>
-
+    </div>
 </body>

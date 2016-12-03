@@ -1,0 +1,23 @@
+.out_question{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+.input{
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    padding: 5px;
+}
+
+.answer{
+    display:inline-block;
+    width:50%;
+    margin:0 auto;
+    padding: 10px;
+}
+
+.question{
+    padding: 10px;
+}

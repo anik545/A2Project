@@ -17,17 +17,17 @@
 <body>
     <div class="col-lg-6">
         <b>Matrix Questions</b>
-        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('mat_questions',q_type='add_sub') }}">Addition and Subtraction</a>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('mat_questions',q_type='mul') }}">Multiplication</a>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('mat_questions',q_type='det') }}">Determinant</a>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('mat_questions',q_type='inv') }}">Inverse</a>
+        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('show_questions',topic='matrix',q_type='add_sub') }}">Addition and Subtraction</a>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('show_questions',topic='matrix',q_type='mul') }}">Multiplication</a>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('show_questions',topic='matrix',q_type='det') }}">Determinant</a>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('show_questions',topic='matrix',q_type='inv') }}">Inverse</a>
     </div>
 
     <div class="col-lg-6">
         <b>Complex Number Questions</b>
-        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('complex_questions',q_type='add_sub') }}">Addition and Subtraction</a>
-        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('complex_questions',q_type='mul') }}">Multiplication</a>
-        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('complex_questions',q_type='div') }}">Division</a>
-        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('complex_questions',q_type='mod_arg') }}">Argument and Modulus</a>
+        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('show_questions',topic='complex',q_type='add_sub') }}">Addition and Subtraction</a>
+        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('show_questions',topic='complex',q_type='mul') }}">Multiplication</a>
+        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('show_questions',topic='complex',q_type='div') }}">Division</a>
+        <a class="btn btn-primary btn-lg btn-block" href = "{{ url_for('show_questions',topic='complex',q_type='mod_arg') }}">Argument and Modulus</a>
     </div>
 </body>
