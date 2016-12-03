@@ -67,36 +67,60 @@ def show_answers(topic):
         answers = request.args.getlist('ans',None)
         mat_ans = request.args.get('mat_ans','True')
         if mat_ans == 'True':
-            answers = [ast.literal_eval(a) for a in answers]
+            answers = [[[str(i) for i in j] for j in ast.literal_eval(a)] for a in answers]
             inputs=[]
             for n,a in enumerate(answers):
                 inputs.append([])
                 for x in range(len(a)):
                     inputs[n].append([])
                     for y in range(len(a[0])):
-                        inputs[n][x].append(request.form.get(str(a)+str(x)+str(y),0))
+                        inputs[n][x].append(request.form.get(str(n)+str(x)+str(y),0))
+            score = 0
+            for n,x in enumerate(answers):
+                if x == inputs[n]:
+                    score+=1
+            percent = score*100//len(answers)
+
         else:
             inputs = [request.form.get(str(x),0) for x in range(10)]
+            inputs = [int(x) if x else 0 for x in inputs]
+            score = 0
+            for n,x in enumerate(answers):
+                if x == inputs[n]:
+                    score+=1
+            percent = score*100//len(answers)
         print(inputs)
         print(answers)
-        return render_template('answers.html',ans=answers,ins=enumerate(inputs))
+        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent)
 
     if topic == 'complex':
-        print(1)
         answers = request.args.getlist('ans',None)
         q_type = request.args.get('q_type',None)
         inputs=[]
         if q_type == 'mod_arg':
             for x in range(len(answers)):
                 inputs.append((request.form.get(str(x)+'mod',0),request.form.get(str(x)+'arg',0)))
+            answers = [(str(i),str(j)) for i,j in [ast.literal_eval(a) for a in answers]]
+            score=0
+            for n,x in enumerate(answers):
+                print(x,inputs[n])
+                if x==inputs[n]:
+                    score+=1
+            percent=score*100//len(answers)
         else:
             for x in range(len(answers)):
-                inputs.append((request.form.get(str(x)+'im',0),request.form.get(str(x)+'re',0)))
+                inputs.append(str(request.form.get(str(x)+'re',0))+'+'+str(request.form.get(str(x)+'im',0))+'j')
+            score = 0
+            for n,x in enumerate(answers):
+                print(x,inputs[n])
+                if complex(x) == complex(inputs[n]):
+                    score +=1
+            percent = score*100//len(answers)
+
         print(inputs)
         print(answers)
-        return render_template('answers.html',ans=answers,ins=inputs)
+        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent)
     else:
-        print(2)
         abort(404)
 
 

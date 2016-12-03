@@ -18,13 +18,21 @@
 </head>
 
 <body>
-    {% for a in ans %}
-        {{ a }}
+    <div style="float:left">
+    {% for q in ans %}
+        q: {{ q }}
         <br>
     {% endfor %}
-    {% for i,r in ins %}
-        {{ i }}i + {{ r }}
-        <br>
-    {% endfor %}
+    <p style="font-size:50px"><b>{{ percent }}%</b></p>
 
+    </div>
+    <div style="float:left;margin-left:20px">
+    {% for i in inputs %}
+        a: {{ i }}
+        <br>
+    {% endfor %}
+    </div>
+    <br>
+    <div style="float:bottom">
+    </div>
 </body>
