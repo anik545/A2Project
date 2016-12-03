@@ -56,7 +56,7 @@ def show_questions(topic,q_type):
     elif topic == 'complex':
         questions = [ComplexQuestion(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
-        return render_template('complex_questions.html',questions=enumerate(questions),answers=answers)
+        return render_template('complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type)
     else:
         abort(404)
 
@@ -82,14 +82,21 @@ def show_answers(topic):
         return render_template('answers.html',ans=answers,ins=enumerate(inputs))
 
     if topic == 'complex':
+        print(1)
         answers = request.args.getlist('ans',None)
+        q_type = request.args.get('q_type',None)
         inputs=[]
-        for x in range(10):
-            inputs.append((request.form.get(str(x)+'im',0),request.form.get(str(x)+'re',0)))
+        if q_type == 'mod_arg':
+            for x in range(len(answers)):
+                inputs.append((request.form.get(str(x)+'mod',0),request.form.get(str(x)+'arg',0)))
+        else:
+            for x in range(len(answers)):
+                inputs.append((request.form.get(str(x)+'im',0),request.form.get(str(x)+'re',0)))
         print(inputs)
         print(answers)
         return render_template('answers.html',ans=answers,ins=inputs)
     else:
+        print(2)
         abort(404)
 
 

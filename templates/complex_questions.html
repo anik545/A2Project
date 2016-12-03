@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <form class="form-inline" action="{{ url_for('show_answers',ans=answers,topic='complex') }}" method="post">
+    <form class="form-inline" action="{{ url_for('show_answers',ans=answers,topic='complex',q_type=q_type) }}" method="post">
 <!-- need two inputs for each q -> input for imaginary and real parts
      except mod_arg_question, two inputs, one for mod and one for arg
 -->
@@ -28,12 +28,12 @@
             {{ q.get_question().replace('(1i','(i').replace('+1i','+i') }}
         </div>
         <div class="answer">
-            {% if q.question_type != 'mod_arg' %}
+            {% if q_type != 'mod_arg' %}
                 <input type="text" name="{{ n|string+'re'}}" class="form-control input"> `+` &nbsp;
                 <input type="text" name="{{ n|string+'im'}}"   class="form-control input">  `i`
             {% else %}
-                mod: <input type="text" name="{{ n|string+'re'}}" class="form-control input">
-                arg: <input type="text" name="{{ n|string+'im'}}"   class="form-control input">
+                mod: <input type="text" name="{{ n|string+'mod'}}" class="form-control input">
+                arg: <input type="text" name="{{ n|string+'arg'}}"   class="form-control input">
             {% endif %}
 
         </div>
