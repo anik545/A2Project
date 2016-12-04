@@ -11,7 +11,10 @@ from flask_wtf import Form
 from wtforms import TextField,PasswordField,validators
 from wtforms.fields.html5 import EmailField
 
+import sqlite3
+from flask import g
 
+import models as dbHandler
 
 class Register(Form):
     Fname = TextField('First Name',[validators.Required()])
@@ -21,11 +24,12 @@ class Register(Form):
     email=EmailField('Email Address',[validators.DataRequired(),validators.Email()])
 
 class Login(Form):
-    username = TextField('Username',[validators.Required()])
+    email = TextField('Username',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
 
 app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
+
 
 @app.route('/')
 def main():
@@ -33,25 +37,32 @@ def main():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
+    error = ''
     if request.method == 'GET':
         loginform = Login()
     if request.method == 'POST':
         loginform = Login(request.form)
-        if loginform.validate():
-            print('logged in')
+        print(dbHandler.checkLogin(loginform.email.data,loginform.password.data))
+        if loginform.validate() and dbHandler.checkLogin(loginform.email.data,loginform.password.data):
             return redirect(url_for('main'))
-    return render_template('login.html',loginform=loginform)
+        else:
+            error = 'Wrong Username or Password'
+    return render_template('login.html',loginform=loginform,error=error)
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-    if request.method == 'POST':
-        regform = Register(request.form)
-        if regform.validate():
-            print('registered')
-            return redirect(url_for('main'))
+    error = ''
     if request.method == 'GET':
         regform = Register()
-    return render_template('signup.html',regform=regform)
+    if request.method == 'POST':
+        regform = Register(request.form)
+        print(dbHandler.checkEmailExists(regform.email.data))
+        if regform.validate() and not dbHandler.checkEmailExists(regform.email.data):
+            dbHandler.insertUser(regform.Fname.data,regform.Lname.data,regform.email.data,regform.password.data)
+            return redirect(url_for('main'))
+        else:
+            error = 'Incorrect Details'
+    return render_template('signup.html',regform=regform,error=error)
 
 @app.route('/loci-plotter')
 def loci():
