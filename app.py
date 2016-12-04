@@ -7,7 +7,7 @@ import ast
 
 from views.matrix import matrix_blueprint
 
-from flask_wtf import Form
+from flask_wtf import Form,FlaskForm
 from wtforms import TextField,PasswordField,validators
 from wtforms.fields.html5 import EmailField
 
@@ -16,19 +16,20 @@ from flask import g
 
 import models as dbHandler
 
-class Register(Form):
+class Register(FlaskForm):
     Fname = TextField('First Name',[validators.Required()])
     Lname = TextField('Last Name',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
     confirm_password = PasswordField('Confirm Password',[validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
     email=EmailField('Email Address',[validators.DataRequired(),validators.Email()])
 
-class Login(Form):
+class Login(FlaskForm):
     email = TextField('Username',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
 
 app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
+app.config["WTF_CSRF_ENABLED"] = False
 
 
 @app.route('/')
