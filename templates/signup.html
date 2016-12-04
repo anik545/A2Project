@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+    </script>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+
+<body>
+    <div class="container">
+
+        <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">Sign Up</div>
+                </div>
+                <div class="panel-body">
+                    <form id="signupform" name="regform" class="form-horizontal" role="form" action="{{ url_for('register') }}" method="post">
+                        {{ regform.hidden_tag() }}
+                        <div id="signupalert" style="display:none" class="alert alert-danger">
+                            <p>Error:</p>
+                            <span></span>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="email" class="col-md-3 control-label">Email</label>
+                            <div class="col-md-9">
+                                {{ regform.email(class="form-control",placeholder="Email") }}
+                                <!--input type="text" class="form-control" name="email" placeholder="Email Address"-->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstname" class="col-md-3 control-label">First Name</label>
+                            <div class="col-md-9">
+                                {{ regform.Fname(class="form-control",placeholder="First Name") }}
+                                <!--input type="text" class="form-control" name="firstname" placeholder="First Name"-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-md-3 control-label">Last Name</label>
+                            <div class="col-md-9">
+                                {{ regform.Lname(class="form-control",placeholder="Last Name",placeholder="Last Name") }}
+                                <!--input type="text" class="form-control" name="lastname" placeholder="Last Name"-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-md-3 control-label">Password</label>
+                            <div class="col-md-9">
+                                {{ regform.password(class="form-control",placeholder="Password") }}
+                                <!--input type="password" class="form-control" name="passwd" placeholder="Password"-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-md-3 control-label">Confirm Password</label>
+                            <div class="col-md-9">
+                                {{ regform.confirm_password(class="form-control",placeholder="Confirm Password") }}
+                                <!--input type="password" class="form-control" name="passwd2" placeholder="Confirm Password"-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- Button -->
+                            <div class="col-md-offset-3 col-md-9">
+                                <!--button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> Sign Up</button-->
+                                <input type="submit" value="Sign Up" class="btn btn-info">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 control">
+                                <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                    Have an account?
+                                    <a href="{{ url_for('login') }}">
+                                    Sign In Here
+                                </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% if regform.errors %}
+                    <ul class="errors">
+                        {% for field_name, field_errors in regform.errors|dictsort if field_errors %} {% for error in field_errors %}
+                        <li>{{ regform[field_name].label }}: {{ error }}</li>
+                        {% endfor %} {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

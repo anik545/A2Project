@@ -20,22 +20,22 @@
     </script-->
 
     <script>
-		window.MathJax = {
-				AuthorInit: function() {
-					MathJax.Hub.Register.StartupHook('End', function() {
-						MathJax.Hub.processSectionDelay = 0
-						var eq_in = document.getElementById('eq_in')
-						var MathPreview = document.getElementById('MathPreview')
-						var math = MathJax.Hub.getAllJax('MathPreview')[0]
-						eq_in.addEventListener('input', function() {
-							MathJax.Hub.Queue(['Text', math, eq_in.value])
-						})
-					})
-				}
-			}
-	</script>
+        window.MathJax = {
+            AuthorInit: function() {
+                MathJax.Hub.Register.StartupHook('End', function() {
+                    MathJax.Hub.processSectionDelay = 0
+                    var eq_in = document.getElementById('eq_in')
+                    var MathPreview = document.getElementById('MathPreview')
+                    var math = MathJax.Hub.getAllJax('MathPreview')[0]
+                    eq_in.addEventListener('input', function() {
+                        MathJax.Hub.Queue(['Text', math, eq_in.value])
+                    })
+                })
+            }
+        }
+    </script>
 
-    <script	src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
+    <script src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
     </script>
 
 
@@ -47,7 +47,7 @@
     <row>
         <div class="col-lg-12">
             <div class="input-group" style="margin-top:10px;margin-bottom:10px">
-                <input type="text" class="form-control" placeholder="Enter Equation..." id='eq_in' name="in" >
+                <input type="text" class="form-control" placeholder="Enter Equation..." id='eq_in' name="in">
                 <span class="input-group-btn">
                     <button id="go"  class="btn btn-default" type="button">Go</button>
                 </span>
@@ -81,7 +81,11 @@
     </div>
 
     <script type=text/javascript>
-        $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
+        $SCRIPT_ROOT = {
+            {
+                request.script_root | tojson | safe
+            }
+        };
     </script>
 
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/loci_plot.js') }}">

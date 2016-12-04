@@ -9,38 +9,30 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
     </script>
 
-    <script	src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
+    <script src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
     </script>
 
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/questions.css') }}"
-
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/questions.css') }}" <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
     <form class="form-inline" action="{{ url_for('show_answers',ans=answers,topic='complex',q_type=q_type) }}" method="post">
-<!-- need two inputs for each q -> input for imaginary and real parts
-     except mod_arg_question, two inputs, one for mod and one for arg
--->
-    {% for n,q in questions %}
-    <div class="out_question">
-        <div class="question">
-            {{ q.get_question().replace('(1i','(i').replace('+1i','+i') }}
-        </div>
-        <div class="answer">
-            {% if q_type != 'mod_arg' %}
+        {% for n,q in questions %}
+        <div class="out_question">
+            <div class="question">
+                {{ q.get_question().replace('(1i','(i').replace('+1i','+i') }}
+            </div>
+            <div class="answer">
+                {% if q_type != 'mod_arg' %}
                 <input type="text" name="{{ n|string+'re'}}" class="form-control input"> `+` &nbsp;
-                <input type="text" name="{{ n|string+'im'}}"   class="form-control input">  `i`
-            {% else %}
-                mod: <input type="text" name="{{ n|string+'mod'}}" class="form-control input">
-                arg: <input type="text" name="{{ n|string+'arg'}}"   class="form-control input">
-            {% endif %}
+                <input type="text" name="{{ n|string+'im'}}" class="form-control input"> `i` {% else %} mod: <input type="text" name="{{ n|string+'mod'}}" class="form-control input"> arg: <input type="text" name="{{ n|string+'arg'}}" class="form-control input">                {% endif %}
 
+            </div>
         </div>
-    </div>
-    {% endfor %}
-    <div class="col-lg-12">
-    <input class="btn btn-primary btn-lg btn-block submit" type="submit" value="Submit Answers">
+        {% endfor %}
+        <div class="col-lg-12">
+            <input class="btn btn-primary btn-lg btn-block submit" type="submit" value="Submit Answers">
+            <br>
+        </div>
     </form>
-    </div>
 </body>

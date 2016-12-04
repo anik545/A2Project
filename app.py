@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort
+from flask import Flask, render_template, request, jsonify, abort,redirect,url_for
 from complex_loci import *
 from matrix_questions import MatrixQuestion
 from complex_questions import ComplexQuestion
@@ -7,14 +7,51 @@ import ast
 
 from views.matrix import matrix_blueprint
 
+from flask_wtf import Form
+from wtforms import TextField,PasswordField,validators
+from wtforms.fields.html5 import EmailField
+
+
+
+class Register(Form):
+    Fname = TextField('First Name',[validators.Required()])
+    Lname = TextField('Last Name',[validators.Required()])
+    password = PasswordField('Password', [validators.Required()])
+    confirm_password = PasswordField('Confirm Password',[validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
+    email=EmailField('Email Address',[validators.DataRequired(),validators.Email()])
+
+class Login(Form):
+    username = TextField('Username',[validators.Required()])
+    password = PasswordField('Password', [validators.Required()])
+
 app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
-
 
 @app.route('/')
 def main():
     return render_template('index.html')
 
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if request.method == 'GET':
+        loginform = Login()
+    if request.method == 'POST':
+        loginform = Login(request.form)
+        if loginform.validate():
+            print('logged in')
+            return redirect(url_for('main'))
+    return render_template('login.html',loginform=loginform)
+
+@app.route('/register',methods=['GET','POST'])
+def register():
+    if request.method == 'POST':
+        regform = Register(request.form)
+        if regform.validate():
+            print('registered')
+            return redirect(url_for('main'))
+    if request.method == 'GET':
+        regform = Register()
+    return render_template('signup.html',regform=regform)
 
 @app.route('/loci-plotter')
 def loci():
@@ -59,7 +96,6 @@ def show_questions(topic,q_type):
         return render_template('complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type)
     else:
         abort(404)
-
 
 @app.route('/questions/answers/<topic>',methods=['GET','POST'])
 def show_answers(topic):
@@ -130,4 +166,5 @@ def ttt():
 
 if __name__ == '__main__':
     app.debug = True
+    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run()
