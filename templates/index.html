@@ -16,6 +16,9 @@
 
 <body>
     <div class="col-lg-12" style="margin-top:15px;">
+        {% if current_user.is_authenticated %}
+        Hi {{ current_user.email }}!
+        {% endif %}
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci') }}">Loci Plotter</a>
         <br>
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('operations') }}">Complex Number Operations</a>
@@ -30,6 +33,7 @@
         <div class = "col-sm-6">
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('register') }}">Sign Up</a>
         </div>
+
     </div>
 </body>
 

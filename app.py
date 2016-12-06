@@ -11,6 +11,11 @@ from flask_wtf import Form,FlaskForm
 from wtforms import TextField,PasswordField,validators
 from wtforms.fields.html5 import EmailField
 
+import flask_login
+from flask_login import login_required,logout_user,current_user,login_user
+
+from flask_sqlalchemy import SQLAlchemy
+
 import sqlite3
 from flask import g
 
@@ -27,9 +32,50 @@ class Login(FlaskForm):
     email = TextField('Username',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
 
+
+
 app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
 app.config["WTF_CSRF_ENABLED"] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    fname = db.Column(db.String(80), unique=False)
+    lname = db.Column(db.String(80), unique=False)
+    email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120), unique=False)
+    authenticated = db.Column(db.Boolean,default=False)
+
+    def __init__(self,fname,lname,email,password):
+        self.fname = fname
+        self.lname = lname
+        self.email = email
+        self.password = password
+        self.authenticated = False
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.email
+
+@login_manager.user_loader
+def user_loader(email):
+    print(email)
+    return User.query.filter_by(email=email).first()
+#    return User.query.get(int(user_id))
 
 
 @app.route('/')
@@ -43,12 +89,28 @@ def login():
         loginform = Login()
     if request.method == 'POST':
         loginform = Login(request.form)
-        print(dbHandler.checkLogin(loginform.email.data,loginform.password.data))
-        if loginform.validate() and dbHandler.checkLogin(loginform.email.data,loginform.password.data):
-            return redirect(url_for('main'))
+        if loginform.validate():
+            user = User.query.filter_by(email=loginform.email.data).first()
+            if user and user.password == loginform.password.data:
+                user.authenticated = True
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+                return redirect(url_for('main'))
         else:
             error = 'Wrong Username or Password'
     return render_template('login.html',loginform=loginform,error=error)
+
+@app.route('/logout')
+@login_required
+def logout():
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
+    logout_user()
+    return render_template('index.html')
+
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -57,10 +119,12 @@ def register():
         regform = Register()
     if request.method == 'POST':
         regform = Register(request.form)
-        print(dbHandler.checkEmailExists(regform.email.data))
-        if regform.validate() and not dbHandler.checkEmailExists(regform.email.data):
-            dbHandler.insertUser(regform.Fname.data,regform.Lname.data,regform.email.data,regform.password.data)
-            return redirect(url_for('main'))
+        if regform.validate():
+            if not User.query.filter_by(email=regform.email.data).first():
+                u = User(regform.Fname.data,regform.Lname.data,regform.email.data,regform.password.data) #TODO hashing password
+                db.session.add(u)
+                db.session.commit()
+                return redirect(url_for('main'))
         else:
             error = 'Incorrect Details'
     return render_template('signup.html',regform=regform,error=error)
