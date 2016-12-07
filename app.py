@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort,redirect,url_for
+from flask import Flask, render_template, request, jsonify, abort,redirect,url_for,g,flash
 from complex_loci import *
 from matrix_questions import MatrixQuestion
 from complex_questions import ComplexQuestion
@@ -8,22 +8,18 @@ import ast
 from views.matrix import matrix_blueprint
 
 from flask_wtf import Form,FlaskForm
-from wtforms import TextField,PasswordField,validators
+from wtforms import TextField,PasswordField,BooleanField,validators
 from wtforms.fields.html5 import EmailField
 
-import flask_login
-from flask_login import login_required,logout_user,current_user,login_user,LoginManager
+from flask_login import login_required, logout_user, current_user, login_user, LoginManager
 
 from flask_sqlalchemy import SQLAlchemy
 
-import sqlite3
-from flask import g
-
-import models as dbHandler
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class Register(FlaskForm):
-    Fname = TextField('First Name',[validators.Required()])
-    Lname = TextField('Last Name',[validators.Required()])
+    fname = TextField('First Name',[validators.Required()])
+    lname = TextField('Last Name',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
     confirm_password = PasswordField('Confirm Password',[validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
     email=EmailField('Email Address',[validators.DataRequired(),validators.Email()])
@@ -31,7 +27,7 @@ class Register(FlaskForm):
 class Login(FlaskForm):
     email = TextField('Username',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
-
+    remember = BooleanField('Remember')
 
 
 app = Flask(__name__)
@@ -41,6 +37,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
 
@@ -56,11 +53,14 @@ class User(db.Model):
         self.fname = fname
         self.lname = lname
         self.email = email
-        self.password = password
+        self.password = generate_password_hash(password)
         self.authenticated = False
 
+    def check_pw(self,password):
+        return check_password_hash(self.password,password)
+
     def is_authenticated(self):
-        return True
+        return self.authenticated
 
     def is_active(self):
         return True
@@ -75,8 +75,6 @@ class User(db.Model):
 def user_loader(email):
     print(email)
     return User.query.filter_by(email=email).first()
-#    return User.query.get(int(user_id))
-
 
 @app.route('/')
 def main():
@@ -84,23 +82,23 @@ def main():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-    error = ''
+    if current_user.is_authenticated:
+        return redirect(url_for('main'))  #already logged in user shouldnt go to login page
     if request.method == 'GET':
         loginform = Login()
     if request.method == 'POST':
         loginform = Login(request.form)
         if loginform.validate():
-            user = User.query.filter_by(email=loginform.email.data,password=loginform.password.data).first()
-            print(user)
-            if user:
+            user = User.query.filter_by(email=loginform.email.data.lower()).first()
+            if user and user.check_pw(loginform.password.data):
                 user.authenticated = True
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
-                return redirect(url_for('main'))
-        else:
-            error = 'Wrong Username or Password'
-    return render_template('login.html',loginform=loginform,error=error)
+                return redirect(url_for('main')) #TODO redirect to last page
+            else:
+                flash('Incorrect Credentials')
+    return render_template('login.html',loginform=loginform)
 
 @app.route('/logout')
 @login_required
@@ -115,20 +113,24 @@ def logout():
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-    error = ''
+    if current_user.is_authenticated:
+        return redirect(url_for('main'))
     if request.method == 'GET':
         regform = Register()
     if request.method == 'POST':
         regform = Register(request.form)
         if regform.validate():
-            if not User.query.filter_by(email=regform.email.data).first():
-                u = User(regform.Fname.data,regform.Lname.data,regform.email.data,regform.password.data) #TODO hashing password
+            if not User.query.filter_by(email=regform.email.data.lower()).first():
+                u = User(regform.fname.data.lower(),regform.lname.data.lower(),regform.email.data.lower(),regform.password.data)
                 db.session.add(u)
                 db.session.commit()
+                login_user(u)
                 return redirect(url_for('main'))
+            else:
+                flash('Email already exists')
         else:
             error = 'Incorrect Details'
-    return render_template('signup.html',regform=regform,error=error)
+    return render_template('signup.html',regform=regform)
 
 @app.route('/loci-plotter')
 def loci():

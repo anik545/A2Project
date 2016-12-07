@@ -29,8 +29,6 @@
                             <span></span>
                         </div>
 
-
-
                         <div class="form-group">
                             <label for="email" class="col-md-3 control-label">Email</label>
                             <div class="col-md-9">
@@ -42,14 +40,14 @@
                         <div class="form-group">
                             <label for="firstname" class="col-md-3 control-label">First Name</label>
                             <div class="col-md-9">
-                                {{ regform.Fname(class="form-control",placeholder="First Name") }}
+                                {{ regform.fname(class="form-control",placeholder="First Name") }}
                                 <!--input type="text" class="form-control" name="firstname" placeholder="First Name"-->
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="lastname" class="col-md-3 control-label">Last Name</label>
                             <div class="col-md-9">
-                                {{ regform.Lname(class="form-control",placeholder="Last Name",placeholder="Last Name") }}
+                                {{ regform.lname(class="form-control",placeholder="Last Name",placeholder="Last Name") }}
                                 <!--input type="text" class="form-control" name="lastname" placeholder="Last Name"-->
                             </div>
                         </div>
@@ -92,6 +90,15 @@
                         {% endfor %} {% endfor %}
                     </ul>
                     {% endif %}
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
                 </div>
             </div>
         </div>
