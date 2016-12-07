@@ -12,7 +12,7 @@ from wtforms import TextField,PasswordField,validators
 from wtforms.fields.html5 import EmailField
 
 import flask_login
-from flask_login import login_required,logout_user,current_user,login_user
+from flask_login import login_required,logout_user,current_user,login_user,LoginManager
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -39,13 +39,13 @@ app.register_blueprint(matrix_blueprint)
 app.config["WTF_CSRF_ENABLED"] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
-login_manager = flask_login.LoginManager()
+login_manager = LoginManager()
 login_manager.init_app(app)
 
 db = SQLAlchemy(app)
 
 class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column('user_id',db.Integer, primary_key=True)
     fname = db.Column(db.String(80), unique=False)
     lname = db.Column(db.String(80), unique=False)
     email = db.Column(db.String(120), unique=True)
@@ -90,8 +90,9 @@ def login():
     if request.method == 'POST':
         loginform = Login(request.form)
         if loginform.validate():
-            user = User.query.filter_by(email=loginform.email.data).first()
-            if user and user.password == loginform.password.data:
+            user = User.query.filter_by(email=loginform.email.data,password=loginform.password.data).first()
+            print(user)
+            if user:
                 user.authenticated = True
                 db.session.add(user)
                 db.session.commit()

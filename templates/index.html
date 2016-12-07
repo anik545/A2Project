@@ -17,7 +17,7 @@
 <body>
     <div class="col-lg-12" style="margin-top:15px;">
         {% if current_user.is_authenticated %}
-        Hi {{ current_user.email }}!
+        Hi {{ current_user.fname }}!
         {% endif %}
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci') }}">Loci Plotter</a>
         <br>
@@ -27,12 +27,18 @@
         <br>
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('questions') }}">Questions</a>
         <br>
+        {% if not current_user.is_authenticated %}
         <div class = "col-sm-6">
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('login') }}">Log In</a>
         </div>
         <div class = "col-sm-6">
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('register') }}">Sign Up</a>
         </div>
+        {% else %}
+        <div class = "col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+        {% endif %}
 
     </div>
 </body>
