@@ -20,6 +20,12 @@ class MatrixQuestion(object):
             raise ValueError
 
 
+    def check_answer(self,ans):
+        if ans == self.answer:
+            return True
+        else:return False
+        pass
+
     def get_question(self):
         return self.question
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort,redirect,url_for,g,flash
+from flask import Flask, render_template, request, jsonify, abort,redirect,url_for,g,flash,session
 from complex_loci import *
 from matrix_questions import MatrixQuestion
 from complex_questions import ComplexQuestion
@@ -6,6 +6,8 @@ from complex_questions import ComplexQuestion
 import ast
 
 from views.matrix import matrix_blueprint
+
+#from flask.ext.session import Session
 
 from flask_wtf import Form,FlaskForm
 from wtforms import TextField,PasswordField,BooleanField,validators
@@ -34,12 +36,15 @@ app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
 app.config["WTF_CSRF_ENABLED"] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
+
+#Session(app)
 
 class User(db.Model):
     user_id = db.Column('user_id',db.Integer, primary_key=True)
@@ -168,15 +173,17 @@ def show_questions(topic,q_type):
         questions = [MatrixQuestion(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
         matans=questions[0].mat_ans
+        session['questions'] = [q.get_question() for q in questions]
         return render_template('mat_questions.html',questions=enumerate(questions),answers=answers,mat_ans=matans)
     elif topic == 'complex':
         questions = [ComplexQuestion(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
+        session['questions'] = [q.get_question() for q in questions]
         return render_template('complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type)
     else:
         abort(404)
 
-@app.route('/questions/answers/<topic>',methods=['GET','POST'])
+@app.route('/questions/answers/<topic>',methods=['POST'])
 def show_answers(topic):
     if topic == 'matrix':
         answers = request.args.getlist('ans',None)
@@ -190,23 +197,25 @@ def show_answers(topic):
                     inputs[n].append([])
                     for y in range(len(a[0])):
                         inputs[n][x].append(request.form.get(str(n)+str(x)+str(y),0))
-            score = 0
+            scores = []
             for n,x in enumerate(answers):
                 if x == inputs[n]:
-                    score+=1
-            percent = score*100//len(answers)
+                    scores.append(1)
+            percent = sum(scores)//len(answers)
 
         else:
             inputs = [request.form.get(str(x),0) for x in range(10)]
             inputs = [int(x) if x else 0 for x in inputs]
-            score = 0
+            scores = []
             for n,x in enumerate(answers):
                 if x == inputs[n]:
-                    score+=1
-            percent = score*100//len(answers)
+                    scores.append(1)
+            percent = sum(scores)*100//len(answers)
         print(inputs)
         print(answers)
-        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent)
+        print(session['questions'])
+        questions = session['questions']
+        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent,scores=scores,questions=questions)
 
     if topic == 'complex':
         answers = request.args.getlist('ans',None)
@@ -216,25 +225,26 @@ def show_answers(topic):
             for x in range(len(answers)):
                 inputs.append((request.form.get(str(x)+'mod',0),request.form.get(str(x)+'arg',0)))
             answers = [(str(i),str(j)) for i,j in [ast.literal_eval(a) for a in answers]]
-            score=0
+            scores=[]
             for n,x in enumerate(answers):
                 print(x,inputs[n])
                 if x==inputs[n]:
-                    score+=1
-            percent=score*100//len(answers)
+                    scores.append(1)
+            percent=sum(scores)*100//len(answers)
         else:
             for x in range(len(answers)):
                 inputs.append(str(request.form.get(str(x)+'re',0))+'+'+str(request.form.get(str(x)+'im',0))+'j')
-            score = 0
+            scores = []
             for n,x in enumerate(answers):
                 print(x,inputs[n])
                 if complex(x) == complex(inputs[n]):
-                    score +=1
-            percent = score*100//len(answers)
+                    scores.append(1)
+            percent = sum(scores)*100//len(answers)
 
         print(inputs)
         print(answers)
-        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent)
+        print(session['questions'])
+        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent,scores=scores)
     else:
         abort(404)
 
@@ -245,5 +255,4 @@ def ttt():
 
 if __name__ == '__main__':
     app.debug = True
-    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run()

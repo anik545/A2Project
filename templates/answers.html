@@ -18,21 +18,40 @@
 </head>
 
 <body>
-    <div style="float:left">
-    {% for q in ans %}
-        q: {{ q }}
-        <br>
-    {% endfor %}    
-    <p style="font-size:50px"><b>{{ percent }}%</b></p>
+  <div>
+  <table class="table">
+    <thead>
+      <th> Question </th>
+      <th> Answer</th>
+      <th> Your Answer</th>
+      <th></th>
+    </thead>
+    <tbody>
+      {% for a in ans %}
+      <tr>
+        <td>
+          {# question #}
+        </td>
+        <td>
+          {{ a }}
+        </td>
+        <td>
+          {{ inputs[loop.index0] }}
+        </td>
+        {% if scores[loop.index0] == 1 %}
+        <td bgcolor="#00FF00">
+        </td>
+        {% else %}
+        <td bgcolor="#FF0000">
+        </td>
+        {% endif %}
 
-    </div>
-    <div style="float:left;margin-left:20px">
-    {% for i in inputs %}
-        a: {{ i }}
-        <br>
-    {% endfor %}
-    </div>
-    <br>
-    <div style="float:bottom">
-    </div>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p style="font-size:50px">
+  {{ percent }}%
+  </p>
+  </div>
 </body>
