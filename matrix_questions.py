@@ -19,12 +19,10 @@ class MatrixQuestion(object):
         else:
             raise ValueError
 
-
     def check_answer(self,ans):
         if ans == self.answer:
             return True
         else:return False
-        pass
 
     def get_question(self):
         return self.question
@@ -77,8 +75,6 @@ def add_sub_question(max_num=10,op='add'):
         else:
             answer = m1-m2
             question = 'Calculate `'+str(m1.get_rows())+' - '+str(m2.get_rows())+'`'
-
-
     return (question,answer)
 
 def det_question(size=3):

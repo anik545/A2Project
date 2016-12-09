@@ -30,13 +30,13 @@
       {% for a in ans %}
       <tr>
         <td>
-          {# question #}
+          {{ questions[loop.index0] }}
         </td>
         <td>
-          {{ a }}
+          {{ a.replace('j','i') }}
         </td>
         <td>
-          {{ inputs[loop.index0] }}
+         ({{ inputs[loop.index0].replace('j','i') }})
         </td>
         {% if scores[loop.index0] == 1 %}
         <td bgcolor="#00FF00">

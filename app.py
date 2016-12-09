@@ -174,21 +174,33 @@ def show_questions(topic,q_type):
         answers = [q.get_answer() for q in questions]
         matans=questions[0].mat_ans
         session['questions'] = [q.get_question() for q in questions]
-        return render_template('mat_questions.html',questions=enumerate(questions),answers=answers,mat_ans=matans)
+        session['answers'] = [str(q.get_answer()) for q in questions]
+        return render_template('mat_questions.html',questions=enumerate(questions),answers=answers,mat_ans=matans,q_type=q_type,topic=topic)
     elif topic == 'complex':
         questions = [ComplexQuestion(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
         session['questions'] = [q.get_question() for q in questions]
-        return render_template('complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type)
+        session['answers'] = [str(q.get_answer()) for q in questions]
+        return render_template('complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type,topic=topic)
     else:
         abort(404)
 
-@app.route('/questions/answers/<topic>',methods=['POST'])
-def show_answers(topic):
+
+@app.route('/questions/_answers/<topic>/<q_type>')
+def answers(topic,q_type):
     if topic == 'matrix':
-        answers = request.args.getlist('ans',None)
-        mat_ans = request.args.get('mat_ans','True')
-        if mat_ans == 'True':
+        answers = session['answers']
+        if q_type == 'det':
+            inputs = [request.form.get(str(x),0) for x in range(10)]
+            inputs = [int(x) if x else 0 for x in inputs]
+            scores = []
+            for n,x in enumerate(answers):
+                if x == inputs[n]:
+                    scores.append(1)
+                else:
+                    scores.append(0)
+            percent = sum(scores)*100//len(answers)
+        else:
             answers = [[[str(i) for i in j] for j in ast.literal_eval(a)] for a in answers]
             inputs=[]
             for n,a in enumerate(answers):
@@ -196,55 +208,53 @@ def show_answers(topic):
                 for x in range(len(a)):
                     inputs[n].append([])
                     for y in range(len(a[0])):
-                        inputs[n][x].append(request.form.get(str(n)+str(x)+str(y),0))
+                        i=request.args.get(str(n)+str(x)+str(y),0)
+                        if i:
+                            inputs[n][x].append(i)
+                        else:
+                            inputs[n][x].append('0')
             scores = []
             for n,x in enumerate(answers):
                 if x == inputs[n]:
                     scores.append(1)
-            percent = sum(scores)//len(answers)
-
-        else:
-            inputs = [request.form.get(str(x),0) for x in range(10)]
-            inputs = [int(x) if x else 0 for x in inputs]
-            scores = []
-            for n,x in enumerate(answers):
-                if x == inputs[n]:
-                    scores.append(1)
+                else:
+                    scores.append(0)
             percent = sum(scores)*100//len(answers)
-        print(inputs)
-        print(answers)
-        print(session['questions'])
         questions = session['questions']
-        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent,scores=scores,questions=questions)
+        answers = [str(a).replace("'","") for a in answers]
+        inputs = [str(i).replace("'","") for i in inputs]
+        print(answers,inputs)
+        return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
 
-    if topic == 'complex':
-        answers = request.args.getlist('ans',None)
-        q_type = request.args.get('q_type',None)
-        inputs=[]
+    elif topic == 'complex':
+        answers = session['answers']
         if q_type == 'mod_arg':
+            inputs = []
             for x in range(len(answers)):
-                inputs.append((request.form.get(str(x)+'mod',0),request.form.get(str(x)+'arg',0)))
+                inputs.append((request.args.get(str(x)+'mod',0),request.args.get(str(x)+'arg',0)))
             answers = [(str(i),str(j)) for i,j in [ast.literal_eval(a) for a in answers]]
             scores=[]
             for n,x in enumerate(answers):
-                print(x,inputs[n])
                 if x==inputs[n]:
                     scores.append(1)
+                else:
+                    scores.append(0)
             percent=sum(scores)*100//len(answers)
+            pass
         else:
-            for x in range(len(answers)):
-                inputs.append(str(request.form.get(str(x)+'re',0))+'+'+str(request.form.get(str(x)+'im',0))+'j')
-            scores = []
+            inputs = []
+            for x in range(10):
+                inputs.append(str(request.args.get(str(x)+'re',0))+'+'+str(request.args.get(str(x)+'im',0))+'j')
+            scores=[]
             for n,x in enumerate(answers):
-                print(x,inputs[n])
                 if complex(x) == complex(inputs[n]):
                     scores.append(1)
+                else:
+                    scores.append(0)
             percent = sum(scores)*100//len(answers)
-
-        print(inputs)
-        print(answers)
-        print(session['questions'])
-        return render_template('answers.html',ans=answers,inputs=inputs,percent=percent,scores=scores)
+        questions = session['questions']
+        print(scores)
+        return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
     else:
         abort(404)
 
