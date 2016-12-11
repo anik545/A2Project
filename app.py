@@ -246,9 +246,10 @@ def answers(topic,q_type):
         questions = session['questions']
         answers = [str(a).replace("'","") for a in answers]
         inputs = [str(i).replace("'","") for i in inputs]
-        mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
-        db.session.add(mark)
-        db.session.commit()
+        if current_user.is_authenticated:
+            mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
+            db.session.add(mark)
+            db.session.commit()
         return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
 
     elif topic == 'complex':
@@ -280,10 +281,11 @@ def answers(topic,q_type):
                     scores.append(0)
             percent = sum(scores)*100//len(answers)
         questions = session['questions']
-        print(scores,current_user.user_id)
-        mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
-        db.session.add(mark)
-        db.session.commit()
+        print(scores)
+        if current_user.is_authenticated:
+            mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
+            db.session.add(mark)
+            db.session.commit()
         return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
     else:
         abort(404)
