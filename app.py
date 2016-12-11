@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort,redirect,url_for,g,flash,session
+from flask import Flask, render_template, request, jsonify,  abort, redirect, url_for, g, flash, session
 from complex_loci import *
 from matrix_questions import MatrixQuestion
 from complex_questions import ComplexQuestion
@@ -6,8 +6,6 @@ from complex_questions import ComplexQuestion
 import ast
 
 from views.matrix import matrix_blueprint
-
-#from flask.ext.session import Session
 
 from flask_wtf import Form,FlaskForm
 from wtforms import TextField,PasswordField,BooleanField,validators
@@ -31,7 +29,6 @@ class Login(FlaskForm):
     password = PasswordField('Password', [validators.Required()])
     remember = BooleanField('Remember')
 
-
 app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
 app.config["WTF_CSRF_ENABLED"] = False
@@ -43,8 +40,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
-
-#Session(app)
 
 class User(db.Model):
     user_id = db.Column('user_id',db.Integer, primary_key=True)
@@ -247,6 +242,7 @@ def answers(topic,q_type):
                 inputs.append(str(request.args.get(str(x)+'re',0))+'+'+str(request.args.get(str(x)+'im',0))+'j')
             scores=[]
             for n,x in enumerate(answers):
+                print(x,'||',inputs[n])
                 if complex(x) == complex(inputs[n]):
                     scores.append(1)
                 else:
