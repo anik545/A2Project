@@ -17,6 +17,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+import datetime
+
+from question_dict import COMPLEX_QUESTIONS,MATRIX_QUESTIONS,QUESTIONS
+
 class Register(FlaskForm):
     fname = TextField('First Name',[validators.Required()])
     lname = TextField('Last Name',[validators.Required()])
@@ -48,6 +52,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120), unique=False)
     authenticated = db.Column(db.Boolean,default=False)
+    marks = db.relationship('Mark',backref="user",cascade="all, delete-orphan", lazy="dynamic")
 
     def __init__(self,fname,lname,email,password):
         self.fname = fname
@@ -70,6 +75,21 @@ class User(db.Model):
 
     def get_id(self):
         return self.email
+
+class Mark(db.Model):
+     key = db.Column('key',db.Integer,primary_key=True)
+     score = db.Column(db.Integer)
+     out_of = db.Column(db.Integer)
+     date = db.Column(db.DateTime)
+     question_id = db.Column(db.Integer)
+     user_id = db.Column('user_id',db.Integer,db.ForeignKey('user.user_id'))
+
+     def __init__(self,score,out_of,q_id,user_id):
+         self.score=score
+         self.out_of=out_of
+         self.question_id=q_id
+         self.user_id = user_id
+         self.date = datetime.date.today()
 
 @login_manager.user_loader
 def user_loader(email):
@@ -132,9 +152,15 @@ def register():
             error = 'Incorrect Details'
     return render_template('signup.html',regform=regform)
 
+@app.route('/account')
+def account():
+    user_id = current_user.user_id
+    u = User.query.get(user_id)
+    return render_template('account.html',user=u,qs=QUESTIONS)
+
 @app.route('/loci-plotter')
 def loci():
-    return render_template('loci.html')
+    return render_template('loci.html',)
 
 
 @app.route('/_plot')
@@ -184,8 +210,10 @@ def show_questions(topic,q_type):
 @app.route('/questions/_answers/<topic>/<q_type>')
 def answers(topic,q_type):
     if topic == 'matrix':
+        question_id = MATRIX_QUESTIONS[q_type]
         answers = session['answers']
         if q_type == 'det':
+            question_id=3
             inputs = [request.form.get(str(x),0) for x in range(10)]
             inputs = [int(x) if x else 0 for x in inputs]
             scores = []
@@ -218,10 +246,13 @@ def answers(topic,q_type):
         questions = session['questions']
         answers = [str(a).replace("'","") for a in answers]
         inputs = [str(i).replace("'","") for i in inputs]
-        print(answers,inputs)
+        mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
+        db.session.add(mark)
+        db.session.commit()
         return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
 
     elif topic == 'complex':
+        question_id = COMPLEX_QUESTIONS[q_type]
         answers = session['answers']
         if q_type == 'mod_arg':
             inputs = []
@@ -249,7 +280,10 @@ def answers(topic,q_type):
                     scores.append(0)
             percent = sum(scores)*100//len(answers)
         questions = session['questions']
-        print(scores)
+        print(scores,current_user.user_id)
+        mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
+        db.session.add(mark)
+        db.session.commit()
         return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
     else:
         abort(404)
