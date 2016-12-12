@@ -53,6 +53,7 @@ class User(db.Model):
     password = db.Column(db.String(120), unique=False)
     authenticated = db.Column(db.Boolean,default=False)
     marks = db.relationship('Mark',backref="user",cascade="all, delete-orphan", lazy="dynamic")
+    graphs = db.relationship('Graph',backref="user",cascade="all, delete-orphan", lazy="dynamic")
 
     def __init__(self,fname,lname,email,password):
         self.fname = fname
@@ -90,6 +91,20 @@ class Mark(db.Model):
          self.question_id=q_id
          self.user_id = user_id
          self.date = datetime.date.today()
+
+class Graph(db.Model):
+    graph_id = db.Column('graph_id',db.Integer,primary_key=True)
+    title = db.Column(db.String)
+    description = db.Column(db.String, nullable=True)
+    data = db.Column(db.String)
+    date = db.Column(db.DateTime)
+    user_id = db.Column('user_id',db.Integer,db.ForeignKey('user.user_id'))
+
+    def __init__(self,data,user_id,title):
+        self.data=data
+        self.user_id = user_id
+        self.title = title
+        self.date = datetime.date.today()
 
 @login_manager.user_loader
 def user_loader(email):
@@ -153,6 +168,7 @@ def register():
     return render_template('signup.html',regform=regform)
 
 @app.route('/account')
+@login_required
 def account():
     user_id = current_user.user_id
     u = User.query.get(user_id)
