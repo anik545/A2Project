@@ -13,7 +13,21 @@
 </head>
 
 <body>
-    {% for mark in user.marks.all() %}
-        {{ qs[mark.question_id]["topic"] }}&nbsp;{{ qs[mark.question_id]["name"] }}&nbsp;|&nbsp;{{ mark.score }}/{{ mark.out_of }} <br>
-    {% endfor %}
+    <table class="table">
+    <thead>
+        <th> Topic </th>
+        <th> Score </th>
+        <th> Percentage </th>
+    </thead>
+    <tbody>
+        {% for mark in user.marks.all() %}
+        <tr>
+        <td>{{ qs[mark.question_id]["topic"] }}&nbsp;{{ qs[mark.question_id]["name"] }}</td>
+        <td>{{ mark.score }}/{{ mark.out_of }}</td>
+        <td>{{ mark.score/mark.out_of*100 }}%</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+    </table>
 </body>
