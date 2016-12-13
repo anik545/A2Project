@@ -96,14 +96,17 @@ class Graph(db.Model):
     graph_id = db.Column('graph_id',db.Integer,primary_key=True)
     title = db.Column(db.String)
     description = db.Column(db.String, nullable=True)
-    data = db.Column(db.String)
+    desmosdata = db.Column(db.String)
+    exprlist = db.Column(db.String)
     date = db.Column(db.DateTime)
     user_id = db.Column('user_id',db.Integer,db.ForeignKey('user.user_id'))
 
-    def __init__(self,data,user_id,title):
-        self.data=data
+    def __init__(self,desmosdata,exprlist,user_id,title,desc):
+        self.desmosdata = desmosdata
+        self.exprlist = exprlist
         self.user_id = user_id
         self.title = title
+        self.description = desc
         self.date = datetime.date.today()
 
 @login_manager.user_loader
@@ -193,6 +196,22 @@ def plot():
     except Exception as e:
         print(e)
         abort(500)
+
+@app.route('/_addgraph',methods=['POST'])
+@login_required
+def addgraph():
+    try:
+        data1 = request.form.get('desmosdata',None)
+        data2 = request.form.get('exprlist',None)
+        title = request.form.get('title',"")
+        desc = request.form.get('description',"")
+        user_id = current_user.user_id
+        g=Graph(data1,data2,user_id,title,desc)
+        db.session.add(g)
+        db.session.commit()
+        return jsonify(res="Successfully Saved Graph")
+    except:
+        return jsonify(res="Error Saving Graph")
 
 
 @app.route('/operations-argand')

@@ -71,5 +71,21 @@ $(document).ready(function() {
         calculator.setExpression({id:plot_no,hidden:!vis})
         // Show/Hide line(s)
     });
-
+    $('#submit-graph').on('click',function(){
+        exprlist = $('#expressions td:nth-child(1)').map(function(){
+            return $(this).text();
+        }).get();
+        //TODO exprlist not working, implement JSON object as {id:plot}
+        console.log(exprlist);
+        $.post('/_addgraph',{
+            title:$('#title').val(),
+            desmosdata:JSON.stringify(calculator.getState()),
+            exprlist:exprlist,
+            description:$('#desc').val()
+        },function(data){
+            $('#modal').modal('hide')
+            alert(data.res)
+            $('#eq_in').focus()
+        });
+    })
 });
