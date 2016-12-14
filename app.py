@@ -179,7 +179,12 @@ def account():
 
 @app.route('/loci-plotter')
 def loci():
-    return render_template('loci.html',)
+    if current_user.is_authenticated:
+        user = User.query.get(current_user.user_id)
+        user_graphs = user.graphs.all()
+    else:
+        user_graphs = None
+    return render_template('loci.html',user_graphs=user_graphs)
 
 
 @app.route('/_plot')
@@ -197,22 +202,37 @@ def plot():
         print(e)
         abort(500)
 
-@app.route('/_addgraph',methods=['POST'])
+@app.route('/_addgraph',methods=['GET','POST'])
 @login_required
 def addgraph():
-    try:
-        data1 = request.form.get('desmosdata',None)
-        data2 = request.form.get('exprlist',None)
-        title = request.form.get('title',"")
-        desc = request.form.get('description',"")
-        user_id = current_user.user_id
-        g=Graph(data1,data2,user_id,title,desc)
-        db.session.add(g)
-        db.session.commit()
-        return jsonify(res="Successfully Saved Graph")
-    except:
-        return jsonify(res="Error Saving Graph")
-
+    if request.method=='POST':
+        try:
+            data1 = request.form.get('desmosdata',None)
+            data2 = request.form.get('exprlist',None)
+            title = request.form.get('title',"")
+            desc = request.form.get('description',"")
+            user_id = current_user.user_id
+            print(type(Graph.query.filter_by(title=title,user_id=user_id).first()))
+            exists = Graph.query.filter_by(title=title,user_id=user_id).first()
+            if exists:
+                return jsonify(status="error",error="Graph already exists")
+            else:
+                g=Graph(data1,data2,user_id,title,desc)
+                db.session.add(g)
+                db.session.commit()
+                graph_id = g.graph_id #has to be after commit
+                return jsonify(id=graph_id,title=title,status="ok",error=None)
+        except Exception as e:
+            print(e)
+            return jsonify(status="error",error="Error saving Graph")
+    if request.method=='GET':
+        try:
+            graph_id = request.args.get('graph_id',None)
+            g = Graph.query.get(graph_id)
+            return jsonify(desmosdata=g.desmosdata,exprlist=g.exprlist)
+        except Exception as e:
+            print(e)
+            return abort(500)
 
 @app.route('/operations-argand')
 def operations():

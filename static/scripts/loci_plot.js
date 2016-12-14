@@ -73,19 +73,38 @@ $(document).ready(function() {
     });
     $('#submit-graph').on('click',function(){
         exprlist = $('#expressions td:nth-child(1)').map(function(){
-            return $(this).text();
+            return $(this).text(); //need to get from mathjax, not just text
         }).get();
         //TODO exprlist not working, implement JSON object as {id:plot}
-        console.log(exprlist);
         $.post('/_addgraph',{
             title:$('#title').val(),
             desmosdata:JSON.stringify(calculator.getState()),
-            exprlist:exprlist,
+            exprlist:$('#expressions').html(),
             description:$('#desc').val()
         },function(data){
-            $('#modal').modal('hide')
-            alert(data.res)
-            $('#eq_in').focus()
+            if (data.status === 'ok') {
+                $('#save-modal').modal('hide')
+                alert("Successfully saved graph")
+                html='<option value='+data.id+'>'+data.title+'</option>'
+                $('#graph-select').append($('<option>',{value:data.id,text:data.title}))
+            } else {
+                alert(data.error)
+                $('#eq_in').focus()
+            }
+            });
+    });
+    $('#load-graph').on('click',function(){
+        console.log($("#graph-select").val())
+        id = $("#graph-select").val()
+        $.getJSON($SCRIPT_ROOT+'/_addgraph',{
+            graph_id: id
+        },function(data){
+            $('#load-modal').modal('hide')
+            $('#expressions').html(data.exprlist)
+            calculator.setState(data.desmosdata)
+        }).fail(function(){
+            alert('Error Loading Graph')
         });
     })
+    //modal made in jinja at start, then graphs added into html when one is saved
 });
