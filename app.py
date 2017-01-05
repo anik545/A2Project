@@ -224,7 +224,7 @@ def addgraph():
                 db.session.add(g)
                 db.session.commit()
                 graph_id = g.graph_id #has to be after commit
-                return jsonify(id=graph_id,title=title,status="ok",error=None)
+                return jsonify(id=graph_id,title=title,image_url=image_url,desc=desc,status="ok",error=None)
         except Exception as e:
             print(e)
             return jsonify(status="error",error="Error saving Graph")

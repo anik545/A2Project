@@ -49,6 +49,7 @@ return false;
 
 
 $(document).ready(function() {
+    $('#graph-select').imagepicker({show_label:true})
     $('#eq_in').on('keydown', function(e) {
         if (e.keyCode===13) {
             addplot();
@@ -80,13 +81,13 @@ $(document).ready(function() {
             desmosdata:JSON.stringify(calculator.getState()),
             exprlist:$('#expressions').html(),
             description:$('#desc').val(),
-            image: calculator.screenshot()
+            image: calculator.screenshot({width:100,height:100,targetPixelRatio:2})
         },function(data){
             if (data.status === 'ok') {
                 $('#save-modal').modal('hide')
+                $('#graph-select').append('<option value="'+data.id+'" data-img-src="'+data.image_url+'">'+data.title+'</option>')
                 alert("Successfully saved graph")
-                html='<option value='+data.id+'>'+data.title+'</option>'
-                $('#graph-select').append($('<option>',{value:data.id,text:data.title}))
+                $('#graph-select').imagepicker({show_label:true})
             } else {
                 alert(data.error)
                 $('#eq_in').focus()
