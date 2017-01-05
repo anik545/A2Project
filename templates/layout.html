@@ -1,6 +1,31 @@
 <!DOCTYPE html>
+<html>
 
-<!-- USE THIS TO IMPLEMENT A NAVBAR ON EACH PAGE
-     MAKE EACH PAGE EXTEND THIS TEMPLATE-->
+<head>
+  {% block head %}
+  <meta charset="utf-8">
+  <title>{% block title %} A2 Project Website{% endblock %}</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  {% endblock %}
+
+</head>
+
+
+<body>
+  <div id="content">
+    {% block main %}
+    {% endblock %}
+  </div>
+  <footer class="footer">
+    <div class="container">
+    {% block footer %}
+      <p class="text-muted"> Anik Roy 2017 </p>
+    {% endblock %}
+  </div>
+  </footer>
+</body>
 
 </html>

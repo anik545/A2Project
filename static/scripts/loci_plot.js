@@ -75,12 +75,12 @@ $(document).ready(function() {
         exprlist = $('#expressions td:nth-child(1)').map(function(){
             return $(this).text(); //need to get from mathjax, not just text
         }).get();
-        //TODO exprlist not working, implement JSON object as {id:plot}
         $.post('/_addgraph',{
             title:$('#title').val(),
             desmosdata:JSON.stringify(calculator.getState()),
             exprlist:$('#expressions').html(),
-            description:$('#desc').val()
+            description:$('#desc').val(),
+            image: calculator.screenshot()
         },function(data){
             if (data.status === 'ok') {
                 $('#save-modal').modal('hide')

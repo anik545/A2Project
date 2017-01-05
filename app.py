@@ -99,14 +99,16 @@ class Graph(db.Model):
     desmosdata = db.Column(db.String)
     exprlist = db.Column(db.String)
     date = db.Column(db.DateTime)
+    image_url = db.Column(db.String)
     user_id = db.Column('user_id',db.Integer,db.ForeignKey('user.user_id'))
 
-    def __init__(self,desmosdata,exprlist,user_id,title,desc):
+    def __init__(self,desmosdata,exprlist,user_id,title,desc,image_url):
         self.desmosdata = desmosdata
         self.exprlist = exprlist
         self.user_id = user_id
         self.title = title
         self.description = desc
+        self.image_url = image_url
         self.date = datetime.date.today()
 
 @login_manager.user_loader
@@ -211,13 +213,14 @@ def addgraph():
             data2 = request.form.get('exprlist',None)
             title = request.form.get('title',"")
             desc = request.form.get('description',"")
+            image_url = request.form.get('image',"")
             user_id = current_user.user_id
             print(type(Graph.query.filter_by(title=title,user_id=user_id).first()))
             exists = Graph.query.filter_by(title=title,user_id=user_id).first()
             if exists:
                 return jsonify(status="error",error="Graph already exists")
             else:
-                g=Graph(data1,data2,user_id,title,desc)
+                g=Graph(data1,data2,user_id,title,desc,image_url)
                 db.session.add(g)
                 db.session.commit()
                 graph_id = g.graph_id #has to be after commit
