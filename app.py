@@ -120,6 +120,10 @@ def user_loader(email):
 def main():
     return render_template('index.html')
 
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
 @app.route('/login',methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
