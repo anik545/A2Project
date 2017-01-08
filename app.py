@@ -13,6 +13,8 @@ from wtforms.fields.html5 import EmailField
 
 from flask_login import login_required, logout_user, current_user, login_user, LoginManager
 
+from flask_mail import Mail,Message
+
 from flask_sqlalchemy import SQLAlchemy
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -21,17 +23,26 @@ import datetime
 
 from question_dict import COMPLEX_QUESTIONS,MATRIX_QUESTIONS,QUESTIONS
 
-class Register(FlaskForm):
+from itsdangerous import URLSafeTimedSerializer
+
+class RegisterForm(FlaskForm):
     fname = TextField('First Name',[validators.Required()])
     lname = TextField('Last Name',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
     confirm_password = PasswordField('Confirm Password',[validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
     email=EmailField('Email Address',[validators.DataRequired(),validators.Email()])
 
-class Login(FlaskForm):
+class LoginForm(FlaskForm):
     email = TextField('Username',[validators.Required()])
     password = PasswordField('Password', [validators.Required()])
     remember = BooleanField('Remember')
+
+class RequestPasswordChangeForm(FlaskForm):
+    email = TextField('Email', [validators.Required(),validators.Email()])
+
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField('Password', [validators.Required()])
+    confirm_password = PasswordField('Confirm', [validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
 
 app = Flask(__name__)
 app.register_blueprint(matrix_blueprint)
@@ -39,11 +50,28 @@ app.config["WTF_CSRF_ENABLED"] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config["MAIL_PORT"] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'testapp545545'
+app.config['MAIL_PASSWORD'] = 'January28'
+
+ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
+
+mail = Mail(app)
+
+def send_email(address,subject,html):
+    msg=Message(subject,sender="testapp545545@gmail.com",recipients=[address])
+    msg.html = html
+    mail.send(msg)
+
 
 class User(db.Model):
     user_id = db.Column('user_id',db.Integer, primary_key=True)
@@ -111,6 +139,9 @@ class Graph(db.Model):
         self.image_url = image_url
         self.date = datetime.date.today()
 
+# TODO http://librosweb.es/libro/explore_flask/chapter_12/forgot_your_password.html
+# TODO add email confirmation
+
 @login_manager.user_loader
 def user_loader(email):
     print(email)
@@ -129,9 +160,9 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('main'))  #already logged in user shouldnt go to login page
     if request.method == 'GET':
-        loginform = Login()
+        loginform = LoginForm()
     if request.method == 'POST':
-        loginform = Login(request.form)
+        loginform = LoginForm(request.form)
         if loginform.validate():
             user = User.query.filter_by(email=loginform.email.data.lower()).first()
             if user and user.check_pw(loginform.password.data):
@@ -160,9 +191,9 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('main'))
     if request.method == 'GET':
-        regform = Register()
+        regform = RegisterForm()
     if request.method == 'POST':
-        regform = Register(request.form)
+        regform = RegisterForm(request.form)
         if regform.validate():
             if not User.query.filter_by(email=regform.email.data.lower()).first():
                 u = User(regform.fname.data.lower(),regform.lname.data.lower(),regform.email.data.lower(),regform.password.data)
@@ -175,6 +206,41 @@ def register():
         else:
             error = 'Incorrect Details'
     return render_template('signup.html',regform=regform)
+
+@app.route('/reset',methods=['GET','POST'])
+def reset():
+    form = RequestPasswordChangeForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first_or_404()
+        subject = "Password Reset"
+
+        token = ts.dumps(user.email,salt='recover-key')
+
+        recover_url = url_for('reset_with_token',token=token,_external=True)
+
+        html = render_template('recover_email.html',recover_url=recover_url)
+
+        send_email(address=user.email,subject=subject,html=html)
+        flash('Password reset email sent')
+        return redirect(url_for('main'))
+    return render_template('reset.html',form=form)
+
+@app.route('/reset/<token>',methods=['GET','POST'])
+def reset_with_token(token):
+    try:
+        email = ts.loads(token,salt='recover-key',max_age=86400)
+    except:
+        abort(404)
+    form=ChangePasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=email).first_or_404()
+        user.password = generate_password_hash(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("password updated successfully")
+        return redirect(url_for('login'))
+    return render_template('reset_with_token.html',form=form,token=token)
+
 
 @app.route('/account')
 @login_required

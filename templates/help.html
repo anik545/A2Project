@@ -1,4 +1,4 @@
-{% extends layout.html %}
+{% extends "layout.html" %}
 
 {% block title %}Help{% endblock %}
 
@@ -6,7 +6,7 @@
 {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block main %}
 {{ super() }}
 <p> This is the help page </p>
 {% endblock %}

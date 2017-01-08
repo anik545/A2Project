@@ -1,32 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Matrix Calculator</title>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static',filename='styles/a.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
+{% block title %}Matrix Calculator{% endblock %}
 
-<body>
-    <div id="outer">
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static',filename='styles/matrix.css') }}">
+{% endblock %}
+
+<!--TODO change to bootstrap from pure-->
+
+{% block main %}
+<div id="outer">
         <div id="inner">
             <div align="center" id="matrices">
                 <form class="pure-form" method="post" action="matrix">
                     <div id="A-input">
-                        <input type="text" name="A00" size="3" class="in" value="{{ request.form['A00'] }}">
-                        <input type="text" name="A01" size="3" class="in" value="{{ request.form['A01'] }}">
-                        <input type="text" name="A02" size="3" class="in" value="{{ request.form['A02'] }}">
-                        <br>
-                        <input type="text" name="A10" size="3" class="in" value="{{ request.form['A10'] }}">
-                        <input type="text" name="A11" size="3" class="in" value="{{ request.form['A11'] }}">
-                        <input type="text" name="A12" size="3" class="in" value="{{ request.form['A12'] }}">
-                        <br>
-                        <input type="text" name="A20" size="3" class="in" value="{{ request.form['A20'] }}">
-                        <input type="text" name="A21" size="3" class="in" value="{{ request.form['A21'] }}">
-                        <input type="text" name="A22" size="3" class="in" value="{{ request.form['A22'] }}">
-                        <br>
+                        {% for x in ['0','1','2'] %}
+                            {% for y in ['0','1','2'] %}
+                            <input type="text" name="{{  'A'+x+y  }}" size="3" class="in" value="{{ request.form['A'+x+y] }}">
+
+                            {% endfor %}
+                            <br>
+                        {% endfor %}
+
                         <input type="submit" value="Determinant" name="a-submit" class="pure-button">
                         <br>
                         <input type="submit" value="Inverse" name="a-submit" class="pure-button">
@@ -48,18 +45,13 @@
                     </div>
 
                     <div id="B-input">
-                        <input type="text" name="B00" size="3" class="in" value="{{ request.form['B00'] }}">
-                        <input type="text" name="B01" size="3" class="in" value="{{ request.form['B01'] }}">
-                        <input type="text" name="B02" size="3" class="in" value="{{ request.form['B02'] }}">
-                        <br>
-                        <input type="text" name="B10" size="3" class="in" value="{{ request.form['B10'] }}">
-                        <input type="text" name="B11" size="3" class="in" value="{{ request.form['B11'] }}">
-                        <input type="text" name="B12" size="3" class="in" value="{{ request.form['B12'] }}">
-                        <br>
-                        <input type="text" name="B20" size="3" class="in" value="{{ request.form['B20'] }}">
-                        <input type="text" name="B21" size="3" class="in" value="{{ request.form['B21'] }}">
-                        <input type="text" name="B22" size="3" class="in" value="{{ request.form['B22'] }}">
-                        <br>
+                        {% for x in ['0','1','2'] %}
+                            {% for y in ['0','1','2'] %}
+                            <input type="text" name="{{  'B'+x+y  }}" size="3" class="in" value="{{ request.form['B'+x+y] }}">
+
+                            {% endfor %}
+                            <br>
+                        {% endfor %}
                         <input type="submit" value="Determinant" name="b-submit" class="pure-button">
                         <br>
                         <input type="submit" value="Inverse" name="b-submit" class="pure-button">
@@ -92,6 +84,4 @@
             </div>
         </div>
     </div>
-</body>
-
-</html>
+{% endblock %}

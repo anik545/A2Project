@@ -1,18 +1,12 @@
-<head>
-    <meta charset="utf-8">
-    <title>Complex Numbers</title>
+{% extends "layout.html" %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{% block title %} Complex Numbers {% endblock %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+{% block head %}
+{{ super() }}
+{% endblock %}
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-    </script>
-
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
-
-<body>
+{% block main %}
     <table class="table">
     <thead>
         <th> Topic </th>
@@ -30,4 +24,4 @@
 
     </tbody>
     </table>
-</body>
+{% endblock %}

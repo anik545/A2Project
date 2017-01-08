@@ -1,19 +1,13 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <title>Sign Up</title>
+{% block title %} Sign Up {% endblock %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-    </script>
-
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
+{% block head %}
+{{ super() }}
+{% endblock %}
 
 
-<body>
+{% block main %}
     <div class="container">
 
         <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
@@ -41,34 +35,29 @@
                             <label for="firstname" class="col-md-3 control-label">First Name</label>
                             <div class="col-md-9">
                                 {{ regform.fname(class="form-control",placeholder="First Name") }}
-                                <!--input type="text" class="form-control" name="firstname" placeholder="First Name"-->
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="lastname" class="col-md-3 control-label">Last Name</label>
                             <div class="col-md-9">
                                 {{ regform.lname(class="form-control",placeholder="Last Name",placeholder="Last Name") }}
-                                <!--input type="text" class="form-control" name="lastname" placeholder="Last Name"-->
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">Password</label>
                             <div class="col-md-9">
                                 {{ regform.password(class="form-control",placeholder="Password") }}
-                                <!--input type="password" class="form-control" name="passwd" placeholder="Password"-->
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">Confirm Password</label>
                             <div class="col-md-9">
                                 {{ regform.confirm_password(class="form-control",placeholder="Confirm Password") }}
-                                <!--input type="password" class="form-control" name="passwd2" placeholder="Confirm Password"-->
                             </div>
                         </div>
                         <div class="form-group">
                             <!-- Button -->
                             <div class="col-md-offset-3 col-md-9">
-                                <!--button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> Sign Up</button-->
                                 <input type="submit" value="Sign Up" class="btn btn-info">
                             </div>
                         </div>
@@ -103,4 +92,4 @@
             </div>
         </div>
     </div>
-</body>
+{% endblock %}

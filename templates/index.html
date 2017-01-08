@@ -39,6 +39,15 @@
           <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('account') }}">Account</a>
           </div>
         {% endif %}
-
     </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
 {% endblock %}
