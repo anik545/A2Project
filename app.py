@@ -80,6 +80,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120), unique=False)
     authenticated = db.Column(db.Boolean,default=False)
+    confirmed = db.Column(db.Boolean)
     marks = db.relationship('Mark',backref="user",cascade="all, delete-orphan", lazy="dynamic")
     graphs = db.relationship('Graph',backref="user",cascade="all, delete-orphan", lazy="dynamic")
 
@@ -89,6 +90,7 @@ class User(db.Model):
         self.email = email
         self.password = generate_password_hash(password)
         self.authenticated = False
+        self.confirmed = False
 
     def check_pw(self,password):
         return check_password_hash(self.password,password)
@@ -139,9 +141,6 @@ class Graph(db.Model):
         self.image_url = image_url
         self.date = datetime.date.today()
 
-# TODO http://librosweb.es/libro/explore_flask/chapter_12/forgot_your_password.html
-# TODO add email confirmation
-
 @login_manager.user_loader
 def user_loader(email):
     print(email)
@@ -173,7 +172,7 @@ def login():
                 return redirect(url_for('main')) #TODO redirect to last page
             else:
                 flash('Incorrect Credentials')
-    return render_template('login.html',loginform=loginform)
+    return render_template('user/login.html',loginform=loginform)
 
 @app.route('/logout')
 @login_required
@@ -199,31 +198,65 @@ def register():
                 u = User(regform.fname.data.lower(),regform.lname.data.lower(),regform.email.data.lower(),regform.password.data)
                 db.session.add(u)
                 db.session.commit()
+
+                subject = "Email Confirmation"
+
+                token = ts.dumps(u.email, salt='email-confirm-key')
+
+                confirm_url = url_for('confirm_email',token=token,_external=True)
+                html = render_template('emails/confirm_email.html',confirm_url=confirm_url)
+                send_email(address=u.email,subject=subject,html=html)
+
                 login_user(u)
+                flash("Confirmation Email Sent")
                 return redirect(url_for('main'))
             else:
                 flash('Email already exists')
         else:
             error = 'Incorrect Details'
-    return render_template('signup.html',regform=regform)
+    return render_template('user/signup.html',regform=regform)
+
+@app.route('/confirm/<token>')
+def confirm_email(token):
+    try:
+        email = ts.loads(token, salt="email-confirm-key",max_age=86400)
+    except:
+        abort(404)
+
+    user = User.query.filter_by(email=email).first_or_404()
+    user.confirmed = True
+
+    login_user(user)
+
+    db.session.add(user)
+    db.session.commit()
+
+    flash('Email Confirmed')
+    return redirect(url_for('main'))
 
 @app.route('/reset',methods=['GET','POST'])
 def reset():
     form = RequestPasswordChangeForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first_or_404()
+        user = User.query.filter_by(email=form.email.data).first()
+
+        if not user:
+            flash('Email address does not exist')
+            return render_template('user/reset.html',form=form)
+        elif not user.confirmed:
+            flash('Email address not confirmed')
+            return render_template('user/reset.html',form=form)
+
+
         subject = "Password Reset"
-
         token = ts.dumps(user.email,salt='recover-key')
-
         recover_url = url_for('reset_with_token',token=token,_external=True)
-
-        html = render_template('recover_email.html',recover_url=recover_url)
+        html = render_template('emails/recover_email.html',recover_url=recover_url)
 
         send_email(address=user.email,subject=subject,html=html)
         flash('Password reset email sent')
         return redirect(url_for('main'))
-    return render_template('reset.html',form=form)
+    return render_template('user/reset.html',form=form)
 
 @app.route('/reset/<token>',methods=['GET','POST'])
 def reset_with_token(token):
@@ -239,7 +272,7 @@ def reset_with_token(token):
         db.session.commit()
         flash("password updated successfully")
         return redirect(url_for('login'))
-    return render_template('reset_with_token.html',form=form,token=token)
+    return render_template('user/reset_with_token.html',form=form,token=token)
 
 
 @app.route('/account')
@@ -247,7 +280,7 @@ def reset_with_token(token):
 def account():
     user_id = current_user.user_id
     u = User.query.get(user_id)
-    return render_template('account.html',user=u,qs=QUESTIONS)
+    return render_template('user/account.html',user=u,qs=QUESTIONS)
 
 @app.route('/loci-plotter')
 def loci():
@@ -313,7 +346,7 @@ def operations():
 
 @app.route('/questions')
 def questions():
-    return render_template('questions.html')
+    return render_template('questions/questions.html')
 
 @app.route('/questions/<topic>/<q_type>')
 def show_questions(topic,q_type):
@@ -324,13 +357,13 @@ def show_questions(topic,q_type):
         matans=questions[0].mat_ans
         session['questions'] = [q.get_question() for q in questions]
         session['answers'] = [str(q.get_answer()) for q in questions]
-        return render_template('mat_questions.html',questions=enumerate(questions),answers=answers,mat_ans=matans,q_type=q_type,topic=topic)
+        return render_template('questions/mat_questions.html',questions=enumerate(questions),answers=answers,mat_ans=matans,q_type=q_type,topic=topic)
     elif topic == 'complex':
         questions = [ComplexQuestion(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
         session['questions'] = [q.get_question() for q in questions]
         session['answers'] = [str(q.get_answer()) for q in questions]
-        return render_template('complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type,topic=topic)
+        return render_template('questions/complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type,topic=topic)
     else:
         abort(404)
 

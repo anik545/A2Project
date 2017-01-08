@@ -6,7 +6,7 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-{% endblock %} 
+{% endblock %}
 
 
 {% block main %}
@@ -39,6 +39,16 @@
 
                         </div>
                     </div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+
                 </div>
             </div>
         </div>
