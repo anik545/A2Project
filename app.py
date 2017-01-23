@@ -57,7 +57,8 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'testapp545545'
 app.config['MAIL_PASSWORD'] = 'January28'
 
-ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+#serializer used to create tokens for email confirmation and password reset -->they use different salts to differentiate between the two
+serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -71,7 +72,6 @@ def send_email(address,subject,html):
     msg=Message(subject,sender="testapp545545@gmail.com",recipients=[address])
     msg.html = html
     mail.send(msg)
-
 
 class User(db.Model):
     user_id = db.Column('user_id',db.Integer, primary_key=True)
@@ -201,7 +201,7 @@ def register():
 
                 subject = "Email Confirmation"
 
-                token = ts.dumps(u.email, salt='email-confirm-key')
+                token = serializer.dumps(u.email, salt='email-confirm-key')
 
                 confirm_url = url_for('confirm_email',token=token,_external=True)
                 html = render_template('emails/confirm_email.html',confirm_url=confirm_url)
@@ -219,7 +219,7 @@ def register():
 @app.route('/confirm/<token>')
 def confirm_email(token):
     try:
-        email = ts.loads(token, salt="email-confirm-key",max_age=86400)
+        email = serializer.loads(token, salt="email-confirm-key",max_age=86400)
     except:
         abort(404)
 
@@ -249,7 +249,7 @@ def reset():
 
 
         subject = "Password Reset"
-        token = ts.dumps(user.email,salt='recover-key')
+        token = serializer.dumps(user.email,salt='recover-key')
         recover_url = url_for('reset_with_token',token=token,_external=True)
         html = render_template('emails/recover_email.html',recover_url=recover_url)
 
@@ -261,7 +261,7 @@ def reset():
 @app.route('/reset/<token>',methods=['GET','POST'])
 def reset_with_token(token):
     try:
-        email = ts.loads(token,salt='recover-key',max_age=86400)
+        email = serializer.loads(token,salt='recover-key',max_age=86400)
     except:
         abort(404)
     form=ChangePasswordForm()
