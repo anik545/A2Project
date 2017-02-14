@@ -59,7 +59,7 @@ app.config['MAIL_PASSWORD'] = 'January28'
 
 #serializer used to create tokens for email confirmation and password reset -->they use different salts to differentiate between the two
 serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
-
+#ok
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
