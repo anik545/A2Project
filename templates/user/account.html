@@ -1,11 +1,12 @@
-{% extends "layout.html" %}
-{% block title %} Complex Numbers {% endblock %}
+
+{% extends "layout.html" %} {% block title %} Complex Numbers {% endblock %}
+
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css">
+
+<!--link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css"-->
 
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/account.css') }}">
-
 {% endblock %}
 <!--http://www.codingeverything.com/2014/02/BootstrapDocsSideBar.html
 http://jsfiddle.net/KyleMit/v6zhz/?utm_source=website&utm_medium=embed&utm_campaign=v6zhz
@@ -13,26 +14,31 @@ http://jsfiddle.net/panchroma/ExWDq/
 Use panels for each section
 -->
 {% block main %}
-<div class="row">
+<div id="title" class="row">
     <div class="col-sm-12">
         <div class="alert alert-info" style="margin:10px;text-align:center;">Your Account</div>
+    </div>
 </div>
-</div>
-<div class="row">
-<div class="col-sm-3">
-<div id="side-nav" class="span3">
-    <ul class="nav nav-list nav-stacked affix nav-list">
-        <li><a href="#links"><i class="icon-chevron-right"></i>Links</a></li>
-        <li><a href="#set"><i class="icon-chevron-right"></i>Set Tasks</a></li>
-        <li><a href="#graphs"><i class="icon-chevron-right"></i>Graphs</a></li>
-        <li><a href="#scores"><i class="icon-chevron-right"></i>Scores</a></li>
-        <li><a href="#settings"><i class="icon-chevron-right"></i>Settings</a></li>
+<div data-spy="scroll" data-target=".scrollspy" style="position:relative">
+<div class="col-md-3 scrollspy">
+    <ul id="nav" class="nav hidden-xs hidden-sm affix-top" data-spy="affix">
+        <li><a href="#links">Links</a></li>
+        <li><a href="#set">Set Tasks</a></li>
+        <li><a href="#graphs">Graphs</a></li>
+        <li><a href="#scores">Scores</a></li>
+        <li><a href="#settings">Settings</a>
+            <ul id="nav">
+                <li>
+                    <a href="#pwd">Password</a>
+                </li>
+                <li>
+                    <a href="#user">Username</a>
+                </li>
+            </ul>
+        </li>
     </ul>
-
 </div>
-</div>
-<div class="col-sm-9">
-<div id="span9 content">
+<div class="col-md-9">
     <section id="links">
         <h1>Settings</h1>
     </section>
@@ -70,4 +76,22 @@ Use panels for each section
 </div>
 </div>
 </div>
+{% endblock %}
+
+{% block endscripts %}
+<script>
+    $('#nav').affix({
+        offset: {
+            top: $('#nav').offset().top
+        }
+    });
+    $('#nav').affix({
+        offset: {
+            bottom: ($('footer').outerHeight(true) +
+                    $('.application').outerHeight(true)) +
+                    40
+        }
+    });
+</script>
+
 {% endblock %}

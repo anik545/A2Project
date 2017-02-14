@@ -1,0 +1,30 @@
+1.
+Split up app.py into models.py, forms.py
+https://github.com/berlotto/flask-app-template
+
+2.
+Database with teacher/student
+http://stackoverflow.com/questions/15871391/implementing-flask-login-with-multiple-user-classes
+Separate teachers and students polymorphic identity
+Maybe links table --> LINKS(StudentID,TeacherID)
+teacher and student inherit from user
+each has teacher id or student id field
+links table has links
+
+3.
+finish account page with sidebar
+
+4.
+make teacher-student links system (form on account page)
+
+5.
+restrict account page view depending on links and role (teacher/student)
+
+6.
+Implement setting/checking of tasks
+teacher has many tasks, task has one teacher.
+student has many tasks, task has one student
+Maybe TASK(Task_ID,Student_ID,Teacher_ID,Task_number,date_due,completed,mark)
+
+7.
+make navbar for whole site
