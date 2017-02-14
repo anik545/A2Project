@@ -1,146 +1,31 @@
 from flask import Flask, render_template, request, jsonify,  abort, redirect, url_for, g, flash, session
-from complex_loci import *
-from matrix_questions import MatrixQuestion
-from complex_questions import ComplexQuestion
+
+from app.pyscripts.complex_loci import *
+from app.pyscripts.matrix_questions import MatrixQuestion
+from app.pyscripts.complex_questions import ComplexQuestion
+from app.pyscripts.question_dict import COMPLEX_QUESTIONS, MATRIX_QUESTIONS, QUESTIONS
 
 import ast
 
-from views.matrix import matrix_blueprint
-
-from flask_wtf import Form,FlaskForm
-from wtforms import TextField,PasswordField,BooleanField,validators
-from wtforms.fields.html5 import EmailField
-
 from flask_login import login_required, logout_user, current_user, login_user, LoginManager
-
-from flask_mail import Mail,Message
-
+from flask_mail import Message
 from flask_sqlalchemy import SQLAlchemy
 
+
 from werkzeug.security import generate_password_hash, check_password_hash
-
-import datetime
-
-from question_dict import COMPLEX_QUESTIONS,MATRIX_QUESTIONS,QUESTIONS
-
 from itsdangerous import URLSafeTimedSerializer
 
-class RegisterForm(FlaskForm):
-    fname = TextField('First Name',[validators.Required()])
-    lname = TextField('Last Name',[validators.Required()])
-    password = PasswordField('Password', [validators.Required()])
-    confirm_password = PasswordField('Confirm Password',[validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
-    email=EmailField('Email Address',[validators.DataRequired(),validators.Email()])
-
-class LoginForm(FlaskForm):
-    email = TextField('Username',[validators.Required()])
-    password = PasswordField('Password', [validators.Required()])
-    remember = BooleanField('Remember')
-
-class RequestPasswordChangeForm(FlaskForm):
-    email = TextField('Email', [validators.Required(),validators.Email()])
-
-class ChangePasswordForm(FlaskForm):
-    password = PasswordField('Password', [validators.Required()])
-    confirm_password = PasswordField('Confirm', [validators.Required(),validators.EqualTo('password',message='Passwords do not match')])
-
-app = Flask(__name__)
-app.register_blueprint(matrix_blueprint)
-app.config["WTF_CSRF_ENABLED"] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config["MAIL_PORT"] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'testapp545545'
-app.config['MAIL_PASSWORD'] = 'January28'
-
-#serializer used to create tokens for email confirmation and password reset -->they use different salts to differentiate between the two
+from app import app, login_manager
+from app.forms import *
+from app.models import *
+'''
 serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
-#ok
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-db = SQLAlchemy(app)
-
-mail = Mail(app)
 
 def send_email(address,subject,html):
     msg=Message(subject,sender="testapp545545@gmail.com",recipients=[address])
     msg.html = html
     mail.send(msg)
-
-class User(db.Model):
-    user_id = db.Column('user_id',db.Integer, primary_key=True)
-    fname = db.Column(db.String(80), unique=False)
-    lname = db.Column(db.String(80), unique=False)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120), unique=False)
-    authenticated = db.Column(db.Boolean,default=False)
-    confirmed = db.Column(db.Boolean)
-    marks = db.relationship('Mark',backref="user",cascade="all, delete-orphan", lazy="dynamic")
-    graphs = db.relationship('Graph',backref="user",cascade="all, delete-orphan", lazy="dynamic")
-
-    def __init__(self,fname,lname,email,password):
-        self.fname = fname
-        self.lname = lname
-        self.email = email
-        self.password = generate_password_hash(password)
-        self.authenticated = False
-        self.confirmed = False
-
-    def check_pw(self,password):
-        return check_password_hash(self.password,password)
-
-    def is_authenticated(self):
-        return self.authenticated
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.email
-
-class Mark(db.Model):
-     key = db.Column('key',db.Integer,primary_key=True)
-     score = db.Column(db.Integer)
-     out_of = db.Column(db.Integer)
-     date = db.Column(db.DateTime)
-     question_id = db.Column(db.Integer)
-     user_id = db.Column('user_id',db.Integer,db.ForeignKey('user.user_id'))
-
-     def __init__(self,score,out_of,q_id,user_id):
-         self.score=score
-         self.out_of=out_of
-         self.question_id=q_id
-         self.user_id = user_id
-         self.date = datetime.date.today()
-
-class Graph(db.Model):
-    graph_id = db.Column('graph_id',db.Integer,primary_key=True)
-    title = db.Column(db.String)
-    description = db.Column(db.String, nullable=True)
-    desmosdata = db.Column(db.String)
-    exprlist = db.Column(db.String)
-    date = db.Column(db.DateTime)
-    image_url = db.Column(db.String)
-    user_id = db.Column('user_id',db.Integer,db.ForeignKey('user.user_id'))
-
-    def __init__(self,desmosdata,exprlist,user_id,title,desc,image_url):
-        self.desmosdata = desmosdata
-        self.exprlist = exprlist
-        self.user_id = user_id
-        self.title = title
-        self.description = desc
-        self.image_url = image_url
-        self.date = datetime.date.today()
-
+'''
 @login_manager.user_loader
 def user_loader(email):
     print(email)
@@ -153,7 +38,7 @@ def main():
 @app.route('/help')
 def help():
     return render_template('help.html')
-
+'''
 @app.route('/login',methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
@@ -344,6 +229,7 @@ def addgraph():
 def operations():
     return render_template('operations.html')
 
+#Questions
 @app.route('/questions')
 def questions():
     return render_template('questions/questions.html')
@@ -366,7 +252,6 @@ def show_questions(topic,q_type):
         return render_template('questions/complex_questions.html',questions=enumerate(questions),answers=answers,q_type=q_type,topic=topic)
     else:
         abort(404)
-
 
 @app.route('/questions/_answers/<topic>/<q_type>')
 def answers(topic,q_type):
@@ -450,12 +335,8 @@ def answers(topic,q_type):
         return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
     else:
         abort(404)
-
-
+#End Questions
+'''
 @app.route('/ttt')
 def ttt():
     return render_template('ttt.html')
-
-if __name__ == '__main__':
-    app.debug = True
-    app.run()

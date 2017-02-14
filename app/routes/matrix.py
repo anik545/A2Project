@@ -1,6 +1,6 @@
 from flask import Flask,request,render_template,Blueprint
 import flask
-from matrices import Matrix
+from ..pyscripts.matrices import Matrix
 from fractions import Fraction
 
 matrix_blueprint = Blueprint('matrix_blueprint',__name__,template_folder='templates')

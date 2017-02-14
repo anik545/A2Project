@@ -1,4 +1,4 @@
-from matrices import Matrix
+from app.pyscripts.matrices import Matrix
 import random
 
 #TODO make parent class Matrix Question and subclasses for each question type

@@ -13,30 +13,30 @@
         Hi {{ current_user.fname }}!
         {% endif %}
 
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci') }}">Loci Plotter</a>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.loci') }}">Loci Plotter</a>
         <br>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('operations') }}">Complex Number Operations</a>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.operations') }}">Complex Number Operations</a>
         <br>
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('matrix_blueprint.matrix') }}">Matrix Calculator</a>
         <br>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('questions') }}">Questions</a>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('questions.questions') }}">Questions</a>
         <br>
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('help') }}">Help</a>
         <br>
 
         {% if not current_user.is_authenticated %}
           <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('login') }}">Log In</a>
+          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.login') }}">Log In</a>
           </div>
           <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('register') }}">Sign Up</a>
+          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.register') }}">Sign Up</a>
           </div>
         {% else %}
           <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('logout') }}">Log Out</a>
+          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.logout') }}">Log Out</a>
           </div>
           <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('account') }}">Account</a>
+          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.account') }}">Account</a>
           </div>
         {% endif %}
     </div>
