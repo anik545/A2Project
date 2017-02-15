@@ -36,6 +36,9 @@ class User(db.Model):
     def get_id(self):
         return self.email
 
+#teacher class subclassing from user, teacher code field extra
+#links table, many to many intermediate, teacher_id, student_id.
+
 class Mark(db.Model):
      key = db.Column('key',db.Integer,primary_key=True)
      score = db.Column(db.Integer)

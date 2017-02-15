@@ -1,4 +1,3 @@
-
 WTF_CSRF_ENABLED = False
 SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
 SECRET_KEY = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
