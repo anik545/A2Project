@@ -50,6 +50,21 @@ return false;
 
 $(document).ready(function() {
     $('#graph-select').imagepicker({show_label:true})
+    var queryDict = {};
+    //get all parameters
+    location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
+    //if there is an id parameter, load graph with that id
+    if (queryDict['id']) {
+        $.getJSON($SCRIPT_ROOT+'/_addgraph',{
+            graph_id: queryDict['id']
+        },function(data){
+            $('#load-modal').modal('hide')
+            $('#expressions').html(data.exprlist)
+            calculator.setState(data.desmosdata)
+        }).fail(function(){
+            alert('Error Loading Graph')
+        });
+    }
     $('#eq_in').on('keydown', function(e) {
         if (e.keyCode===13) {
             addplot();

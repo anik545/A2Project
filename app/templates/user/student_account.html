@@ -1,0 +1,179 @@
+{% extends "layout.html" %}
+
+{% block title %} Account {% endblock %}
+
+{% block head %}
+{{ super() }}
+
+
+<script src="{{ url_for('static',filename='image-picker/image-picker.min.js') }}"></script>
+
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/account.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static',filename='image-picker/image-picker.css') }}">
+
+{% endblock %}
+<!--http://www.codingeverything.com/2014/02/BootstrapDocsSideBar.html
+http://jsfiddle.net/KyleMit/v6zhz/?utm_source=website&utm_medium=embed&utm_campaign=v6zhz
+http://jsfiddle.net/panchroma/ExWDq/
+Use panels for each section
+-->
+{% block main %}
+<div id="title" class="row">
+    <div class="col-sm-12">
+        <div class="alert alert-info" style="margin:10px;text-align:center;">Your Account</div>
+    </div>
+</div>
+<div data-spy="scroll" data-target=".scrollspy" style="position:relative">
+<div class="col-md-3 scrollspy">
+    <ul id="nav" class="nav hidden-xs hidden-sm affix-top" data-spy="affix">
+        <li><a href="#links">Links</a></li>
+        <li><a href="#set">Set Tasks</a></li>
+        <li><a href="#graphs">Graphs</a></li>
+        <li><a href="#scores">Scores</a></li>
+        <li><a href="#settings">Settings</a>
+            <ul id="nav">
+                <li>
+                    <a href="#pwd">Password</a>
+                </li>
+                <li>
+                    <a href="#user">Username</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class="col-md-9">
+    <div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    </div>
+    <section id="links">
+        <h1>Links</h1>
+        <form method="post" action="{{ url_for('user.account') }}">
+        {{ linkform.hidden_tag() }}
+        {{ linkform.link_code }}<br>
+        {{ linkform.link_submit }}
+        </form>
+    </section>
+
+    <section id="set">
+        <h1>Set Tasks</h1>
+        {% if student.tasks.first() %}
+        <table>
+            <thead>
+                <th>Topic</th>
+                <th>Task Name</th>
+                <th>Completed</th>
+                <th></th>
+            </thead>
+            <tbody>
+            {% for t in student.tasks.all() %}
+                <tr>
+                    <td>{{ qs[t.question_id]['topic'] }}</td>
+                    <td>{{ qs[t.question_id]['name'] }}</td>
+                    <td>{{ t.completed }}</td>
+                    <!-- add links to <td>s -->
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </section>
+
+    <section id="graphs">
+        <h1>Graphs</h1>
+        <form action="{{ url_for('loci.loci') }}" method="get" id="graphform">
+        <select size="5" class="image-picker show-html" id="graph-select" form="graphform" name="id">
+                {% for g in student.graphs.all() %}
+                    <option data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}">{{ g.title }}</option>
+                {% endfor %}
+        </select>
+        <!--input type="hidden" name="id" value="$('#graph-select').val()" /-->
+        <input type="submit" value="Go" id="graph-load">
+    </form>
+    </section>
+
+    <section id="scores">
+        <table class="table">
+            <thead>
+                <th> Topic </th>
+                <th> Score </th>
+                <th> Percentage </th>
+            </thead>
+            <tbody>
+                {% for mark in student.marks.all() %}
+                <tr>
+                    <td>{{ qs[mark.question_id]["topic"] }}&nbsp;{{ qs[mark.question_id]["name"] }}</td>
+                    <td>{{ mark.score }}/{{ mark.out_of }}</td>
+                    <td>{{ mark.score/mark.out_of*100 }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section id="settings">
+        <h1>Settings</h1>
+        <form method="post", action="{{ url_for('user.account') }}">
+        {{ changeform.hidden_tag() }}
+        {{ changeform.fname.label }}
+        {{ changeform.fname(value=student.fname) }}
+        <br>
+        {{ changeform.lname.label }}
+        {{ changeform.lname(value=student.lname) }}
+        <br>
+        {{ changeform.email.label }}
+        {{ changeform.email(value=student.email) }}
+        <br>
+        {{ changeform.password.label }}
+        {{ changeform.password }}
+        <br>
+        {{ changeform.change_submit }}
+        </form>
+
+        <form method="post", action="{{ url_for('user.account') }}">
+        {{ pwform.hidden_tag() }}
+        {{ pwform.old_password.label }}
+        {{ pwform.old_password }}
+        <br>
+        {{ pwform.password.label }}
+        {{ pwform.password }}
+        <br>
+        {{ pwform.confirm_password.label }}
+        {{ pwform.confirm_password }}
+        <br>
+        {{ pwform.pw_submit }}
+        </form>
+    </section>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block endscripts %}
+<script>
+    $('#nav').affix({
+        offset: {
+            top: $('#nav').offset().top
+        }
+    });
+    $('#nav').affix({
+        offset: {
+            bottom: ($('footer').outerHeight(true) +
+                    $('.application').outerHeight(true)) +
+                    40
+        }
+    });
+    $('#graph-select').imagepicker({show_label:true})
+</script>
+
+{% endblock %}

@@ -1,11 +1,11 @@
-from flask import Flask,request,Blueprint,render_template,session,abort,jsonify
+from flask import Flask, request, Blueprint, render_template, session, abort, jsonify, flash
 from ..pyscripts.matrix_questions import MatrixQuestion
 from ..pyscripts.complex_questions import ComplexQuestion
 from ..pyscripts.question_dict import COMPLEX_QUESTIONS, MATRIX_QUESTIONS, QUESTIONS
 import ast
 from flask_login import current_user
 
-from ..models import Mark, User
+from ..models import Mark, User, Student, Task, Teacher
 from app import db
 
 questions_blueprint = Blueprint('questions',__name__,template_folder='templates')
@@ -72,11 +72,6 @@ def answers(topic,q_type):
         questions = session['questions']
         answers = [str(a).replace("'","") for a in answers]
         inputs = [str(i).replace("'","") for i in inputs]
-        if current_user.is_authenticated:
-            mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
-            db.session.add(mark)
-            db.session.commit()
-        return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
 
     elif topic == 'complex':
         question_id = COMPLEX_QUESTIONS[q_type]
@@ -108,10 +103,22 @@ def answers(topic,q_type):
             percent = sum(scores)*100//len(answers)
         questions = session['questions']
         print(scores)
-        if current_user.is_authenticated:
-            mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
-            db.session.add(mark)
-            db.session.commit()
-        return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)
     else:
         abort(404)
+    if current_user.is_authenticated and current_user.role == 'student':
+        mark = Mark(sum(scores),len(scores),question_id,current_user.user_id)
+        db.session.add(mark)
+        s = Student.query.filter_by(user_id=current_user.user_id).first()
+        ts = s.tasks.all()
+        task = None
+        for t in ts:
+            if t.question_id == question_id:
+                task = t
+                break
+        if task:
+            task.mark_id = mark.mark_id
+            task.completed = True
+            db.session.add(task)
+            flash('Task Completed!')
+        db.session.commit()
+    return jsonify(answers=answers,inputs=inputs,questions=questions,percent=percent,scores=scores)

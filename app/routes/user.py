@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, Blueprint
+from flask import Flask, render_template, request, jsonify, abort, redirect, url_for, Blueprint, flash
 from flask_login import login_required, logout_user, current_user, login_user
 
-from ..models import User
-from ..forms import RegisterForm, LoginForm, RequestPasswordChangeForm, ChangePasswordForm
+from ..models import User, Student, Teacher, Task
+from ..forms import *
 from ..pyscripts.question_dict import QUESTIONS
 
 from itsdangerous import URLSafeTimedSerializer
+from werkzeug.security import generate_password_hash
 from flask_mail import Message
-from app import app,db
+from app import app,db,mail
 
 user = Blueprint('user',__name__,template_folder='templates')
 
@@ -59,7 +60,9 @@ def register():
         regform = RegisterForm(request.form)
         if regform.validate():
             if not User.query.filter_by(email=regform.email.data.lower()).first():
-                u = User(regform.fname.data.lower(),regform.lname.data.lower(),regform.email.data.lower(),regform.password.data)
+                #only students have to register
+                u = Student(regform.fname.data.lower(), regform.lname.data.lower(), regform.email.data.lower(), regform.password.data, 'student')
+
                 db.session.add(u)
                 db.session.commit()
 
@@ -67,8 +70,8 @@ def register():
 
                 token = serializer.dumps(u.email, salt='email-confirm-key')
 
-                confirm_url = url_for('confirm_email',token=token,_external=True)
-                html = render_template('emails/confirm_email.html',confirm_url=confirm_url)
+                confirm_url = url_for('user.confirm_email',token=token,_external=True)
+                html = render_template('emails/confirm_email.html', confirm_url=confirm_url)
                 send_email(address=u.email,subject=subject,html=html)
 
                 login_user(u)
@@ -111,10 +114,9 @@ def reset():
             flash('Email address not confirmed')
             return render_template('user/reset.html',form=form)
 
-
         subject = "Password Reset"
         token = serializer.dumps(user.email,salt='recover-key')
-        recover_url = url_for('reset_with_token',token=token,_external=True)
+        recover_url = url_for('user.reset_with_token',token=token,_external=True)
         html = render_template('emails/recover_email.html',recover_url=recover_url)
 
         send_email(address=user.email,subject=subject,html=html)
@@ -135,13 +137,97 @@ def reset_with_token(token):
         db.session.add(user)
         db.session.commit()
         flash("password updated successfully")
-        return redirect(url_for('login'))
+        return redirect(url_for('user.login'))
     return render_template('user/reset_with_token.html',form=form,token=token)
 
-
-@user.route('/account')
+@user.route('/account',methods=['GET','POST'])
 @login_required
 def account():
+    #if user.role == 'student': ... LinkForm()
+    #if user.role == 'teacher': ... query and show students
     user_id = current_user.user_id
     u = User.query.get(user_id)
-    return render_template('user/account.html',user=u,qs=QUESTIONS)
+    if u.role == 'student':
+        changeform = ChangeDetailsForm(obj=u)
+        linkform = TeacherLinkForm()
+        pwform = ChangePasswordForm1()
+        if linkform.link_submit.data and linkform.validate_on_submit():
+            t = Teacher.query.filter_by(code=linkform.link_code.data).first()
+            if t:
+                #create link in association table, Association()?
+                s = Student.query.filter_by(user_id=user_id).first()
+                a = t.add_student(s)
+                if not a:
+                    flash('Already linked to this teacher')
+                    return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                db.session.add(a)
+                db.session.commit()
+                flash('Successfully linked')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+            else:
+                flash('No teacher with that code')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+        if changeform.change_submit.data and changeform.validate_on_submit():
+            if u.check_pw(changeform.password.data):
+                u.fname = changeform.fname.data
+                u.lname = changeform.lname.data
+                u.email = changeform.email.data
+                db.session.add(u)
+                db.session.commit()
+                flash('Details changed successfully')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+            else:
+                flash('Incorrect password')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+        if pwform.pw_submit.data and pwform.validate_on_submit():
+            if u.check_pw(pwform.old_password.data):
+                u.password = generate_password_hash(pwform.password.data)
+                db.session.add(u)
+                db.session.commit()
+                flash('Password changed successfully')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+            else:
+                flash('Incorrect password')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+        return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+    elif u.role == 'teacher':
+        students = u.students.all()
+        choices = [(s.student_id,s.fname+' '+s.lname) for s in students]
+        setform = SetTaskForm(choices)
+        changeform = ChangeDetailsForm(obj=u)
+        pwform = ChangePasswordForm1()
+        if setform.set_submit.data and setform.validate_on_submit():
+            t = Teacher.query.filter_by(user_id=user_id).first()
+            teach_id = t.teacher_id
+            for s_id in setform.student_select.data:
+                for q_id in setform.task_select.data:
+                    t=Task(q_id,s_id,teach_id)
+                    db.session.add(t)
+            db.session.commit()
+            flash('Tasks set successfully')
+            return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+        if changeform.change_submit.data and changeform.validate_on_submit():
+            if u.check_pw(changeform.password.data):
+                u.fname = changeform.fname.data
+                u.lname = changeform.lname.data
+                u.email = changeform.email.data
+                db.session.add(u)
+                db.session.commit()
+                flash('Details changed successfully')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+            else:
+                flash('Incorrect password')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+        if pwform.pw_submit.data and pwform.validate_on_submit():
+            if u.check_pw(pwform.old_password.data):
+                u.password = generate_password_hash(pwform.password.data)
+                db.session.add(u)
+                db.session.commit()
+                flash('Password changed successfully')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+            else:
+                flash('Incorrect password')
+                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+        return render_template('user/teacher_account.html', teacher=u, students=students, setform=setform, qs=QUESTIONS, pwform=pwform, changeform=changeform)
+    else:
+        return abort(500)
