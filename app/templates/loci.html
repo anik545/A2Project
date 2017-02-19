@@ -4,7 +4,6 @@
 
 {% block head %}
 {{ super() }}
-
 <link rel="stylesheet" href="{{ url_for('static',filename='image-picker/image-picker.css') }}">
 
 <script src="https://www.desmos.com/api/v0.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
@@ -35,9 +34,12 @@
     <row>
         <div class="col-lg-12">
             <div class="input-group" style="margin-top:10px;margin-bottom:10px">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#help-modal">Help</button>
+                </span>
                 <input type="text" class="form-control" placeholder="Enter Equation..." id='eq_in' name="in">
                 <span class="input-group-btn">
-                    <button id="go"  class="btn btn-default" type="button">Go</button>
+                    <button id="go"  class="btn btn-success" type="button">Go</button>
                 </span>
             </div>
             <!-- /input-group -->
@@ -131,7 +133,28 @@
             </div>
         </div>
         <!--end load-modal-->
+
+        <!-- help modal -->
+        <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Load Graph</h4>
+              </div>
+              <div class="modal-body">
+                Use || for modulus<br>
+                Use arg() for argument<br>
+                Use the variable z<br>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
+    <!-- end help modal -->
 
     <script type=text/javascript>
         $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};

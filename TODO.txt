@@ -6,6 +6,10 @@ let students/teachers remove teachers/students
 let teachers remove tasks
 
 3.
+teacher account page --> let teacher see marks of completed tasks
+use task mark one to one relationship
+
+3.
 make help page(s), instructions on loci plotter (maybe mod/arg buttons)
 
 4.

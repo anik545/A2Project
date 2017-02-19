@@ -71,7 +71,9 @@ class Matrix(object):
 
     def tostr(self):
         rows = self.rows
-        return Matrix([[str(rows[y][x]) for x in range(self.x)] for y in range(self.y)])
+        return Matrix(
+            [[str(rows[y][x]) for x in range(self.x)] for y in range(self.y)]
+                )
 
     def get_dimensions(self):
         return (self.y, self.x)
@@ -81,7 +83,9 @@ class Matrix(object):
 
     def transpose(self):
         rows = self.rows
-        return Matrix([[rows[x][y] for x in range(self.x)] for y in range(self.y)])
+        return Matrix(
+            [[rows[x][y] for x in range(self.x)] for y in range(self.y)]
+                )
 
     def determinant(self):
         rows = self.rows
@@ -171,5 +175,5 @@ class Matrix(object):
         return Matrix(id_mat)
 
 if __name__ == '__main__':
-    a=Matrix([[5, 3, 4], [10, 7, 2], [10, 3, 7]])
+    a = Matrix([[5, 3, 4], [10, 7, 2], [10, 3, 7]])
     a.inverse().display()

@@ -1,4 +1,4 @@
-from sympy import *
+from sympy import symbols, re, im, sqrt, atan, sympify, latex
 import time
 
 # TODO instead of subbing Abs(), find sqrt(re(x)+im(x)) instead.
@@ -22,10 +22,10 @@ def parse(eq):
     eq = eq.replace('z', 'Z').replace('^', '**')
     eq_list = list(eq)
     eq_list = ['I' if ch == 'i' and eq_list[n - 1]
-               not in ['p', 'P','s','S'] else ch for n, ch in enumerate(eq_list)]
+               not in ['p', 'P', 's', 'S'] else ch for n, ch in enumerate(eq_list)]
     nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     for n, ch in enumerate(eq_list):
-        if (ch in ['Z', 'I', 'A', 'a', 'p', 'P','(']) and (eq_list[n - 1] in nums) and n > 0:
+        if (ch in ['Z', 'I', 'A', 'a', 'p', 'P', '(']) and (eq_list[n - 1] in nums) and n > 0:
             eq_list.insert(n, '*')
     eq = ''.join(eq_list)
     eq = eq.replace('Z', '(x+y*I)')
@@ -60,7 +60,7 @@ def parse_inequality(eq):
 def get_implicit(eq, latx=False):
 
     op = parse_inequality(eq)
-    lhs,rhs = eq.split(op)
+    lhs, rhs = eq.split(op)
 
     x, y = symbols('x y', real=True)
     locs = {'x': x, 'y': y}
@@ -78,10 +78,10 @@ def get_implicit(eq, latx=False):
     else:
         return str(eq) + op + '0'
 
+
 if __name__ == '__main__':
     t1 = time.time()
     b = get_implicit('arg(z) = pi/4', latx=True)
     t2 = time.time()
     print(b)
-    pprint(b)
     print('time: ', t2 - t1, ' seconds')

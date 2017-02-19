@@ -41,17 +41,16 @@ Use panels for each section
     </ul>
 </div>
 <div class="col-md-9">
-    <div>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <ul class=flashes>
                 {% for message in messages %}
-                    <li>{{ message }}</li>
+                <div class="alert alert-info alert-dismissable fade in">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  {{ message }}
+                </div>
                 {% endfor %}
-            </ul>
         {% endif %}
     {% endwith %}
-    </div>
 
     <section id="links">
         <h1>Links</h1>
@@ -64,14 +63,24 @@ Use panels for each section
                         <th>Topic</th>
                         <th>Task Name</th>
                         <th>Completed</th>
+                        <th>Mark</th>
+                        <th>Percent</th>
+                        <th>Date Completed</th>
                         <th></th>
                     </thead>
                     <tbody>
                     {% for t in s.tasks.all() %}
+
                         <tr>
+
                             <td>{{ qs[t.question_id]['topic'] }}</td>
                             <td>{{ qs[t.question_id]['name'] }}</td>
                             <td>{{ t.completed }}</td>
+                            {% if t.mark %}
+                            <td>{{ t.mark.score }}/{{ t.mark.out_of }}</td>
+                            <td>{{ t.mark.score/t.mark.out_of*100 }}%</td>
+                            <td>{{ t.mark.date }}</td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -126,13 +135,13 @@ Use panels for each section
         <form method="post", action="{{ url_for('user.account') }}">
         {{ changeform.hidden_tag() }}
         {{ changeform.fname.label }}
-        {{ changeform.fname(value=student.fname) }}
+        {{ changeform.fname(value=teacher.fname) }}
         <br>
         {{ changeform.lname.label }}
-        {{ changeform.lname(value=student.lname) }}
+        {{ changeform.lname(value=teacher.lname) }}
         <br>
         {{ changeform.email.label }}
-        {{ changeform.email(value=student.email) }}
+        {{ changeform.email(value=teacher.email) }}
         <br>
         {{ changeform.password.label }}
         {{ changeform.password }}
