@@ -13,8 +13,10 @@ from ..forms import (ChangeDetailsForm, ChangePasswordForm,
 from ..models import Student, Task, Teacher, User
 from ..pyscripts.question_dict import QUESTIONS
 
+#Initialise blueprint
 user = Blueprint('user', __name__, template_folder='templates')
 
+#Create serializer object -- used to create tokens for emails
 serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 
 
@@ -32,6 +34,7 @@ def login():
     if current_user.is_authenticated:
         # already logged in user shouldnt go to login page
         return redirect(url_for('main'))
+    # TODO Change to validate_on_submit()
     if request.method == 'GET':
         loginform = LoginForm()
     if request.method == 'POST':
@@ -52,10 +55,14 @@ def login():
 @user.route('/logout')
 @login_required
 def logout():
+    # Load current user
     user = current_user
+    # Unauthenicate
     user.authenticated = False
+    # Update database
     db.session.add(user)
     db.session.commit()
+    # Log out user and return to home page
     logout_user()
     return render_template('index.html')
 
@@ -79,19 +86,22 @@ def register():
                 db.session.commit()
 
                 subject = "Email Confirmation"
-
+                #Create token for confimation link
                 token = serializer.dumps(u.email, salt='email-confirm-key')
-
+                # Create confirmation url from token
                 confirm_url = url_for('user.confirm_email', token=token, _external=True)
+                # Render and send confirmation email
                 html = render_template('emails/confirm_email.html', confirm_url=confirm_url)
                 send_email(address=u.email, subject=subject, html=html)
-
+                # Log in the user and redirect to homepage
                 login_user(u)
                 flash("Confirmation Email Sent")
                 return redirect(url_for('main'))
             else:
+                # Cant have two users with the same email
                 flash('Email already exists')
         else:
+            # If form didn't validate, display error message
             error = 'Incorrect Details'
     return render_template('user/signup.html', regform=regform)
 
@@ -99,41 +109,51 @@ def register():
 @user.route('/confirm/<token>')
 def confirm_email(token):
     try:
+        # Try to decode the token in the url with the given salt
+        # Reject if token is more than an hour old
+        # The token decodes to the user's email address
         email = serializer.loads(token, salt="email-confirm-key", max_age=86400)
     except:
+        # If the token is invalid and an error is thrown, return 404 error code
         abort(404)
-
+    # Get User from database based on email (from decoded token)
     user = User.query.filter_by(email=email).first_or_404()
+    # Set confirmed status
     user.confirmed = True
-
-    login_user(user)
-
+    # Update database
     db.session.add(user)
     db.session.commit()
-
+    #Log in user and redirect to home page
+    login_user(user)
     flash('Email Confirmed')
     return redirect(url_for('main'))
 
 
 @user.route('/reset', methods=['GET', 'POST'])
 def reset():
+    #Load form
     form = RequestPasswordChangeForm()
     if form.validate_on_submit():
+        #Get user from input email
         user = User.query.filter_by(email=form.email.data).first()
-
+        # If there is no user, display error message and return to same page
         if not user:
             flash('Email address does not exist')
             return render_template('user/reset.html', form=form)
+        # If user not confirmed, display error message and return to same page
         elif not user.confirmed:
             flash('Email address not confirmed')
             return render_template('user/reset.html', form=form)
-
+        # If there is a user with that email address, create email
         subject = "Password Reset"
+        # Create token based on users email
         token = serializer.dumps(user.email, salt='recover-key')
+        # Generate url with the token
         recover_url = url_for('user.reset_with_token', token=token, _external=True)
+        # Render and send the email
         html = render_template('emails/recover_email.html', recover_url=recover_url)
-
         send_email(address=user.email, subject=subject, html=html)
+        # Display success message and redirect to home page
         flash('Password reset email sent')
         return redirect(url_for('main'))
     return render_template('user/reset.html', form=form)
@@ -234,28 +254,43 @@ def account():
                 return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
         return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
     elif u.role == 'teacher':
+        # Get all the teachers linked students from the database
         students = u.students.all()
+        # List of tuples (student_id,student_name) for each student
+        # Used in SetForm, when a teacher chooses which students to set which tasks
         choices = [(s.student_id, s.fname+' '+s.lname) for s in students]
+        # Load forms
         setform = SetTaskForm(choices)
         changeform = ChangeDetailsForm(obj=u)
         pwform = ChangePasswordForm1()
         if setform.set_submit.data and setform.validate_on_submit():
+            # If setform submitted (form for setting tasks)
+            # Get teacher object from user_id
             t = Teacher.query.filter_by(user_id=user_id).first()
             teach_id = t.teacher_id
+            # Loop over each student selected
             for s_id in setform.student_select.data:
+                # Loop over each tasks selected
                 for q_id in setform.task_select.data:
+                    # Set task to student
                     t = Task(q_id, s_id, teach_id)
+                    # Add to database
                     db.session.add(t)
+            # Commit database changes
             db.session.commit()
+            # Go back to account page with success message
             flash('Tasks set successfully')
             return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
         if changeform.change_submit.data and changeform.validate_on_submit():
             if u.check_pw(changeform.password.data):
+                # Get data from form and change attributes for user
                 u.fname = changeform.fname.data
                 u.lname = changeform.lname.data
                 u.email = changeform.email.data
+                # Update user in database
                 db.session.add(u)
                 db.session.commit()
+                # Go back to account page with message
                 flash('Details changed successfully')
                 return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
             else:
@@ -263,12 +298,15 @@ def account():
                 return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
         if pwform.pw_submit.data and pwform.validate_on_submit():
             if u.check_pw(pwform.old_password.data):
+                # Get form data and update users password
                 u.password = generate_password_hash(pwform.password.data)
                 db.session.add(u)
                 db.session.commit()
+                # Go back to account page with success message
                 flash('Password changed successfully')
                 return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
             else:
+                # Go back to account page with error message
                 flash('Incorrect password')
                 return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
         return render_template('user/teacher_account.html', teacher=u, students=students, setform=setform, qs=QUESTIONS, pwform=pwform, changeform=changeform)
