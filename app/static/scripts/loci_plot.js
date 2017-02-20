@@ -18,6 +18,8 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
     eq: eq
 }, function(data) {
     plots += 1;
+    //Add html for a row in the expressions table
+    //Includes the expression, show/hide checkbox, delete button
     $('#expressions tbody').append(
         '<tr id="row'+plots+'">'+
             '<td>'+
@@ -65,17 +67,22 @@ $(document).ready(function() {
             alert('Error Loading Graph')
         });
     }
+    //If enter pressed while in the input box, add the plot to the graph
     $('#eq_in').on('keydown', function(e) {
         if (e.keyCode===13) {
             addplot();
         }});
+    //CLicking the go button also adds a plot to the graph
     $('#go').on('click', addplot);
+    //Function for clear all button
     $('#clear').on('click', function() {
+        // Delete al rows in expressions table
         $('#expressions tbody > tr').remove();
         plots = -1;
+        //Reset calculator
         calculator.setState(reset);
-        //Clear All
     });
+    //Button for deleting individual plots
     $('#expressions').on('click','[type=button]',function(){
         var plot_no = $(this).attr('id').replace('del','');
         $('#row'+plot_no).remove();
