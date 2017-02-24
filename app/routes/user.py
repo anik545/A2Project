@@ -34,21 +34,21 @@ def login():
     if current_user.is_authenticated:
         # already logged in user shouldnt go to login page
         return redirect(url_for('main'))
-    # TODO Change to validate_on_submit()
-    if request.method == 'GET':
-        loginform = LoginForm()
-    if request.method == 'POST':
-        loginform = LoginForm(request.form)
-        if loginform.validate():
-            user = User.query.filter_by(email=loginform.email.data.lower()).first()
-            if user and user.check_pw(loginform.password.data):
-                user.authenticated = True
-                db.session.add(user)
-                db.session.commit()
-                login_user(user)
-                return redirect(url_for('main'))  # TODO redirect to last page
-            else:
-                flash('Incorrect Credentials')
+    loginform = LoginForm()
+    if loginform.validate_on_submit():
+        user = User.query.filter_by(email=loginform.email.data.lower()).first()
+        # If user exists and password enters is valid
+        if user and user.check_pw(loginform.password.data):
+            # Login user and update database
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            # Go back to home page
+            return redirect(url_for('main'))
+        else:
+            flash('Incorrect Credentials')
+    # Return empty login page if no form submitted or errors on form validation
     return render_template('user/login.html', loginform=loginform)
 
 
@@ -70,41 +70,37 @@ def logout():
 @user.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        # already logged in user shouldnt go to register page
+        # Already logged in user shouldnt go to register page
         return redirect(url_for('main'))
-    if request.method == 'GET':
-        regform = RegisterForm()
-    if request.method == 'POST':
-        regform = RegisterForm(request.form)
-        if regform.validate():
-            if not User.query.filter_by(email=regform.email.data.lower()).first():
-                # Only students have to register
-                # So create student object with form data
-                u = Student(regform.fname.data.lower(), regform.lname.data.lower(), regform.email.data.lower(), regform.password.data, 'student')
-                # Add student object to database.
-                db.session.add(u)
-                db.session.commit()
+    regform = RegisterForm()
+    if regform.validate_on_submit():
+        if not User.query.filter_by(email=regform.email.data.lower()).first():
+            # Only students have to register
+            # So create student object with form data
+            u = Student(regform.fname.data.lower(), regform.lname.data.lower(),
+                        regform.email.data.lower(), regform.password.data,
+                        'student')
+            # Add student object to database.
+            db.session.add(u)
+            db.session.commit()
 
-                subject = "Email Confirmation"
-                #Create token for confimation link
-                token = serializer.dumps(u.email, salt='email-confirm-key')
-                # Create confirmation url from token
-                confirm_url = url_for('user.confirm_email', token=token, _external=True)
-                # Render and send confirmation email
-                html = render_template('emails/confirm_email.html', confirm_url=confirm_url)
-                send_email(address=u.email, subject=subject, html=html)
-                # Log in the user and redirect to homepage
-                login_user(u)
-                flash("Confirmation Email Sent")
-                return redirect(url_for('main'))
-            else:
-                # Cant have two users with the same email
-                flash('Email already exists')
+            subject = "Email Confirmation"
+            #Create token for confimation link
+            token = serializer.dumps(u.email, salt='email-confirm-key')
+            # Create confirmation url from token
+            confirm_url = url_for('user.confirm_email', token=token, _external=True)
+            # Render and send confirmation email
+            html = render_template('emails/confirm_email.html', confirm_url=confirm_url)
+            send_email(address=u.email, subject=subject, html=html)
+            # Log in the user and redirect to homepage
+            login_user(u)
+            flash("Confirmation Email Sent")
+            return redirect(url_for('main'))
         else:
-            # If form didn't validate, display error message
-            error = 'Incorrect Details'
+            # Cant have two users with the same email
+            flash('Email already exists')
+    # Return signup page if GET request (no form submitted)
     return render_template('user/signup.html', regform=regform)
-
 
 @user.route('/confirm/<token>')
 def confirm_email(token):
@@ -209,17 +205,23 @@ def account():
                     # If add_student returns none, then student is already linked
                     flash('Already linked to this teacher')
                     # Go back to account page
-                    return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                    return render_template('user/student_account.html', student=u,
+                                            qs=QUESTIONS, linkform=linkform,
+                                            changeform=changeform, pwform=pwform)
                 # If student not already linked, commit link to database
                 db.session.add(a)
                 db.session.commit()
                 flash('Successfully linked')
                 # Go back to account page
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
             else:
                 flash('No teacher with that code')
                 #Go back to account page with appropriate message
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
         if changeform.change_submit.data and changeform.validate_on_submit():
             # If user is changing details, check password is correct
             if u.check_pw(changeform.password.data):
@@ -232,11 +234,15 @@ def account():
                 db.session.commit()
                 flash('Details changed successfully')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
             else:
                 flash('Incorrect password')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
         if pwform.pw_submit.data and pwform.validate_on_submit():
             #Make sure old password was input correctly
             if u.check_pw(pwform.old_password.data):
@@ -247,12 +253,18 @@ def account():
                 db.session.commit()
                 flash('Password changed successfully')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
             else:
                 flash('Incorrect password')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
-        return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
+        return render_template('user/student_account.html', student=u,
+                                qs=QUESTIONS, linkform=linkform,
+                                changeform=changeform, pwform=pwform)
     elif u.role == 'teacher':
         # Get all the teachers linked students from the database
         students = u.students.all()

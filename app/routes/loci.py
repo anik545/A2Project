@@ -6,6 +6,7 @@ from ..pyscripts.complex_loci import get_implicit
 from ..models import Graph, User
 from app import db
 
+# Initialise blueprint
 loci_blueprint = Blueprint('loci', __name__, template_folder='templates')
 
 

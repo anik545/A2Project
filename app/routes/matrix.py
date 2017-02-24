@@ -10,7 +10,7 @@ matrix_blueprint = Blueprint('matrix_blueprint', __name__,
 @matrix_blueprint.route('/matrix', methods=['GET', 'POST'])
 def matrix():
     result = None
-    # If the form is posted, it is submitted
+    # If the form is posted, it has been submitted
     if request.method == 'POST':
         try:
             # Get operator pressed (+,-,*)
@@ -72,7 +72,7 @@ def matrix():
             # Create matrix object based on this
             m = Matrix(mat)
             # Calculate result depending on which button pressed
-            # Return page with result
+            # Return page with relevant result
             if 'Determinant' in calc:
                 result = str(m.determinant())
                 return render_template('matrix.html', matrix_result=None,
@@ -89,7 +89,6 @@ def matrix():
                 result = m.triangle().tostr().rows
                 return render_template('matrix.html', matrix_result=result,
                                        det_result=None, Error=None)
-
             else:
                 return render_template('matrix.html', matrix_result=None,
                                        det_result=None, Error=None)
@@ -99,5 +98,5 @@ def matrix():
             error = 'Invalid Matrix, Try again'
             return render_template('matrix.html', matrix_result=None,
                                    det_result=None, Error=error)
-    # Return basic page if GET request (no form submitted yet) 
+    # Return basic page if GET request (no form submitted yet)
     return render_template('matrix.html', matrix_result=result)

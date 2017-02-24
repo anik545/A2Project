@@ -18,6 +18,7 @@ questions_blueprint = Blueprint('questions', __name__,
 
 @questions_blueprint.route('/questions')
 def questions():
+    """Questions home page."""
     return render_template('questions/questions.html')
 
 
@@ -25,25 +26,40 @@ def questions():
 def show_questions(topic, q_type):
     q_number = request.args.get('n', 10)
     if topic == 'matrix':
+        #Generate question objects
         questions = [MatrixQuestion(q_type) for x in range(q_number)]
+        # Get list of answers from question objects
         answers = [q.get_answer() for q in questions]
+        # Check whether the answers are of type matrix or not
         matans = questions[0].mat_ans
+        # List of question strings from question objects
+        # List of answer strings from question objects
+        # Save both in server side session
         session['questions'] = [q.get_question() for q in questions]
         session['answers'] = [str(q.get_answer()) for q in questions]
-        return render_template('questions/mat_questions.html', questions=enumerate(questions), answers=answers, mat_ans=matans, q_type=q_type, topic=topic)
+        return render_template('questions/mat_questions.html',
+                                questions=enumerate(questions), answers=answers,
+                                mat_ans=matans, q_type=q_type, topic=topic)
     elif topic == 'complex':
         questions = [ComplexQuestion(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
         session['questions'] = [q.get_question() for q in questions]
         session['answers'] = [str(q.get_answer()) for q in questions]
-        return render_template('questions/complex_questions.html', questions=enumerate(questions), answers=answers, q_type=q_type, topic=topic)
+        return render_template('questions/complex_questions.html',
+                                questions=enumerate(questions), answers=answers,
+                                q_type=q_type, topic=topic)
     else:
+        # If topic is invalid, return 404 page not found
         abort(404)
 
 
 @questions_blueprint.route('/questions/_answers/<topic>/<q_type>')
 def answers(topic, q_type):
+    """Return scores and marked questions given topic, question type and list
+       of input answers from questions form"""
+
     if topic == 'matrix':
+        # Get question_id from dictionary
         question_id = MATRIX_QUESTIONS[q_type]
         answers = session['answers']
         if q_type == 'det':
@@ -129,4 +145,6 @@ def answers(topic, q_type):
             db.session.add(task)
             flash('Task Completed!')
         db.session.commit()
-    return jsonify(answers=answers, inputs=inputs, questions=questions, percent=percent, scores=scores)
+    # Return data in JSON form for javascript to display
+    return jsonify(answers=answers, inputs=inputs, questions=questions,
+                    percent=percent, scores=scores)

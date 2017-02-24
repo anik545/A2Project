@@ -1,21 +1,24 @@
 <!DOCTYPE html>
+{# Jinja 2 Template which all other templates will inherit from #}
+{# Contains blocks which are overridden by child templates #}
+{# Child blocks call super() to get the common elements #}
 <html>
-
 <head>
+  <!-- load all common libraries and css in head, can be overidden -->
   {% block head %}
   <meta charset="utf-8">
   <title>{% block title %} A2 Project Website{% endblock %}</title>
+  <!-- load jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
   </script>
+  <!-- bootstrap css and js -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+  <!-- All pages have the same favicon -->
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   {% endblock %}
-
 </head>
-
-
 <body>
   <div id="container">
     {% block main %}
@@ -23,11 +26,13 @@
   </div>
   <footer class="footer">
     <div class="container">
+    <!-- Same footer for all pages, but can be overridden -->
     {% block footer %}
       <p class="text-muted"> Anik Roy 2017 </p>
     {% endblock %}
     </div>
   </footer>
+  <!-- Block for other javascript at end of document -->
   {% block endscripts %}
   {% endblock %}
 </body>

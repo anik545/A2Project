@@ -4,11 +4,10 @@
 
 {% block head %}
 {{ super() }}
+<!-- load css -->
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 <link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static',filename='styles/matrix.css') }}">
 {% endblock %}
-
-<!--TODO change to bootstrap from pure-->
 
 {% block main %}
 <div id="outer">
@@ -16,6 +15,7 @@
             <div align="center" id="matrices">
                 <form class="pure-form" method="post" action="matrix">
                     <div id="A-input">
+                      {# Create 3x3 matrix of inputs with names corresponding to their position #}
                         {% for x in ['0','1','2'] %}
                             {% for y in ['0','1','2'] %}
                             <input type="text" name="{{  'A'+x+y  }}" size="3" class="in" value="{{ request.form['A'+x+y] }}">
@@ -45,6 +45,7 @@
                     </div>
 
                     <div id="B-input">
+                      {# Create 3x3 matrix of inputs with names corresponding to their position #}
                         {% for x in ['0','1','2'] %}
                             {% for y in ['0','1','2'] %}
                             <input type="text" name="{{  'B'+x+y  }}" size="3" class="in" value="{{ request.form['B'+x+y] }}">
@@ -63,23 +64,27 @@
                     </div>
                 </form>
             </div>
-
+            <!-- anwer display div-->
             <div id="answer" align="center">
+              {# div displays different things depending on result passed to template #}
                 {% if det_result %}
-                <p id="det"> Determinant: {{ det_result }} </p>
-                {% endif %} {% if Error %}
-                <p id="error"> {{ Error }} </p>
-                {% endif %} {% if matrix_result %}
-                <p>Result:</p>
-                <table class="matrix">
-                    {% for row in matrix_result %}
-                    <tr>
-                        {% for value in row %}
-                        <td>{{ value }}</td>
+                  <p id="det"> Determinant: {{ det_result }} </p>
+                {% endif %}
+                {% if Error %}
+                  <p id="error"> {{ Error }} </p>
+                {% endif %}
+                {% if matrix_result %}
+                  <p>Result:</p>
+                  <table class="matrix">
+                      {#  #}
+                      {% for row in matrix_result %}
+                      <tr>
+                          {% for value in row %}
+                            <td>{{ value }}</td>
+                          {% endfor %}
+                        </tr>
                         {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </table>
+                      </table>
                 {% endif %}
             </div>
         </div>

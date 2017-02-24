@@ -5,12 +5,12 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static',filename='image-picker/image-picker.css') }}">
-
+<!--Load desmos and image-picker javascript-->
 <script src="https://www.desmos.com/api/v0.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
-
 <script src="{{ url_for('static',filename='image-picker/image-picker.min.js') }}"></script>
 
 <script>
+    // Initialize MathJax and typesetting
     window.MathJax = {
         AuthorInit: function() {
             MathJax.Hub.Register.StartupHook('End', function() {
@@ -25,7 +25,7 @@
         }
     }
 </script>
-
+<!--Load MathJax library-->
 <script src=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full.js>
 </script>
 {% endblock %}
@@ -33,6 +33,7 @@
 {% block main %}
     <row>
         <div class="col-lg-12">
+          <!-- equation input group -->
             <div class="input-group" style="margin-top:10px;margin-bottom:10px">
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#help-modal">Help</button>
@@ -42,7 +43,7 @@
                     <button id="go"  class="btn btn-success" type="button">Go</button>
                 </span>
             </div>
-            <!-- /input-group -->
+            <!-- end input-group -->
         </div>
     </row>
     <div class="col-sm-4">
@@ -51,6 +52,7 @@
             <div id="MathBuffer" style="padding: 3px; width:100%; margin-top:5px; visibility:hidden; position:absolute; top:0; left: 0"></div>
         </div>
         <div>
+          <!-- empty table to be filled in by javascript-->
             <table id="expressions" class="table">
                 <thead>
                     <tr>
@@ -115,6 +117,7 @@
                         <label for="title">Select Graph</label>
 
                         <select size="5" class="image-picker show-html" id="graph-select">
+                          {# load all user_graphs into gallery for users to select #}
                             {% if user_graphs %}
                                 {% for g in user_graphs %}
                                     <option data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}">{{ g.title }}</option>
@@ -129,7 +132,7 @@
                     </div>
                     </form>
                 </div>
-                    <!-- end modal content-->
+                <!-- end modal content-->
             </div>
         </div>
         <!--end load-modal-->

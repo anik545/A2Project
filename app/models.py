@@ -6,6 +6,7 @@ import string
 
 
 class User(db.Model):
+    """User class for flask-login and storing user data"""
     user_id = db.Column('user_id', db.Integer, primary_key=True)
     fname = db.Column(db.String(80), unique=False)
     lname = db.Column(db.String(80), unique=False)
@@ -14,6 +15,7 @@ class User(db.Model):
     authenticated = db.Column(db.Boolean, default=False)
     confirmed = db.Column(db.Boolean)
     role = db.Column(db.String(50))
+    # One to many (one user - teachers and students - has many graphs)
     graphs = db.relationship('Graph', backref="user",
                              cascade="all, delete-orphan", lazy="dynamic")
 
@@ -47,8 +49,6 @@ class User(db.Model):
     def get_id(self):
         return self.email
 
-# http://docs.sqlalchemy.org/en/latest/orm/inheritance.html#using-relationships-with-inheritance
-
 
 class Teacher(User):
     """Teacher model inheriting from User."""
@@ -57,29 +57,37 @@ class Teacher(User):
     teacher_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     code = db.Column(db.String(7))
+    # Many to many
     students = db.relationship('Student', secondary='links',
                                backref=db.backref('teachers', lazy='dynamic'),
                                lazy='dynamic')
+    # One to many (One teacher sets many tasks)
     tasks = db.relationship('Task', backref="teacher",
                             cascade="all, delete-orphan", lazy="dynamic")
-    # could also be just one id field
 
     def __init__(self, fname, lname, email, password, role):
         super().__init__(fname, lname, email, password, role)
+        #Create random 7 character code
         self.code = ''.join(random.choice(string.ascii_letters)
                             for x in range(7))
 
     def add_student(self, student):
+        """Return none id student already added, else add student to teacher
+            and return new teacher object"""
+
         if not self.has_student(student):
             self.students.append(student)
             return self
 
     def remove_student(self, student):
+        """Return none is student already removed, else remove student and
+            return new teacher object"""
         if self.has_student(student):
             self.students.remove(student)
             return self
 
     def has_student(self, student):
+        """ Check if teacher already has student by performing query with student id"""
         return self.students.filter(links.c.student_id == student.student_id).count() > 0
 
     __mapper_args__ = {
@@ -98,14 +106,11 @@ class Student(User):
     tasks = db.relationship('Task', backref="student",
                             cascade="all, delete-orphan", lazy="dynamic")
 
-    # could also be just one id field
-    # TODO only students can have marks, so that relationship can go here.
-
     __mapper_args__ = {
         'polymorphic_identity': 'student',
     }
 
-
+# Many-to-many intermediate table, linking teacher and student id
 links = db.Table('links',
                  db.Column('teacher_id', db.Integer,
                            db.ForeignKey('teacher.teacher_id')),
@@ -121,12 +126,15 @@ class Mark(db.Model):
     score = db.Column(db.Integer)
     out_of = db.Column(db.Integer)
     date = db.Column(db.DateTime)
+    # The id for the type of question (dictionary stored in QUESTION_DICT.py)
     question_id = db.Column(db.Integer)
+    # Many to one (many marks to each student)
     student_id = db.Column('student_id', db.Integer,
                            db.ForeignKey('student.student_id'))
+    # One to one
+    # When a task is completed, a mark (id) is linked to it which is the mark the
+    # student got on that task
     task = db.relationship('Task', uselist=False, back_populates='mark')
-
-    # TODO make it so only student has marks
 
     def __init__(self, score, out_of, q_id, student_id):
         self.score = score
@@ -147,6 +155,9 @@ class Task(db.Model):
     teacher_id = db.Column('teacher_id', db.Integer,
                            db.ForeignKey('teacher.teacher_id'))
     mark_id = db.Column('mark_id', db.Integer, db.ForeignKey('mark.mark_id'))
+    # One to one
+    # When a task is completed, a mark (id) is linked to it which is the mark the
+    # student got on that task
     mark = db.relationship('Mark', back_populates='task')
 
     def __init__(self, q_id, student_id, teacher_id):
@@ -161,10 +172,14 @@ class Graph(db.Model):
 
     graph_id = db.Column('graph_id', db.Integer, primary_key=True)
     title = db.Column(db.String)
+    # Description is not necessary, so nullable is true
     description = db.Column(db.String, nullable=True)
+    # Graph data from desmos, very large string
     desmosdata = db.Column(db.String)
+    # HTML for expressions table
     exprlist = db.Column(db.String)
     date = db.Column(db.DateTime)
+    # Screenshot image data
     image_url = db.Column(db.String)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'))
 
