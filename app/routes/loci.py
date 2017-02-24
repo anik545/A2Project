@@ -6,6 +6,8 @@ from ..pyscripts.complex_loci import get_implicit
 from ..models import Graph, User
 from app import db
 
+import sympy as s
+
 # Initialise blueprint
 loci_blueprint = Blueprint('loci', __name__, template_folder='templates')
 
@@ -83,3 +85,18 @@ def addgraph():
 @loci_blueprint.route('/operations-argand')
 def operations():
     return render_template('operations.html')
+
+@loci_blueprint.route('/_addcalc',methods=['GET'])
+def addcalc():
+    eq_str = request.args.get('eq',None)
+    points = request.args.get('points',None)
+    eq = s.simpify(eq)
+    vars_ = eq.free_symbols
+    real = str(s.re(eq))
+    imag = (s.im(eq))
+    for v in vars_:
+        real.replace('im('+str(v)')',str(v)+'.Y()')
+        real.replace('re('+str(v)')',str(v)+'.X()')
+        imag.replace('im('+str(v)')',str(v)+'.Y()')
+        imag.replace('re('+str(v)')',str(v)+'.X()')
+    return jsonify(point = {x:real,y:imag})

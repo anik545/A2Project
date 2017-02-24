@@ -41,8 +41,36 @@ $(document).ready(function(){
                 '</tr>'
             );
         points[letter].on('up',function(){
-            console.log('aa')
-            $('#label'+letter).html('`'+points[letter].X()+'+'+points[letter].Y()+'`')
+            $('#label'+letter).html('`'+points[letter].X().toFixed(2)+'+'+points[letter].Y().toFixed(2)+'`')
+        });
+    });
+    $('#addcalc').on(click,function(){
+        calc = $('#calc_in').val()
+        $.getJSON($SCRIPT_ROOT + '/_addcalc',{
+            eq:calc,
+            points:points
+        }, function(data){
+            console.log(data)
+            letter = String.fromCharCode(letter.charCodeAt()+1);
+            points[letter] = board.create('point',[data.point.x,data.point.y],{style:4,color:'blue',strokeColor:'blue',name:letter});
+            $('#expressions tbody').append(
+                    '<tr id="row'+letter+'">'+
+                        '<td id="label'+letter+'">'+
+                            '`'+points[letter].X()+'+'+points[letter].Y()+'i'+'`'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="checkbox" name="plot" id="'+letter+'" checked>'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="button" class="btn btn-block" name="del" id="del'+letter+'" value="X">'+
+                        '</td>'+
+                    '</tr>'
+                );
+            points[letter].on('update',function(){
+                $('#label'+letter).html('`'+points[letter].X().toFixed(2)+'+'+points[letter].Y().toFixed(2)+'`')
+            });
+        }).fail(function(){
+            alert('Invalid calculation')
         });
     });
 });
