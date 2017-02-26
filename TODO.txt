@@ -6,22 +6,13 @@ let students/teachers remove teachers/students
 let teachers remove tasks
 
 3.
-teacher account page --> let teacher see marks of completed tasks
-use task mark one to one relationship
-
-3.
 make help page(s), instructions on loci plotter (maybe mod/arg buttons)
-
-4.
-make flashed messages better using bootstrap or other libraries
-make them pop up at top of page
-https://v4-alpha.getbootstrap.com/components/alerts/ dismissable alerts
-
-5.
-Complex number operations?
 
 6.
 make navbar for whole site
 
 7.
 let teachers make classes, set tasks for entire classes.
+
+8.
+Make better flashed messages
