@@ -2,9 +2,17 @@ from sympy import im, re
 import random
 from cmath import phase
 
-
+# https://pythonspot.com/factory-method/
 class ComplexQuestion(object):
     """Class for creating matrix questions, inherits from BaseQuestion."""
+
+    # @staticmethod
+    # def factory(q_type):
+    #     if q_type == 'add_sub':
+    #         question, answer = add_sub_question(max_num)
+    #         return ComplexQuestion(question,answer)
+    #     other if statements
+    # def __init__(self,question,answer)
 
     def __init__(self, q_type, max_num=10):
         self.question_type = q_type

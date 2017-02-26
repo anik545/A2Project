@@ -6,7 +6,7 @@ from ..pyscripts.complex_loci import get_implicit
 from ..models import Graph, User
 from app import db
 
-import sympy as s
+from sympy import sympify, re, im
 
 # Initialise blueprint
 loci_blueprint = Blueprint('loci', __name__, template_folder='templates')
@@ -86,17 +86,29 @@ def addgraph():
 def operations():
     return render_template('operations.html')
 
-@loci_blueprint.route('/_addcalc',methods=['GET'])
+
+@loci_blueprint.route('/_addcalc', methods=['GET'])
 def addcalc():
-    eq_str = request.args.get('eq',None)
-    points = request.args.get('points',None)
-    eq = s.simpify(eq)
+    # Get equation requested
+    eq_str = request.args.get('eq', None)
+    # Convert to sympy object
+    eq = sympify(eq_str)
+    # Get all the variables in the expression
     vars_ = eq.free_symbols
-    real = str(s.re(eq))
-    imag = (s.im(eq))
+    # get real and imaginary parts of expression
+    real = str(re(eq).expand(complex=True))
+    imag = str(im(eq).expand(complex=True))
+    # Loop over the variables
     for v in vars_:
-        real.replace('im('+str(v)')',str(v)+'.Y()')
-        real.replace('re('+str(v)')',str(v)+'.X()')
-        imag.replace('im('+str(v)')',str(v)+'.Y()')
-        imag.replace('re('+str(v)')',str(v)+'.X()')
-    return jsonify(point = {x:real,y:imag})
+        # Replace im(variable) with variable.Y()
+        # Replace re(variable) with variable.X()
+        # This is how JSXGraph allows points based on other points
+        real = real.replace('im('+str(v)+')', str(v)+'.Y()')
+        real = real.replace('re('+str(v)+')', str(v)+'.X()')
+        imag = imag.replace('im('+str(v)+')', str(v)+'.Y()')
+        imag = imag.replace('re('+str(v)+')', str(v)+'.X()')
+    # Relace functions for javascript
+    real = real.replace('**', '^').replace('sin', 'Math.sin').replace('cos',  'Math.cos').replace('atan2', 'Math.atan')
+    imag = imag.replace('**', '^').replace('sin', 'Math.sin').replace('cos',  'Math.cos').replace('atan2', 'Math.atan')
+    # Return the real and imaginary parts of calculated points as JSON
+    return jsonify(x=real, y=imag)

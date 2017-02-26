@@ -15,14 +15,14 @@ var reset = calculator.getState();
 
 var plots = -1
 
-function addplot(){ 
+function addplot(){
 // Get input from equation input field
 var eq = $('input[name="in"]').val()
 // Send GET request to server at /_plot with 'eq' variable
 $.getJSON($SCRIPT_ROOT + '/_plot', {
     eq: eq
 }, function(data) {  //function carried out on receiving data from server
-    // Increment plots counter 
+    // Increment plots counter
     // Allows each plot to have an unique id
     plots += 1;
     // Add html for a row in the expressions table
@@ -54,7 +54,6 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
     $('#eq_in').focus()
 });
 return false;
-
 }
 
 
@@ -106,13 +105,13 @@ $(document).ready(function() {
         var plot_no=$(this).attr('id')
         // See whether the checkbox is checked or not
         var checked = $(this).is(':checked')
-        // Set hidden attribute of the expression the opposite of checked 
+        // Set hidden attribute of the expression the opposite of checked
         calculator.setExpression({id:plot_no,hidden:!checked})
     });
     // Function for saving a graph
     $('#submit-graph').on('click',function(){
         // Send POST request to server at '/_addgraph' with data:
-        // Graph title, graph data from desmos, the html for the expressions table, 
+        // Graph title, graph data from desmos, the html for the expressions table,
         // Graph description, image data from a screenshot of graph
         $.post('/_addgraph',{
             title:$('#title').val(),

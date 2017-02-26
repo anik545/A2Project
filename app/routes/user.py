@@ -13,16 +13,15 @@ from ..forms import (ChangeDetailsForm, ChangePasswordForm,
 from ..models import Student, Task, Teacher, User
 from ..pyscripts.question_dict import QUESTIONS
 
-#Initialise blueprint
+# Initialise blueprint
 user = Blueprint('user', __name__, template_folder='templates')
 
-#Create serializer object -- used to create tokens for emails
+# Create serializer object -- used to create tokens for emails
 serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 
 
 def send_email(address, subject, html):
     """Sends email to address given the html content of email."""
-
     msg = Message(subject, sender="testapp545545@gmail.com",
                   recipients=[address])
     msg.html = html
@@ -188,7 +187,7 @@ def account():
     user_id = current_user.user_id
     u = User.query.get(user_id)
     if u.role == 'student':
-        #Load all forms
+        # Load all forms
         changeform = ChangeDetailsForm(obj=u)
         linkform = TeacherLinkForm()
         pwform = ChangePasswordForm1()
@@ -218,7 +217,7 @@ def account():
                                         changeform=changeform, pwform=pwform)
             else:
                 flash('No teacher with that code')
-                #Go back to account page with appropriate message
+                # Go back to account page with appropriate message
                 return render_template('user/student_account.html', student=u,
                                         qs=QUESTIONS, linkform=linkform,
                                         changeform=changeform, pwform=pwform)
@@ -244,11 +243,11 @@ def account():
                                         qs=QUESTIONS, linkform=linkform,
                                         changeform=changeform, pwform=pwform)
         if pwform.pw_submit.data and pwform.validate_on_submit():
-            #Make sure old password was input correctly
+            # Make sure old password was input correctly
             if u.check_pw(pwform.old_password.data):
                 # Get form data and update users password
                 u.password = generate_password_hash(pwform.password.data)
-                #Update user in database
+                # Update user in database
                 db.session.add(u)
                 db.session.commit()
                 flash('Password changed successfully')

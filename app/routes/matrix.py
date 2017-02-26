@@ -2,7 +2,7 @@ from flask import request, render_template, Blueprint
 from ..pyscripts.matrices import Matrix
 from fractions import Fraction
 
-# Initialize blueprint
+# Initialise blueprint
 matrix_blueprint = Blueprint('matrix_blueprint', __name__,
                              template_folder='templates')
 
