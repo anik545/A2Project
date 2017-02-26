@@ -1,18 +1,21 @@
 1.
-clean up account page with css
+let students/teachers remove teachers/students
+let teachers remove tasks --> also remove from students pages
 
 2.
-let students/teachers remove teachers/students
-let teachers remove tasks
+clean up account page with css
 
 3.
-make help page(s), instructions on loci plotter (maybe mod/arg buttons)
+make help page(s), instructions on loci plotter #//(maybe mod/arg buttons)
 
 6.
-make navbar for whole site
+make navbar for whole site #//
 
 7.
-let teachers make classes, set tasks for entire classes.
+let teachers make classes, set tasks for entire classes #
 
 8.
-Make better flashed messages
+Make better flashed messages with bootstrap message divs
+
+9.
+COMMENT CODE
