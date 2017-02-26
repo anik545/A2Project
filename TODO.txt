@@ -1,15 +1,21 @@
 1.
 let students/teachers remove teachers/students
 let teachers remove tasks --> also remove from students pages
+let users delete graphs
+let users delete account?
 
 2.
 clean up account page with css
 
-3.
+4.
+finish making question classes with factory method, subclassing from basequestion
+
+5.
 make help page(s), instructions on loci plotter #//(maybe mod/arg buttons)
 
 6.
 make navbar for whole site #//
+at least add back/home buttons to pages
 
 7.
 let teachers make classes, set tasks for entire classes #
@@ -18,4 +24,7 @@ let teachers make classes, set tasks for entire classes #
 Make better flashed messages with bootstrap message divs
 
 9.
-COMMENT CODE
+COMMENT CODE --> pyscripts, templates (reset,signup,accounts,questions)
+
+10.
+Check analysis and design to see missed out points
