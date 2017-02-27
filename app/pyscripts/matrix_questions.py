@@ -1,38 +1,12 @@
 from app.pyscripts.matrices import Matrix
+from BaseQuestion import BaseQuestion
 import random
 
-# TODO make parent class Matrix Question and subclasses for each question type
-# TODO inverse question class with get_answer_float,get_answer_frac
-
-
-class MatrixQuestion(object):
+class MatrixQuestion(BaseQuestion):
     """Class for creating matrix questions, inherits from BaseQuestion."""
-
-    def __init__(self, q_type, small=True, size=3, max_num=10):
-        self.question_type = q_type
-        self.mat_ans = True
-        if q_type == 'inv':
-            self.question, self.answer = inv_question(size)
-        elif q_type == 'det':
-            self.mat_ans = False
-            self.question, self.answer = det_question(size)
-        elif q_type in ['sub', 'add', 'add_sub']:
-            self.question, self.answer = add_sub_question(max_num, op=q_type)
-        elif q_type == 'mul':
-            self.question, self.answer = mult_question(small, max_num)
-        else:
-            raise ValueError
-
-    def check_answer(self, ans):
-        if ans == self.answer:
-            return True
-        else:
-            return False
-
-    def get_question(self):
-        return self.question
-
+    
     def get_answer(self):
+        """Override get_answer as matrix type answers need to also call get_rows"""
         if self.question_type != 'det':
             return self.answer.get_rows()
         else:
@@ -43,6 +17,19 @@ class MatrixQuestion(object):
             return self.answer.get_dimensions()
         else:
             return 0
+
+    @staticmethod
+    def get_question(q_type, small=True, size=3, max_num=10):
+        if q_type == 'add_sub':
+            question, answer = add_sub_question(max_num, op='add_sub')
+        elif q_type == 'mul':
+            question, answer = mult_question(small, max_num)
+        elif q_type == 'inv':
+            question, answer = inv_question(size)
+        elif q_type == 'det':
+            question, answer = det_question(size)
+        return MatrixQuestion(question,answer,q_type)
+
 
 def mult_question(small=True, max_num=10):
     s1 = (1, 2) if small else (3, 4)

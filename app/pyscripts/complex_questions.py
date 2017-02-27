@@ -1,45 +1,29 @@
 from sympy import im, re
 import random
 from cmath import phase
+from BaseQuestion import BaseQuestion
 
-# https://pythonspot.com/factory-method/
-class ComplexQuestion(object):
+
+class ComplexQuestion(BaseQuestion):
     """Class for creating matrix questions, inherits from BaseQuestion."""
 
-##     @staticmethod
-##     def factory(q_type):
-##         if q_type == 'add_sub':
-##            question, answer = add_sub_question(max_num)
-##             return ComplexQuestion(question,answer)
-##        elif q_type == 'mul':
-##            question, answer = mult_question(max_num)
-##            return ComplexQuestion(question,answer,q_type)
-##        elif q_type == 'div':
-##            question, answer = div_question(max_num)
-##            return ComplexQuestion(question,answer,q_type)
-##        elif q_type == 'mod_arg':
-##            question, answer = mod_arg_question(max_num)
-##            return ComplexQuestion(question,answer,q_type)
-##
-##    # def __init__(self,question,answer,q_type):
-        
-
-    def __init__(self, q_type, max_num=10):
-        self.question_type = q_type
+    @staticmethod
+    def get_question(q_type, max_num=10):
         if q_type == 'add_sub':
-            self.question, self.answer = add_sub_question(max_num)
+            question, answer = add_sub_question(max_num)
         elif q_type == 'mul':
-            self.question, self.answer = mult_question(max_num)
+            question, answer = mult_question(max_num)
         elif q_type == 'div':
-            self.question, self.answer = div_question(max_num)
+            question, answer = div_question(max_num)
         elif q_type == 'mod_arg':
-            self.question, self.answer = mod_arg_question(max_num)
+            question, answer = mod_arg_question(max_num)
+        return ComplexQuestion(question,answer,q_type)
 
-    def get_question(self):
-        return self.question
-
-    def get_answer(self):
-        return self.answer
+    def is_mod_arg(self):
+        if self.question_type == 'mod_arg':
+            return True
+        else:
+            return False
 
 
 def add_sub_question(maxnum=10):
@@ -83,4 +67,4 @@ def mod_arg_question(maxnum=10):
 
 
 if __name__ == '__main__':
-    print(ComplexQuestion('div').get_question())
+    print(ComplexQuestion.get_question('add_sub').get_q())
