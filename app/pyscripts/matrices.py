@@ -1,18 +1,17 @@
-import copy
-import time
 import fractions
 
 
 class MatrixError(Exception):
     """An exception class for Matrix."""
+
     pass
 
 
 class Matrix(object):
     """Class for matrix operations."""
-    
+
     def __init__(self, rows):
-        """Return Matrix object given 2D list"""
+        """Return Matrix object given 2D list."""
         self.y = len(rows)
         self.x = len(rows[0])
         for row in rows:
@@ -23,7 +22,7 @@ class Matrix(object):
             self.rows = [list(row) for row in rows]
 
     def __add__(self, other):
-        """Override add operator to add matrix objects"""
+        """Override add operator to add matrix objects."""
         # Can only add matrices to matrices
         if type(other) != Matrix:
             raise TypeError
@@ -42,7 +41,7 @@ class Matrix(object):
             return Matrix(result)
 
     def __sub__(self, other):
-        """Override subtract operator to subtract matrix objects"""
+        """Override subtract operator to subtract matrix objects."""
         # Can only subtract matrices from matrices
         if type(other) != Matrix:
             raise TypeError
@@ -61,11 +60,11 @@ class Matrix(object):
             return Matrix(result)
 
     def __mul__(self, other):
-        """Override multiply operator to multiply matrix objects"""
-        #Can only multiply a matrix by an integer, float or another matrix
+        """Override multiply operator to multiply matrix objects."""
+        # Can only multiply a matrix by an integer, float or another matrix
         if type(other) not in [Matrix, int, float]:
             raise TypeError
-        # Can only multiply by another matrix if width of one is height of other 
+        # Can only multiply by another matrix if width of one is height of other
         elif type(other) == Matrix and self.get_dimensions()[1] != other.get_dimensions()[0]:
             raise MatrixError
         # If multiplying by a int or float, multiply each element in matrix by the int or float
@@ -92,27 +91,30 @@ class Matrix(object):
         return Matrix(result)
 
     def tostr(self):
+        """Return Matrix with all elements converted to strings."""
         rows = self.rows
         return Matrix(
             [[str(rows[y][x]) for x in range(self.x)] for y in range(self.y)]
                 )
 
     def get_dimensions(self):
-        """ Return dimensions of the matrix as a tuple"""
+        """Return dimensions of the matrix as a tuple."""
         return (self.y, self.x)
 
     def get_rows(self):
+        """Get matrix data."""
         return self.rows
 
     def transpose(self):
-        """Returned transposed matrix object"""
+        """Returned transposed matrix object."""
         rows = self.rows
+        # List comprehension to flip matrix
         return Matrix(
             [[rows[x][y] for x in range(self.x)] for y in range(self.y)]
                 )
 
     def determinant(self):
-        """Return determinant of matrix as a float or int"""
+        """Return determinant of matrix as a float or int."""
         rows = self.rows
         if self.x != self.y:
             return MatrixError
@@ -140,53 +142,45 @@ class Matrix(object):
             return det
 
     def display(self):
+        """Print Matrix."""
         for row in self.rows:
             for value in row:
                 print(value, end=" ")
             print('\n', end='')
 
     def triangle(self):
+        """Return Matrix in triangle form."""
         n = self.x
-        mat = copy.deepcopy(self.rows)
+        rows = self.rows
+        # Loop from 0 to width-1
         for i in range(n - 1):
-            if mat[i][i] == 0:
-                for j in range(i + 1, n, 1):
-                    if mat[j][i] == 0:
+            if rows[i][i] == 0:
+                for j in range(i + 1, n):
+                    if rows[j][i] == 0:
+                        # If all elements in the column are 0, do not swap rows
                         continue
                     else:
-                        mat[j], mat[i] = mat[i], mat[j]
+                        # Swap rows numbered j and i
+                        rows[j], rows[i] = rows[i], rows[j]
             else:
                 for k in range(i + 1, n):
-                    ratio = fractions.Fraction(mat[k][i], mat[i][i])
+                    # Get ratio between item in row i and row k (under i)
+                    ratio = fractions.Fraction(rows[k][i], rows[i][i])
                     for r in range(i, n, 1):
-                        mat[k][r] -= ratio * mat[i][r]
-                        # b[j] -= ratio*b[i] the column matrix Ax+By+Cz=(D)
-        return Matrix(mat)
-
-    def determinant2(self):
-        if self.x != self.y:
-            return None
-        if self.x == 2:
-            rows = self.rows
-            det = ((rows[0][0]) * (rows[1][1])) - (rows[0][1] * rows[1][0])
-            return det
-        else:
-            trimat = self.triangle().rows
-            det = 1
-            for x in range(len(trimat)):
-                det *= trimat[x][x]
-            return det
+                        # Subtract this row from row above * the ratio
+                        # Means there is a 0 in first column(s)
+                        rows[k][r] -= ratio * rows[i][r]
+        return Matrix(rows)
 
     def cofactors(self):
         """Return cofactor matrix object."""
-        rows = self.rows
-        co_mat = copy.deepcopy(rows)
-        for y in range(len(rows)):
-            for x in range(len(rows[0])):
+        co_mat = self.rows
+        for y in range(len(co_mat)):
+            for x in range(len(co_mat[0])):
                 inner_mat = [[b for a, b in enumerate(
-                    j) if a != x] for i, j in enumerate(rows) if i != y]
+                    j) if a != x] for i, j in enumerate(co_mat) if i != y]
                 inner_mat = Matrix(inner_mat)
-                co_mat[y][x] = (-1) ** (x + y) * inner_mat.determinant2()
+                co_mat[y][x] = (-1) ** (x + y) * inner_mat.determinant()
         return Matrix(co_mat)
 
     def adjoint(self):
@@ -202,20 +196,10 @@ class Matrix(object):
         # Can only find inverse if determinant is not 0
         if det == 0:
             raise MatrixError
-        #Find the transpose of the cofactor matrix (the adjoint)
+        # Find the transpose of the cofactor matrix (the adjoint)
         c_t = self.adjoint().get_rows()
         # Divide every item in c_t by the determinant
         for x in range(len(c_t)):
             for y in range(len(c_t[0])):
                 c_t[x][y] = fractions.Fraction(c_t[x][y] / det).limit_denominator()
         return Matrix(c_t)
-
-    @staticmethod
-    def identity(size):
-        id_mat = [[1 if x == y else 0 for y in range(
-            size)] for x in range(size)]
-        return Matrix(id_mat)
-
-if __name__ == '__main__':
-    a = Matrix([[5, 3, 4], [10, 7, 2], [10, 3, 7]])
-    a.inverse().display()
