@@ -17,7 +17,7 @@
         {% for n,q in questions %}
             <div class="out_question">
                 <div class="question">
-                    {{ q.get_question().replace('[','(').replace(']',')') }}
+                    {{ q.get_q().replace('[','(').replace(']',')') }}
                 </div>
                 <div class="answer">
                     {% if mat_ans %}

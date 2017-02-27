@@ -1,11 +1,10 @@
 from sympy import symbols, re, im, sqrt, atan, sympify, latex
-import time
 
 # TODO instead of subbing Abs(), find sqrt(re(x)+im(x)) instead.
 
 
 def parse_mod(inner):
-    """Convert expression inside modulus to x-y equation"""
+    """Convert expression inside modulus to x-y equation."""
     # Set up sympy variables and convert inner expression to sympy object
     x, y = symbols('x y', real=True)
     locs = {'x': x, 'y': y}
@@ -15,7 +14,7 @@ def parse_mod(inner):
 
 
 def parse_arg(inner):
-    """Convert expression inside arument function to x-y equation"""
+    """Convert expression inside arument function to x-y equation."""
     # Set up sympy variables and convert inner expression to sympy object
     x, y = symbols('x y', real=True)
     locs = {'x': x, 'y': y}
@@ -25,7 +24,7 @@ def parse_arg(inner):
 
 
 def parse(eq):
-    """Return string of manipulated equation"""
+    """Return string of manipulated equation."""
     eq = eq.replace('z', 'Z').replace('^', '**')
     # Make the string a list for easier manipulation
     eq_list = list(eq)
@@ -44,25 +43,16 @@ def parse(eq):
     # Substitute z for x+yi
     eq = eq.replace('Z', '(x+y*I)')
 
-    #Mods within mods need brackets |z+(|4+3|)|
     # While there are still modulus lines
     while '|' in eq:
-        a = eq.find("|")
-        found=0
-        for n,char in enumerate(eq[a+1:]):
-            found += 1 if char =='(' else 0
-            found -= 1 if char ==')' else 0
-            if char=='|' and found == 0:
-                b=a+n+1
-                break
-        # If there is no matching modulus line, raise an error
-        # Will cause popup on clients screen
-        if not b:
-            raise ValueError
-        # Parse everything between modulus lines according to formula 
+        # Find first modulus line
+        a = eq.find('|')
+        # Find matching line
+        b = eq.find('|', a+1)
+        # Parse everything between modulus lines according to formula
         eq = eq[:a] + parse_mod(eq[a + 1:b]) + eq[b + 1:]
 
-    #While there is an argument funcion in the equation
+    # While there is still an argument funcion in the equation
     while 'arg(' in eq:
         # Find occurence of function
         # a is the index of the start of the inner expression
@@ -77,7 +67,7 @@ def parse(eq):
             # Increment counter
             b += 1
             # When found is less than 0, then the correct close bracket is found
-        # Parse everything between modulus lines according to formula 
+        # Parse everything between modulus lines according to formula
         eq = eq[:a - 4] + parse_arg(eq[a:b - 1]) + eq[b:]
     return eq
 

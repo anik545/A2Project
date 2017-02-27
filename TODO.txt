@@ -7,9 +7,6 @@ let users delete account?
 2.
 clean up account page with css
 
-4.
-finish making question classes with factory method, subclassing from basequestion
-
 5.
 make help page(s), instructions on loci plotter #//(maybe mod/arg buttons)
 

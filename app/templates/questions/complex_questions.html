@@ -16,10 +16,10 @@
         {% for n,q in questions %}
         <div class="out_question">
             <div class="question">
-                {{ q.get_question().replace('(1i','(i').replace('+1i','+i') }}
+                {{ q.get_q().replace('(1i','(i').replace('+1i','+i') }}
             </div>
             <div class="answer">
-                {% if q_type != 'mod_arg' %}
+                {% if not q.is_mod_arg() %}
                     <input type="text" name="{{ n|string+'re'}}" class="form-control input"> `+` &nbsp;
                     <input type="text" name="{{ n|string+'im'}}" class="form-control input"> `i`
                 {% else %}
