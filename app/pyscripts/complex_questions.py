@@ -6,13 +6,23 @@ from cmath import phase
 class ComplexQuestion(object):
     """Class for creating matrix questions, inherits from BaseQuestion."""
 
-    # @staticmethod
-    # def factory(q_type):
-    #     if q_type == 'add_sub':
-    #         question, answer = add_sub_question(max_num)
-    #         return ComplexQuestion(question,answer)
-    #     other if statements
-    # def __init__(self,question,answer)
+##     @staticmethod
+##     def factory(q_type):
+##         if q_type == 'add_sub':
+##            question, answer = add_sub_question(max_num)
+##             return ComplexQuestion(question,answer)
+##        elif q_type == 'mul':
+##            question, answer = mult_question(max_num)
+##            return ComplexQuestion(question,answer,q_type)
+##        elif q_type == 'div':
+##            question, answer = div_question(max_num)
+##            return ComplexQuestion(question,answer,q_type)
+##        elif q_type == 'mod_arg':
+##            question, answer = mod_arg_question(max_num)
+##            return ComplexQuestion(question,answer,q_type)
+##
+##    # def __init__(self,question,answer,q_type):
+        
 
     def __init__(self, q_type, max_num=10):
         self.question_type = q_type
