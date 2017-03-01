@@ -3,25 +3,16 @@ let students/teachers remove teachers/students
 let teachers remove tasks --> also remove from students pages
 let users delete graphs
 let users delete account?
+add classes:
+    class --> student one to many
+    class <--> teacher many to many
+let teachers organise classes
 
 2.
 clean up account page with css
 
-5.
+3.
 make help page(s), instructions on loci plotter #//(maybe mod/arg buttons)
 
-6.
-make navbar for whole site #//
-at least add back/home buttons to pages
-
-7.
-let teachers make classes, set tasks for entire classes #
-
-8.
-Make better flashed messages with bootstrap message divs
-
-9.
-COMMENT CODE --> pyscripts, templates (reset,signup,accounts,questions)
-
-10.
+5.
 Check analysis and design to see missed out points

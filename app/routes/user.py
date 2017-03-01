@@ -10,7 +10,7 @@ from app import app, db, mail
 from ..forms import (ChangeDetailsForm, ChangePasswordForm,
                      ChangePasswordForm1, LoginForm, RegisterForm,
                      RequestPasswordChangeForm, SetTaskForm, TeacherLinkForm)
-from ..models import Student, Task, Teacher, User
+from ..models import Student, Task, Teacher, User, Graph
 from ..pyscripts.question_dict import QUESTIONS
 
 # Initialise blueprint
@@ -180,6 +180,51 @@ def reset_with_token(token):
     return render_template('user/reset_with_token.html', form=form, token=token)
 
 
+@user.route('/_delete_teacher', methods=['POST'])
+def delete_teacher():
+    # Get user id
+    user_id = current_user.user_id
+    # Get student from user_id
+    s = Student.query.filter_by(user_id=user_id).first()
+    # Get teacher id to be deleted from student and delete link
+    teacher_id = request.form.get('teacher_id', None)
+    t = Teacher.query.filter_by(teacher_id=teacher_id).first()
+    a = t.remove_student(s)
+    db.session.add(a)
+    db.session.commit()
+    return jsonify()  # return nothing (no error)
+
+
+@user.route('/_delete_student', methods=['POST'])
+def delete_student():
+    # Get user id
+    user_id = current_user.user_id
+    # Get teacher from user_id
+    t = Teacher.query.filter_by(user_id=user_id).first()
+    # Get student id to be deleted from teacher and delete link
+    student_id = request.form.get('student_id', None)
+    s = Student.query.filter_by(student_id=student_id).first()
+    a = t.remove_student(s)
+    db.session.add(a)
+    db.session.commit()
+    return jsonify()  # return nothing (no error)
+
+
+@user.route('/_delete_graph', methods=['POST'])
+def delete_graph():
+    # Get id of graph to be deleted
+    graph_id = request.form.get('graph_id', None)
+    # Query database and delete graph
+    g = Graph.query.filter_by(graph_id=graph_id).delete()
+    db.session.commit()
+    return jsonify()  # return nothing (no error)
+
+
+@user.route('/_delete_task', methods=['POST'])
+def delete_task():
+    pass
+
+
 @user.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
@@ -303,10 +348,14 @@ def account():
                 db.session.commit()
                 # Go back to account page with message
                 flash('Details changed successfully')
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
             else:
                 flash('Incorrect password')
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
         if pwform.pw_submit.data and pwform.validate_on_submit():
             if u.check_pw(pwform.old_password.data):
                 # Get form data and update users password
@@ -315,11 +364,18 @@ def account():
                 db.session.commit()
                 # Go back to account page with success message
                 flash('Password changed successfully')
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
             else:
                 # Go back to account page with error message
                 flash('Incorrect password')
-                return render_template('user/student_account.html', student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
-        return render_template('user/teacher_account.html', teacher=u, students=students, setform=setform, qs=QUESTIONS, pwform=pwform, changeform=changeform)
+                return render_template('user/student_account.html', student=u,
+                                        qs=QUESTIONS, linkform=linkform,
+                                        changeform=changeform, pwform=pwform)
+        return render_template('user/teacher_account.html', teacher=u,
+                                students=students, setform=setform,
+                                qs=QUESTIONS, pwform=pwform,
+                                changeform=changeform)
     else:
         return abort(500)

@@ -11,36 +11,47 @@
 {% endblock %}
 
 {% block main %}
-<div id="main">
+  <div id="main">
     <form id="questions" class="form-inline">
+        {# loop over all questions #}
         {% for n,q in questions %}
-        <div class="out_question">
+          <div class="out_question">
+            <!--question-->
             <div class="question">
-                {{ q.get_q().replace('(1i','(i').replace('+1i','+i') }}
+              {{ q.get_q().replace('(1i','(i').replace('+1i','+i') }}
             </div>
+            <!--answer-->
             <div class="answer">
-                {% if not q.is_mod_arg() %}
-                    <input type="text" name="{{ n|string+'re'}}" class="form-control input"> `+` &nbsp;
-                    <input type="text" name="{{ n|string+'im'}}" class="form-control input"> `i`
-                {% else %}
-                    mod: <input type="text" name="{{ n|string+'mod'}}" class="form-control input"> arg: <input type="text" name="{{ n|string+'arg'}}" class="form-control input">
-                {% endif %}
+              {# Different formatting for modulus and argument question #}
+              {% if not q.is_mod_arg() %}
+                <input type="text" name="{{ n|string+'re'}}" class="form-control input"> `+` &nbsp;
+                <input type="text" name="{{ n|string+'im'}}" class="form-control input"> `i`
+              {% else %}
+                mod: <input type="text" name="{{ n|string+'mod'}}" class="form-control input">
+                arg: <input type="text" name="{{ n|string+'arg'}}" class="form-control input">
+              {% endif %}
             </div>
-        </div>
+          </div>
         {% endfor %}
-        <div class="col-lg-12">
+        <!--Submit button-->
+        <div class="row">
+          <div class="col-lg-12">
             <input id="submit" class="btn btn-primary btn-lg btn-block submit" type="button" value="Submit Answers">
             <br>
+          </div>
         </div>
-    </form>
-</div>
+      </form>
+  </div>
+{% endblock %}
+
+{% block endscripts %}
     <script type=text/javascript>
+        // Variables for the js script
         $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
-        q_type = {{ q_type | tojson | safe}}
-        topic = {{ topic | tojson | safe}}
+        q_type = {{ q_type | tojson | safe }}
+        topic = {{ topic | tojson | safe }}
     </script>
 
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/questions.js') }}">
     </script>
-
 {% endblock %}

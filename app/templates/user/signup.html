@@ -22,33 +22,35 @@
                             <p>Error:</p>
                             <span></span>
                         </div>
-
+                        <!-- email field-->
                         <div class="form-group">
                             <label for="email" class="col-md-3 control-label">Email</label>
                             <div class="col-md-9">
                                 {{ regform.email(class="form-control",placeholder="Email") }}
-                                <!--input type="text" class="form-control" name="email" placeholder="Email Address"-->
                             </div>
                         </div>
-
+                        <!--first name field-->
                         <div class="form-group">
                             <label for="firstname" class="col-md-3 control-label">First Name</label>
                             <div class="col-md-9">
                                 {{ regform.fname(class="form-control",placeholder="First Name") }}
                             </div>
                         </div>
+                        <!--last name field-->
                         <div class="form-group">
                             <label for="lastname" class="col-md-3 control-label">Last Name</label>
                             <div class="col-md-9">
                                 {{ regform.lname(class="form-control",placeholder="Last Name",placeholder="Last Name") }}
                             </div>
                         </div>
+                        <!--password field-->
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">Password</label>
                             <div class="col-md-9">
                                 {{ regform.password(class="form-control",placeholder="Password") }}
                             </div>
                         </div>
+                        <!--confirm password field-->
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">Confirm Password</label>
                             <div class="col-md-9">
@@ -56,11 +58,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <!-- Button -->
+                            <!-- Submit button -->
                             <div class="col-md-offset-3 col-md-9">
                                 <input type="submit" value="Sign Up" class="btn btn-info">
                             </div>
                         </div>
+                        <!--Link to login page-->
                         <div class="form-group">
                             <div class="col-md-12 control">
                                 <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
@@ -72,6 +75,8 @@
                             </div>
                         </div>
                     </form>
+                    {# Simple form validation errors get passed to this #}
+                    {# e.g. first name not entered #}
                     {% if regform.errors %}
                     <ul class="errors">
                         {% for field_name, field_errors in regform.errors|dictsort if field_errors %} {% for error in field_errors %}
@@ -79,6 +84,8 @@
                         {% endfor %} {% endfor %}
                     </ul>
                     {% endif %}
+                    {# Flashed messages for other form validation errors #}
+                    {# e.g. user already exists #}
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             <ul class=flashes>

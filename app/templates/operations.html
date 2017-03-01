@@ -11,8 +11,9 @@
 {% endblock %}
 
 {% block main %}
-    <div class="col-sm-4">
+  <div class="col-sm-4">
     <div>
+      <!--empty table to be filled in by javascript-->
       <table id="expressions" class="table">
         <thead>
           <tr>
@@ -24,49 +25,55 @@
           </tr>
         </thead>
         <tbody>
+          <!--empty tbody-->
         </tbody>
       </table>
     </div>
+    <!--add moveable point button-->
     <div>
       <button id="addpoint" type="button" class="btn btn-block btn-primary">Add Moveable point</button>
     </div>
     <div>
+      <!--add calculated point input-->
       <div class="input-group">
         <input id="calc_in" type="text" class="form-control" placeholder="Enter Calculation">
           <span class="input-group-btn">
             <button id="addcalc"  class="btn btn-primary" type="button">Add Calculated point</button>
           </span>
-      </div><!-- /input-group -->
+      </div> <!-- end input group-->
     </div>
+    <!--clear all button-->
     <div>
       <button type="button" class="btn btn-block" id="clear">Clear All</button>
     </div>
-    </div>
-    <div class="col-sm-8">
-      <div id="box" class="jxgbox" style="width:100%; height:600px;"></div>
-      <button class="btn btn-primary btn-block  " type="button" data-toggle="modal" data-target="#help-modal">Help</button>
-    </div>
+  </div> <!--end left column-->
+  <div class="col-sm-8"> <!--right column-->
+    <!--graphing area-->
+    <div id="box" class="jxgbox" style="width:100%; height:600px;"></div>
+    <button class="btn btn-primary btn-block  " type="button" data-toggle="modal" data-target="#help-modal">Help</button>
+  </div>
 
-    <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Load Graph</h4>
-              </div>
-              <!-- help modal content -->
-              <div class="modal-body">
-                Add a moveable point on argand diagram<br>
-                Add calculated point by inputting calculation<br>
-              </div>
-              <!-- end content -->
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-            </div>
+  <!-- help modal -->
+  <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Load Graph</h4>
+          </div>
+          <!-- help modal content -->
+          <div class="modal-body">
+            Add a moveable point on argand diagram<br>
+            Add calculated point by inputting calculation<br>
+          </div>
+          <!-- end content -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
-    </div>
+      </div>
+    </div><!-- end help modal -->
+  </div>
 {% endblock %}
 
 {% block endscripts %}

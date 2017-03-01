@@ -6,13 +6,17 @@
 {{ super() }}
 {% endblock %}
 
+{% block nav %}
+{# home page does not need navigation bar, all the links are on this page#}
+{% endblock %}
+
 {% block main %}
-  {{ super() }}
     <div class="col-lg-12" style="margin-top:15px;">
         {% if current_user.is_authenticated %}
-        Hi {{ current_user.fname }}!
+        Logged in as {{ current_user.fname }}&nbsp;{{ current_user.lname }}
         {% endif %}
 
+        <!--Links to all other pages-->
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.loci') }}">Loci Plotter</a>
         <br>
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.operations') }}">Complex Number Operations</a>
@@ -24,6 +28,7 @@
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('help') }}">Help</a>
         <br>
 
+        {# Show log in buttons if user isnt logged in, else show other buttons #}
         {% if not current_user.is_authenticated %}
           <div class = "col-sm-6">
           <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.login') }}">Log In</a>
@@ -40,14 +45,15 @@
           </div>
         {% endif %}
     </div>
+    {# show all flashed messages #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <ul class=flashes>
                 {% for message in messages %}
-                    <li>{{ message }}</li>
+                <div class="alert alert-info alert-dismissable fade in">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  {{ message }}
+                </div>
                 {% endfor %}
-            </ul>
         {% endif %}
     {% endwith %}
-
 {% endblock %}

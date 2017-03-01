@@ -11,37 +11,46 @@
 {% endblock %}
 
 {% block main %}
-{{ super() }}
-    <div id="main">
+  <div id="main">
     <form id="questions" class="form-inline">
-        {% for n,q in questions %}
-            <div class="out_question">
-                <div class="question">
-                    {{ q.get_q().replace('[','(').replace(']',')') }}
-                </div>
-                <div class="answer">
-                    {% if mat_ans %}
-                        {% for a in range(q.get_ans_dim()[0]) %}
-                            {% for b in range(q.get_ans_dim()[1]) %}
-                                <input name="{{ n|string+a|string+b|string }}" type="text" class="form-control input" size=3>
-                            {% endfor %}
-                            <br>
-                        {% endfor %}
-                    {% else %}
-                        <input name="{{ n|string }}" type="text" class="form-control input" size=3>
-                    {% endif %}
-                </div>
-            </div>
-            <br>
-        {% endfor %}
-        <div class="col-lg-12">
-            <input id="submit" class="btn btn-primary btn-lg btn-block submit" type="button" value="Submit Answers">
-            <br>
+      {% for n,q in questions %}
+        <div class="out_question">
+          <!--question-->
+          <div class="question">
+            {{ q.get_q().replace('[','(').replace(']',')') }}
+          </div>
+          <!--answer-->
+          <div class="answer">
+            {# Display correct type of inputs for the answer type #}
+            {% if mat_ans %}
+              {# Use answer dimensions to make correct size matrix of inputs #}
+              {% for a in range(q.get_ans_dim()[0]) %}
+                {% for b in range(q.get_ans_dim()[1]) %}
+                  <input name="{{ n|string+a|string+b|string }}" type="text" class="form-control input" size=3>
+                {% endfor %}
+                <br>
+              {% endfor %}
+            {% else %}
+              <input name="{{ n|string }}" type="text" class="form-control input" size=3>
+            {% endif %}
+          </div>
         </div>
+        <br>
+      {% endfor %}
+      <!--Submit button-->
+      <div class="row">
+        <div class="col-lg-12">
+          <input id="submit" class="btn btn-primary btn-lg btn-block submit" type="button" value="Submit Answers">
+          <br>
+        </div>
+      </div>
     </form>
-    </div>
+  </div>
+{% endblock %}
 
+{% block endscripts %}
     <script type=text/javascript>
+        // Variables used in javascript
         $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
         q_type = {{ q_type | tojson | safe}}
         topic = {{ topic | tojson | safe}}
@@ -49,5 +58,4 @@
 
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/questions.js') }}">
     </script>
-
 {% endblock %}

@@ -5,19 +5,13 @@
 {% block head %}
 {{ super() }}
 
-
 <script src="{{ url_for('static',filename='image-picker/image-picker.min.js') }}"></script>
 
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/account.css') }}">
 
 <link rel="stylesheet" href="{{ url_for('static',filename='image-picker/image-picker.css') }}">
-
 {% endblock %}
-<!--http://www.codingeverything.com/2014/02/BootstrapDocsSideBar.html
-http://jsfiddle.net/KyleMit/v6zhz/?utm_source=website&utm_medium=embed&utm_campaign=v6zhz
-http://jsfiddle.net/panchroma/ExWDq/
-Use panels for each section
--->
+
 {% block main %}
 <div id="title" class="row">
     <div class="col-sm-12">
@@ -45,6 +39,7 @@ Use panels for each section
 </div>
 
 <div class="col-md-9">
+    {# Show flashed messages #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
                 {% for message in messages %}
@@ -55,19 +50,40 @@ Use panels for each section
                 {% endfor %}
         {% endif %}
     {% endwith %}
+
     <section id="links">
+    <!-- Form for students to link to teachers -->
         <h1>Links</h1>
         <form method="post" action="{{ url_for('user.account') }}">
         {{ linkform.hidden_tag() }}
         {{ linkform.link_code }}<br>
         {{ linkform.link_submit }}
         </form>
+        <h2>Existing Links:</h2>
+        <table id="links-table" class="table">
+          <thead>
+            <th>Fname</th>
+            <th>Lname</th>
+            <th></th>
+          </thead>
+          <tbody>
+            {% for t in student.teachers.all() %}
+            <tr id="link-row{{ t.teacher_id }}">
+              <td>{{ t.fname }}</td>
+              <td>{{ t.lname }}</td>
+              <td><input type="button" id="{{ t.teacher_id }}" value="Delete"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
     </section>
 
     <section id="set">
+    <!-- Display tasks which are set-->
         <h1>Set Tasks</h1>
+        {# Show tasks table if there any set tasks #}
         {% if student.tasks.first() %}
-        <table>
+        <table class="table">
             <thead>
                 <th>Topic</th>
                 <th>Task Name</th>
@@ -78,12 +94,13 @@ Use panels for each section
                 <th></th>
             </thead>
             <tbody>
+            {# Loop though all tasks and render information in table #}
             {% for t in student.tasks.all() %}
                 <tr>
-
                     <td>{{ qs[t.question_id]['topic'] }}</td>
+                    <!-- Link to relevant questions -->
                     <td><a href="{{ url_for('questions.show_questions',  topic=qs[t.question_id]['topic'].lower(), q_type=qs[t.question_id]['q_type']) }}">
-{{ qs[t.question_id]['name'] }}</a></td>
+                    {{ qs[t.question_id]['name'] }}</a></td>
                     <td>{{ t.completed }}</td>
 
                     {% if t.mark %}
@@ -91,8 +108,6 @@ Use panels for each section
                     <td>{{ t.mark.score/t.mark.out_of*100 }}%</td>
                     <td>{{ t.mark.date }}</td>
                     {% endif %}
-
-                    <!-- add links to <td>s -->
                 </tr>
             {% endfor %}
             </tbody>
@@ -101,19 +116,21 @@ Use panels for each section
     </section>
 
     <section id="graphs">
-        <h1>Graphs</h1>
-        <form action="{{ url_for('loci.loci') }}" method="get" id="graphform">
+    <!-- Gallery shows saved graphs-->
+    <!-- Each graph also link to the loci plotter page (form posts to that url with a graph id)-->
+      <h1>Graphs</h1>
+      <form action="{{ url_for('loci.loci') }}" method="get" id="graphform">
         <select size="5" class="image-picker show-html" id="graph-select" form="graphform" name="id">
-                {% for g in student.graphs.all() %}
-                    <option data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}">{{ g.title }}</option>
-                {% endfor %}
+          {% for g in student.graphs.all() %}
+              <option data-img-label="{{ g.title }}<br>{{ g.description }}<br><button class='btn btn-block'>Load</button><br><input type='button' value='Delete' id='del-graph{{ g.graph_id }}' class='btn btn-block'>" data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}"></option>
+          {% endfor %}
         </select>
-        <!--input type="hidden" name="id" value="$('#graph-select').val()" /-->
-        <input type="submit" value="Go" id="graph-load">
-    </form>
+      </form>
     </section>
 
+
     <section id="scores">
+    <!--Show scores on previous tasks and completed questions-->
         <table class="table">
             <thead>
                 <th> Topic </th>
@@ -133,6 +150,7 @@ Use panels for each section
     </section>
 
     <section id="settings">
+      <!--Forms for changing details-->
         <h1>Settings</h1>
         <form method="post", action="{{ url_for('user.account') }}">
         {{ changeform.hidden_tag() }}
@@ -172,6 +190,8 @@ Use panels for each section
 
 {% block endscripts %}
 <script>
+    $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
+    // js for sidebar formatting
     $('#nav').affix({
         offset: {
             top: $('#nav').offset().top
@@ -184,7 +204,39 @@ Use panels for each section
                     40
         }
     });
+    // Initialise imagepicker
     $('#graph-select').imagepicker({show_label:true})
+    $('#links-table').on('click','[type=button]',function(){
+      if (confirm('Are you sure')) {
+        // Send data of student to be deleted to server
+        teacher_id = $(this).attr('id');
+        console.log(teacher_id);
+        $.post($SCRIPT_ROOT + '/_delete_teacher',{
+          teacher_id:teacher_id
+        },function(data){
+          // Remove teacher from account page
+          $('#link-row'+teacher_id).remove()
+        }).fail(function(){
+          // Show error message if there is a server error
+          alert('Error deleting teacher')
+        });
+      }
+    });
+    $('input[type="button"][id*="del-graph"]').on('click',function(){
+      if (confirm('Are you sure')) {
+        graph_id = $(this).attr('id').replace('del-graph','');
+        // Send data of graph to be deleted to server
+        $.post($SCRIPT_ROOT + '/_delete_graph',{
+          graph_id:graph_id
+        },function(data){
+          // Remove graph from account page
+          $('option[value="'+graph_id+'"]').remove()
+          $('#graph-select').imagepicker({show_label:true})
+        }).fail(function(){
+          // Show error message if there is a server error
+          alert('Error Deleting Graph')
+        });
+      }
+    });
 </script>
-
 {% endblock %}
