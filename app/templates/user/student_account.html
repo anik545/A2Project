@@ -151,37 +151,68 @@
 
     <section id="settings">
       <!--Forms for changing details-->
-        <h1>Settings</h1>
-        <form method="post", action="{{ url_for('user.account') }}">
+    <h1>Settings</h1>
+      <h2>Change Details</h2>
+      <form class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
         {{ changeform.hidden_tag() }}
-        {{ changeform.fname.label }}
-        {{ changeform.fname(value=student.fname,class='a') }}
-        <br>
-        {{ changeform.lname.label }}
-        {{ changeform.lname(value=student.lname) }}
-        <br>
-        {{ changeform.email.label }}
-        {{ changeform.email(value=student.email) }}
-        <br>
-        {{ changeform.password.label }}
-        {{ changeform.password }}
-        <br>
-        {{ changeform.change_submit }}
-        </form>
+        <div class="form-group">
+          {{ changeform.fname.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ changeform.fname(value=teacher.fname,class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          {{ changeform.lname.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ changeform.lname(value=teacher.lname,class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          {{ changeform.email.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ changeform.email(value=teacher.email,class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          {{ changeform.password.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ changeform.password(class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-2 col-xs-10">
+            {{ changeform.change_submit(class="btn btn-primary") }}
+          </div>
+        </div>
+      </form>
 
-        <form method="post", action="{{ url_for('user.account') }}">
+      <h2>Password change</h2>
+      <form class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
         {{ pwform.hidden_tag() }}
-        {{ pwform.old_password.label }}
-        {{ pwform.old_password }}
-        <br>
-        {{ pwform.password.label }}
-        {{ pwform.password }}
-        <br>
-        {{ pwform.confirm_password.label }}
-        {{ pwform.confirm_password }}
-        <br>
-        {{ pwform.pw_submit }}
-        </form>
+        <div class="form-group">
+          {{ pwform.old_password.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ pwform.old_password(class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          {{ pwform.password.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ pwform.password(class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          {{ pwform.confirm_password.label(class="col-xs-2 control-label") }}
+          <div class="col-xs-10">
+            {{ pwform.confirm_password(class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-2 col-xs-10">
+            {{ pwform.pw_submit(class="btn btn-primary") }}
+          </div>
+        </div>
+      </form>
     </section>
 </div>
 </div>
@@ -191,52 +222,6 @@
 {% block endscripts %}
 <script>
     $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
-    // js for sidebar formatting
-    $('#nav').affix({
-        offset: {
-            top: $('#nav').offset().top
-        }
-    });
-    $('#nav').affix({
-        offset: {
-            bottom: ($('footer').outerHeight(true) +
-                    $('.application').outerHeight(true)) +
-                    40
-        }
-    });
-    // Initialise imagepicker
-    $('#graph-select').imagepicker({show_label:true})
-    $('#links-table').on('click','[type=button]',function(){
-      if (confirm('Are you sure')) {
-        // Send data of student to be deleted to server
-        teacher_id = $(this).attr('id');
-        console.log(teacher_id);
-        $.post($SCRIPT_ROOT + '/_delete_teacher',{
-          teacher_id:teacher_id
-        },function(data){
-          // Remove teacher from account page
-          $('#link-row'+teacher_id).remove()
-        }).fail(function(){
-          // Show error message if there is a server error
-          alert('Error deleting teacher')
-        });
-      }
-    });
-    $('input[type="button"][id*="del-graph"]').on('click',function(){
-      if (confirm('Are you sure')) {
-        graph_id = $(this).attr('id').replace('del-graph','');
-        // Send data of graph to be deleted to server
-        $.post($SCRIPT_ROOT + '/_delete_graph',{
-          graph_id:graph_id
-        },function(data){
-          // Remove graph from account page
-          $('option[value="'+graph_id+'"]').remove()
-          $('#graph-select').imagepicker({show_label:true})
-        }).fail(function(){
-          // Show error message if there is a server error
-          alert('Error Deleting Graph')
-        });
-      }
-    });
 </script>
+<script src="{{ url_for('static',filename='scripts/student_account.js') }}"></script>
 {% endblock %}
