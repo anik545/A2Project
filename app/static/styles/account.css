@@ -4,8 +4,9 @@
 }
 
 section{
-    height:750px;
-    color: red;
+    border: 1 px solid black;
+    width:100%
+    
 }
 
 @media (min-width: 1200px) {
