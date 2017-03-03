@@ -155,7 +155,7 @@
         <form method="post", action="{{ url_for('user.account') }}">
         {{ changeform.hidden_tag() }}
         {{ changeform.fname.label }}
-        {{ changeform.fname(value=student.fname) }}
+        {{ changeform.fname(value=student.fname,class='a') }}
         <br>
         {{ changeform.lname.label }}
         {{ changeform.lname(value=student.lname) }}
