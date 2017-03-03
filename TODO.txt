@@ -1,7 +1,5 @@
 1.
-let students/teachers remove teachers/students
 let teachers remove tasks --> also remove from students pages
-let users delete graphs
 let users delete account?
 add classes:
     class --> student one to many
