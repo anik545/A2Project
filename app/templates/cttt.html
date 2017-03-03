@@ -55,7 +55,7 @@ div div[class^=cboard]:nth-of-type(1), div[class^=cboard]:nth-of-type(2), div[cl
                   console.log(self.x,self.y);
                   checkGameOver()
                   self.board.destroy()
-                  $('#'+x+y).css('color',turn==='b'?'red':'blue')
+                  $('#'+x+y).css('background-color',turn==='b'?'black':'white').css('height',self.height)
               }
               turn = turn==='b'? 'w':'b'
               for (var i = 0; i < chess_games.length; i++) {
@@ -69,6 +69,7 @@ div div[class^=cboard]:nth-of-type(1), div[class^=cboard]:nth-of-type(2), div[cl
           onDrop: this.onDrop
       };
       this.board = ChessBoard(''+x+y,cfg)
+      this.height = $('#'+x+y).height()
 
       this.move = function(s,t){
           console.log(this.game)
