@@ -14,9 +14,9 @@
 
 {% block main %}
 <div id="title" class="row">
-    <div class="col-sm-12">
-        <div class="alert alert-info" style="margin:10px;text-align:center;">Your Account</div>
-    </div>
+  <div class="col-sm-12">
+    <div class="alert alert-info" style="margin:10px;text-align:center;">Your Account</div>
+  </div>
 </div>
 <div data-spy="scroll" data-target=".scrollspy" style="position:relative">
 <div class="col-md-3 scrollspy">
@@ -54,6 +54,7 @@
   <section id="links">
   <!-- Form for students to link to teachers -->
     <h1>Links</h1>
+    <h2>Add Teacher</h2>
     <form method="post" action="{{ url_for('user.account') }}">
     {{ linkform.hidden_tag() }}
     <div class="form-group">
