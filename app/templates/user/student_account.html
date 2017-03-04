@@ -20,200 +20,206 @@
 </div>
 <div data-spy="scroll" data-target=".scrollspy" style="position:relative">
 <div class="col-md-3 scrollspy">
-    <ul id="nav" class="nav hidden-xs hidden-sm affix-top" data-spy="affix">
-        <li><a href="#links">Links</a></li>
-        <li><a href="#set">Set Tasks</a></li>
-        <li><a href="#graphs">Graphs</a></li>
-        <li><a href="#scores">Scores</a></li>
-        <li><a href="#settings">Settings</a>
-            <ul id="nav">
-                <li>
-                    <a href="#pwd">Password</a>
-                </li>
-                <li>
-                    <a href="#user">Username</a>
-                </li>
-            </ul>
+  <ul id="nav" class="nav hidden-xs hidden-sm affix-top" data-spy="affix">
+    <li><a href="#links">Links</a></li>
+    <li><a href="#set">Set Tasks</a></li>
+    <li><a href="#graphs">Graphs</a></li>
+    <li><a href="#scores">Scores</a></li>
+    <li><a href="#settings">Settings</a>
+      <ul id="nav">
+        <li>
+          <a href="#change-details">Details</a>
         </li>
-    </ul>
+        <li>
+          <a href="#pwd">Password</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
 
 <div class="col-md-9">
-    {# Show flashed messages #}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-info alert-dismissable fade in">
-                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                  {{ message }}
-                </div>
-                {% endfor %}
-        {% endif %}
-    {% endwith %}
+  {# Show flashed messages #}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-info alert-dismissable fade in">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{ message }}
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
-    <section id="links">
-    <!-- Form for students to link to teachers -->
-        <h1>Links</h1>
-        <form method="post" action="{{ url_for('user.account') }}">
-        {{ linkform.hidden_tag() }}
-        {{ linkform.link_code }}<br>
-        {{ linkform.link_submit }}
-        </form>
-        <h2>Existing Links:</h2>
-        <table id="links-table" class="table">
-          <thead>
-            <th>Fname</th>
-            <th>Lname</th>
-            <th></th>
-          </thead>
-          <tbody>
-            {% for t in student.teachers.all() %}
-            <tr id="link-row{{ t.teacher_id }}">
-              <td>{{ t.fname }}</td>
-              <td>{{ t.lname }}</td>
-              <td><input type="button" id="{{ t.teacher_id }}" value="Delete"></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </section>
+  <section id="links">
+  <!-- Form for students to link to teachers -->
+    <h1>Links</h1>
+    <form method="post" action="{{ url_for('user.account') }}">
+    {{ linkform.hidden_tag() }}
+    <div class="form-group">
+      {{ linkform.link_code(class="form-control form-control-lg",placeholder="Enter Code...") }}
+    </div>
+    <div class="form-group">
+      {{ linkform.link_submit(class="btn btn-primary") }}
+    </div>
+    </form>
+    <h2>Existing Links:</h2>
+    <table id="links-table" class="table">
+      <thead>
+        <th>Fname</th>
+        <th>Lname</th>
+        <th></th>
+      </thead>
+      <tbody>
+        {% for t in student.teachers.all() %}
+        <tr id="link-row{{ t.teacher_id }}">
+          <td>{{ t.fname }}</td>
+          <td>{{ t.lname }}</td>
+          <td><input type="button" class="btn btn-danger" id="{{ t.teacher_id }}" value="Delete"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
 
-    <section id="set">
-    <!-- Display tasks which are set-->
-        <h1>Set Tasks</h1>
-        {# Show tasks table if there any set tasks #}
-        {% if student.tasks.first() %}
-        <table class="table">
-            <thead>
-                <th>Topic</th>
-                <th>Task Name</th>
-                <th>Completed</th>
-                <th>Mark</th>
-                <th>Percent</th>
-                <th>Date Completed</th>
-                <th></th>
-            </thead>
-            <tbody>
-            {# Loop though all tasks and render information in table #}
-            {% for t in student.tasks.all() %}
-                <tr>
-                    <td>{{ qs[t.question_id]['topic'] }}</td>
-                    <!-- Link to relevant questions -->
-                    <td><a href="{{ url_for('questions.show_questions',  topic=qs[t.question_id]['topic'].lower(), q_type=qs[t.question_id]['q_type']) }}">
-                    {{ qs[t.question_id]['name'] }}</a></td>
-                    <td>{{ t.completed }}</td>
+  <section id="set">
+  <!-- Display tasks which are set-->
+    <h1>Set Tasks</h1>
+    {# Show tasks table if there any set tasks #}
+    {% if student.tasks.first() %}
+    <table class="table">
+      <thead>
+        <th>Topic</th>
+        <th>Task Name</th>
+        <th>Completed</th>
+        <th>Mark</th>
+        <th>Percent</th>
+        <th>Date Completed</th>
+        <th></th>
+      </thead>
+      <tbody>
+      {# Loop though all tasks and render information in table #}
+      {% for t in student.tasks.all() %}
+        <tr>
+          <td>{{ qs[t.question_id]['topic'] }}</td>
+          <!-- Link to relevant questions -->
+          <td><a href="{{ url_for('questions.show_questions',  topic=qs[t.question_id]['topic'].lower(), q_type=qs[t.question_id]['q_type']) }}">
+          {{ qs[t.question_id]['name'] }}</a></td>
+          <td>{{ t.completed }}</td>
 
-                    {% if t.mark %}
-                    <td>{{ t.mark.score }}/{{ t.mark.out_of }}</td>
-                    <td>{{ t.mark.score/t.mark.out_of*100 }}%</td>
-                    <td>{{ t.mark.date }}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
-    </section>
+          {% if t.mark %}
+            <td>{{ t.mark.score }}/{{ t.mark.out_of }}</td>
+            <td>{{ t.mark.score/t.mark.out_of*100 }}%</td>
+            <td>{{ t.mark.date }}</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </section>
 
-    <section id="graphs">
-    <!-- Gallery shows saved graphs-->
-    <!-- Each graph also link to the loci plotter page (form posts to that url with a graph id)-->
-      <h1>Graphs</h1>
-      <form action="{{ url_for('loci.loci') }}" method="get" id="graphform">
-        <select size="5" class="image-picker show-html" id="graph-select" form="graphform" name="id">
-          {% for g in student.graphs.all() %}
-              <option data-img-label="{{ g.title }}<br>{{ g.description }}<br><button class='btn btn-block'>Load</button><br><input type='button' value='Delete' id='del-graph{{ g.graph_id }}' class='btn btn-block'>" data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}"></option>
-          {% endfor %}
-        </select>
-      </form>
-    </section>
+  <section id="graphs">
+  <!-- Gallery shows saved graphs-->
+  <!-- Each graph also link to the loci plotter page (form posts to that url with a graph id)-->
+    <h1>Graphs</h1>
+    <form action="{{ url_for('loci.loci') }}" method="get" id="graphform">
+      <select size="5" class="image-picker show-html" id="graph-select" form="graphform" name="id">
+        {% for g in student.graphs.all() %}
+          <option data-img-label="{{ g.title }}<br>{{ g.description }}<br><button class='btn btn-block'>Load</button><br><input type='button' value='Delete' id='del-graph{{ g.graph_id }}' class='btn btn-block'>" data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}"></option>
+        {% endfor %}
+      </select>
+    </form>
+  </section>
 
 
-    <section id="scores">
-    <!--Show scores on previous tasks and completed questions-->
-        <table class="table">
-            <thead>
-                <th> Topic </th>
-                <th> Score </th>
-                <th> Percentage </th>
-            </thead>
-            <tbody>
-                {% for mark in student.marks.all() %}
-                <tr>
-                    <td>{{ qs[mark.question_id]["topic"] }}&nbsp;{{ qs[mark.question_id]["name"] }}</td>
-                    <td>{{ mark.score }}/{{ mark.out_of }}</td>
-                    <td>{{ mark.score/mark.out_of*100 }}%</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+  <section id="scores">
+  <h1>Task Scores</h1>
+  <!--Show scores on previous tasks and completed questions-->
+    <table class="table">
+      <thead>
+        <th> Topic </th>
+        <th> Score </th>
+        <th> Percentage </th>
+      </thead>
+      <tbody>
+        {% for mark in student.marks.all() %}
+        <tr>
+          <td>{{ qs[mark.question_id]["topic"] }}&nbsp;{{ qs[mark.question_id]["name"] }}</td>
+          <td>{{ mark.score }}/{{ mark.out_of }}</td>
+          <td>{{ mark.score/mark.out_of*100 }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
 
-    <section id="settings">
-      <!--Forms for changing details-->
-    <h1>Settings</h1>
-      <h2>Change Details</h2>
-      <form class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
-        {{ changeform.hidden_tag() }}
-        <div class="form-group">
-          {{ changeform.fname.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ changeform.fname(value=teacher.fname,class="form-control") }}
-          </div>
+  <section id="settings">
+    <!--Forms for changing details-->
+  <h1>Settings</h1>
+    <h2>Change Details</h2>
+    <div id="change-details"></div>
+    <form id="change-details" class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
+      {{ changeform.hidden_tag() }}
+      <div class="form-group">
+        {{ changeform.fname.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ changeform.fname(value=student.fname,class="form-control") }}
         </div>
-        <div class="form-group">
-          {{ changeform.lname.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ changeform.lname(value=teacher.lname,class="form-control") }}
-          </div>
+      </div>
+      <div class="form-group">
+        {{ changeform.lname.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ changeform.lname(value=student.lname,class="form-control") }}
         </div>
-        <div class="form-group">
-          {{ changeform.email.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ changeform.email(value=teacher.email,class="form-control") }}
-          </div>
+      </div>
+      <div class="form-group">
+        {{ changeform.email.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ changeform.email(value=student.email,class="form-control") }}
         </div>
-        <div class="form-group">
-          {{ changeform.password.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ changeform.password(class="form-control") }}
-          </div>
+      </div>
+      <div class="form-group">
+        {{ changeform.password.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ changeform.password(class="form-control") }}
         </div>
-        <div class="form-group">
-          <div class="col-xs-offset-2 col-xs-10">
-            {{ changeform.change_submit(class="btn btn-primary") }}
-          </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+          {{ changeform.change_submit(class="btn btn-primary") }}
         </div>
-      </form>
+      </div>
+    </form>
 
-      <h2>Password change</h2>
-      <form class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
-        {{ pwform.hidden_tag() }}
-        <div class="form-group">
-          {{ pwform.old_password.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ pwform.old_password(class="form-control") }}
-          </div>
+    <h2>Password change</h2>
+    <form id="pwd" class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
+      {{ pwform.hidden_tag() }}
+      <div class="form-group">
+        {{ pwform.old_password.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ pwform.old_password(class="form-control") }}
         </div>
-        <div class="form-group">
-          {{ pwform.password.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ pwform.password(class="form-control") }}
-          </div>
+      </div>
+      <div class="form-group">
+        {{ pwform.password.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ pwform.password(class="form-control") }}
         </div>
-        <div class="form-group">
-          {{ pwform.confirm_password.label(class="col-xs-2 control-label") }}
-          <div class="col-xs-10">
-            {{ pwform.confirm_password(class="form-control") }}
-          </div>
+      </div>
+      <div class="form-group">
+        {{ pwform.confirm_password.label(class="col-xs-2 control-label") }}
+        <div class="col-xs-10">
+          {{ pwform.confirm_password(class="form-control") }}
         </div>
-        <div class="form-group">
-          <div class="col-xs-offset-2 col-xs-10">
-            {{ pwform.pw_submit(class="btn btn-primary") }}
-          </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+          {{ pwform.pw_submit(class="btn btn-primary") }}
         </div>
-      </form>
-    </section>
+      </div>
+    </form>
+  </section>
 </div>
 </div>
 </div>

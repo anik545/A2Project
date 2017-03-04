@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/account.css') }}">
 
 <link rel="stylesheet" href="{{ url_for('static',filename='image-picker/image-picker.css') }}">
+
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
 {% endblock %}
 
 {% block main %}
@@ -21,21 +23,21 @@
 </div>
 <div data-spy="scroll" data-target=".scrollspy" style="position:relative">
 <div class="col-md-3 scrollspy">
-    <ul id="nav" class="nav hidden-xs hidden-sm affix-top" data-spy="affix">
-        <li><a href="#links">Links</a></li>
-        <li><a href="#set">Set Tasks</a></li>
-        <li><a href="#graphs">Graphs</a></li>
-        <li><a href="#settings">Settings</a>
-            <ul id="nav">
-                <li>
-                    <a href="#pwd">Password</a>
-                </li>
-                <li>
-                    <a href="#user">Username</a>
-                </li>
-            </ul>
+  <ul id="nav" class="nav hidden-xs hidden-sm affix-top" data-spy="affix">
+    <li><a href="#links">Links</a></li>
+    <li><a href="#set">Set Tasks</a></li>
+    <li><a href="#graphs">Graphs</a></li>
+    <li><a href="#settings">Settings</a>
+      <ul id="nav">
+        <li>
+          <a href="#change-details">Details</a>
         </li>
-    </ul>
+        <li>
+          <a href="#pwd">Password</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
 <div class="col-md-9">
     {% with messages = get_flashed_messages() %}
@@ -104,25 +106,31 @@
   <section id="set">
     <h1>Set Tasks</h1>
     <form method="post", action="{{ url_for('user.account') }}">
-    <div>
-      <table>
-      {% for student in setform.student_select %}
-        <tr id="set-tasks">
-        <td>{{ student.label }}</td><td>{{ student }}</td>
-        </tr>
-      {% endfor %}
-      </table>
-    </div>
-    <div>
-      <table>
-      {% for task in setform.task_select %}
-        <tr>
-        <td>{{ task.label }}</td><td>{{ task }}</td>
-        </tr>
-      {% endfor %}
-      </table>
-    </div>
-    {{ setform.set_submit }}
+      <div class="col-xs-6">
+        <h3>Students</h3>
+        {% for student in setform.student_select %}
+        <div class="form-check">
+          <label class="form-check-label">
+              {{ student }}
+              {{ student.label }}
+          </label>
+        </div>
+        {% endfor %}
+
+      </div>
+      <div class="col-xs-6">
+        <h3>Tasks</h3>
+        {% for task in setform.task_select %}
+        <div class="form-check">
+          <label class="form-check-label">
+            {{ task }}
+            {{ task.label }}
+        </div>
+        {% endfor %}
+      </div>
+      <div>
+        {{ setform.set_submit(class="btn btn-primary",value='Set') }}
+      </div>
     </form>
   </section>
 
@@ -140,7 +148,7 @@
   <section id="settings">
     <h1>Settings</h1>
     <h2>Change Details</h2>
-    <form class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
+    <form id="change-details" class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
       {{ changeform.hidden_tag() }}
       <div class="form-group">
         {{ changeform.fname.label(class="col-xs-2 control-label") }}
@@ -174,7 +182,7 @@
     </form>
 
     <h2>Password change</h2>
-    <form class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
+    <form id="pwd" class="form-horizontal" method="post", action="{{ url_for('user.account') }}">
       {{ pwform.hidden_tag() }}
       <div class="form-group">
         {{ pwform.old_password.label(class="col-xs-2 control-label") }}
