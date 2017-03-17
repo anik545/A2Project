@@ -117,7 +117,7 @@ class Matrix(object):
         """Return determinant of matrix as a float or int."""
         rows = self.rows
         if self.x != self.y:
-            return MatrixError
+            raise MatrixError
         if self.x == 2:
             # For a 2x2 matrix [[a,b],[c,d]], the determinant is a*d-b*c
             det = ((rows[0][0]) * (rows[1][1])) - (rows[0][1] * rows[1][0])

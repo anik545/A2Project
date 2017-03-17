@@ -7,10 +7,7 @@ add classes:
 let teachers organise classes
 
 2.
-clean up account page with css
-
-3.
 make help page(s), instructions on loci plotter #//(maybe mod/arg buttons)
 
-5.
+3.
 Check analysis and design to see missed out points

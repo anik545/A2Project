@@ -81,7 +81,3 @@ def mod_arg_question():
     answer = (mod, arg)
     question = 'Find, to two decimal places, the modulus and argument of  `'+str(a).replace('j', 'i')+'`'
     return (question, answer)
-
-
-if __name__ == '__main__':
-    print(ComplexQuestion.get_question('mult').get_answer())
