@@ -1,6 +1,5 @@
 import unittest
-from app.pyscripts.matrices import *
-
+from app.pyscripts.matrices import Matrix, MatrixError
 
 class TestMatrices(unittest.TestCase):
 
