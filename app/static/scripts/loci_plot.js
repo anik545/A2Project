@@ -30,7 +30,7 @@ $.getJSON($SCRIPT_ROOT + '/_plot', {
     $('#expressions tbody').append(
         '<tr id="row'+plots+'">'+
             '<td>'+
-                '`'+eq+'`'+
+                '`'+data.eq+'`'+
             '</td>'+
             '<td>'+
                 '<input type="checkbox" name="plot" id="'+plots+'" checked>'+

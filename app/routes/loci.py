@@ -7,7 +7,7 @@ from ..models import Graph, User
 from app import db
 
 from sympy import sympify, re, im
-
+import html
 # Initialise blueprint
 loci_blueprint = Blueprint('loci', __name__, template_folder='templates')
 
@@ -30,12 +30,14 @@ def plot():
     try:
         # Modify equation with function in complex_loci.py
         line = get_implicit(eq, latx=True)
+        print(line)
         if ' i ' in line:
             # A separated i means that there is a complex number in the output
             # This means the input equation was invalid
             raise TypeError
-        return jsonify(result=line)
+        return jsonify(result=line, eq=html.escape(eq))
     except Exception as e:
+        print(e)
         # Abort if there is an error (causes error message on client-side)
         abort(500)
 

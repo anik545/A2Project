@@ -107,7 +107,7 @@ def get_implicit(eq, latx=False):
     eq = eq.simplify()
     if latx:
         # Convert to format desmos understands (latex)
-        return ((latex(eq)) + ''+op+' 0').replace('atan', 'arctan')
+        return ((latex(eq)) + ' ' + op + ' 0').replace('atan', 'arctan')
     else:
         return str(eq) + op + '0'
 

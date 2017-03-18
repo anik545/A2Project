@@ -18,7 +18,7 @@ class TestMatrices(unittest.TestCase):
     def test_subtraction(self):
         self.assertEqual((self.mat1 - self.mat2).get_rows(),
                          [[-1, -1, 1],
-                          [7, 2, -5],
+                          [7,   2, -5],
                           [2, 1, -3]])
 
     def test_multiply(self):
