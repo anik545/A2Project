@@ -58,6 +58,8 @@ def addgraph():
 
             exists = Graph.query.filter_by(
                 title=title, user_id=user_id).first()
+            if title.replace(' ', '') == '':
+                return jsonify(status="error", error="Please enter a title")
             if exists:
                 # Prevent same graph getting saved more than once
                 return jsonify(status="error", error="Graph already exists")

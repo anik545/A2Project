@@ -1,30 +1,54 @@
 from app import db
-from app.models import *
+from app.models import Student, Teacher, Graph, Task, Mark
 
-db.create_all()
-u1=Student('John','Smith','a@b.com','abc','student')
-u2=Student('Bob','Ross','a@C.com','abc1','student')
-u3=Student('Alex','Smith','a@D.com','abc12','student')
-u4=Student('Dan','Jones','a@e.com','abc123','student')
-u5=Student('Mike','Red','a@f.com','abc1234','student')
-u6=Student('Jack','Deer','a@g.com','1','student')
-u7=Student('George','Russel','a@h.com','12','student')
-u8=Student('Harvey','Miller','a@i.com','123','student')
-u9=Student('Albert','Parker','a@j.com','1234','student')
-u10=Student('Mary','Cole','a@k.com','12345','student')
-u11=Student('Anik','Roy','anik545@gmail.com','January28','student')
+def setup_database():
+    db.create_all()
 
-t1=Teacher('Stephen','Jackson','a@x.com','cde','teacher')
-t2=Teacher('Laura','Morris','a@y.com','def','teacher')
+    u1=Student('Heather','Freeman','hfreeman0@omniture.com','Abc123','student')
+    u2=Student('Amanda','Evans','aevans1@odnoklassniki.ru','Cde456','student')
+    u3=Student('Jerry','White','jwhite2@desdev.cn','qwerty123','student')
+    u4=Student('Jane', 'Berry', 'jberry3@google.co.uk','tyu1234','student')
+    u5=Student('Lori','Welch','lwelch4@free.fr','erg34345','student')
+    u6=Student('Dorothy','Medina','dmedina5@mozilla.org','bfdg2','student')
+    u7=Student('Lawrence','Foster','lfoster6@who.int','regergs2','student')
+    u8=Student('Annie','Pierce','apierce7@google.cn','bfg3','student')
+    u9=Student('Melissa','Taylor','mtaylor8@state.tx.us','eret3','student')
+    u10=Student('Deborah','Richards','drichards9@dion.ne.jp','opi234','student')
+
+    t1 = Teacher('Albert','Morris','am@yahoo.com','abc123','teacher')
+    t2 = Teacher('Jane','Ripper','j.rp@gmail.com','abc123','teacher')
 
 
-db.session.add_all([u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,t1,t2])
-db.session.commit()
+    task1 = Task(1, 1, 1)
+    task2 = Task(2, 1, 1)
+    task3 = Task(1, 2, 1)
+    task3.mark_id = 1
+    task3.completed = True
 
-a,b,c,x,y = t1.add_student(u11), t1.add_student(u10), t1.add_student(u9), t1.add_student(u8), t1.add_student(u7)
+    m1 = Mark(7, 10, 1, 2)
+    m2 = Mark(1, 10, 3, 3)
+    m3 = Mark(1, 10, 5, 3)
+    m4 = Mark(4, 10, 5, 3)
+    m5 = Mark(5, 10, 4, 3)
+    m6 = Mark(3, 10, 2, 4)
 
-d,e,f,g,h,i,j = t2.add_student(u1), t2.add_student(u2), t2.add_student(u3), t2.add_student(u4), t2.add_student(u5), t2.add_student(u9), t2.add_student(u10)
+    db.session.add_all([u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, t1, t2])
+    db.session.add_all([task1, task2, task3])
+    db.session.add_all([m1, m2, m3, m4, m5, m6])
 
-db.session.add_all([a,b,c,d,e,f,g,h,i,j,x,y])
+    links = [t1.add_student(u1),
+            t1.add_student(u2),
+            t1.add_student(u3),
+            t1.add_student(u8),
+            t1.add_student(u9)]
+    db.session.add_all(links)
 
-db.session.commit()
+    db.session.commit()
+
+    graph1 = Graph('{"version":2,"graph":{"showGrid":true,"showXAxis":true,"showYAxis":true,"xAxisStep":0,"yAxisStep":0,"xAxisMinorSubdivisions":0,"yAxisMinorSubdivisions":0,"xAxisArrowMode":"NONE","yAxisArrowMode":"NONE","xAxisLabel":"Re","yAxisLabel":"Im","xAxisNumbers":true,"yAxisNumbers":true,"polarMode":false,"polarNumbers":true,"degreeMode":false,"projectorMode":false,"squareAxes":true,"viewport":{"xmin":-1.6708536134523648,"ymin":-1.9601353023240395,"xmax":1.9920012573229602,"ymax":1.847026847468353}},"expressions":{"list":[{"id":"0","type":"expression","latex":"\\sqrt{x^2+y^2}-\\sqrt{x^2+\\left(y+1\\right)^2}=0","domain":{"min":0,"max":1},"hidden":false,"color":"#2d70b3","style":"normal","residualVariable":"","regressionParameters":{},"isLogModeRegression":false},{"id":"1","type":"expression","latex":"\\sqrt{x^2+y^2}-\\sqrt{y^2+\\left(x-1\\right)^2}=0","domain":{"min":0,"max":1},"hidden":false,"color":"#388c46","style":"normal","residualVariable":"","regressionParameters":{},"isLogModeRegression":false}]}}','<thead><tr><th>Plot</th><th></th><th></th></tr></thead><tbody> <tr id="row0"><td><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mstyle displaystyle=&quot;true&quot;><mrow><mo>|</mo><mi>z</mi><mo>|</mo></mrow><mo>=</mo><mrow><mo>|</mo><mi>z</mi><mo>+</mo><mi>i</mi><mo>|</mo></mrow></mstyle></math>" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-128" style="width: 6.074em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.06em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.691em, 1004.93em, 2.927em, -1000em); top: -2.56em; left: 0em;"><span class="mrow" id="MathJax-Span-129"><span class="mstyle" id="MathJax-Span-130"><span class="mrow" id="MathJax-Span-131"><span class="mrow" id="MathJax-Span-132"><span class="mo" id="MathJax-Span-133" style="font-family: STIXVariants;">|</span><span class="mi" id="MathJax-Span-134" style="font-family: STIXGeneral; font-style: italic;">z</span><span class="mo" id="MathJax-Span-135" style="font-family: STIXVariants;">|</span></span><span class="mo" id="MathJax-Span-136" style="font-family: STIXGeneral; padding-left: 0.375em; padding-right: 0.375em;">=</span><span class="mrow" id="MathJax-Span-137"><span class="mo" id="MathJax-Span-138" style="font-family: STIXVariants;">|</span><span class="mi" id="MathJax-Span-139" style="font-family: STIXGeneral; font-style: italic;">z</span><span class="mo" id="MathJax-Span-140" style="font-family: STIXGeneral; padding-left: 0.3em; padding-right: 0.3em;">+</span><span class="mi" id="MathJax-Span-141" style="font-family: STIXGeneral; font-style: italic;">i</span><span class="mo" id="MathJax-Span-142" style="font-family: STIXVariants;">|</span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.56em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.298em; border-left: 0px solid; width: 0px; height: 1.198em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="true"><mrow><mo>|</mo><mi>z</mi><mo>|</mo></mrow><mo>=</mo><mrow><mo>|</mo><mi>z</mi><mo>+</mo><mi>i</mi><mo>|</mo></mrow></mstyle></math></span></span><script type="math/asciimath" id="MathJax-Element-2">|z|=|z+i|</script></td><td><input name="plot" id="0" checked="" type="checkbox"></td><td><input class="btn btn-block" name="del" id="del0" value="X" type="button"></td></tr><tr id="row1"><td><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" style="position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mstyle displaystyle=&quot;true&quot;><mrow><mo>|</mo><mi>z</mi><mo>|</mo></mrow><mo>=</mo><mrow><mo>|</mo><mi>z</mi><mo>-</mo><mn>1</mn><mo>|</mo></mrow></mstyle></math>" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-201" style="width: 6.372em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.298em; height: 0px; font-size: 120%;"><span style="position: absolute; clip: rect(1.691em, 1005.17em, 2.927em, -1000em); top: -2.56em; left: 0em;"><span class="mrow" id="MathJax-Span-202"><span class="mstyle" id="MathJax-Span-203"><span class="mrow" id="MathJax-Span-204"><span class="mrow" id="MathJax-Span-205"><span class="mo" id="MathJax-Span-206" style="font-family: STIXVariants;">|</span><span class="mi" id="MathJax-Span-207" style="font-family: STIXGeneral; font-style: italic;">z</span><span class="mo" id="MathJax-Span-208" style="font-family: STIXVariants;">|</span></span><span class="mo" id="MathJax-Span-209" style="font-family: STIXGeneral; padding-left: 0.375em; padding-right: 0.375em;">=</span><span class="mrow" id="MathJax-Span-210"><span class="mo" id="MathJax-Span-211" style="font-family: STIXVariants;">|</span><span class="mi" id="MathJax-Span-212" style="font-family: STIXGeneral; font-style: italic;">z</span><span class="mo" id="MathJax-Span-213" style="font-family: STIXGeneral; padding-left: 0.3em; padding-right: 0.3em;">−</span><span class="mn" id="MathJax-Span-214" style="font-family: STIXGeneral;">1</span><span class="mo" id="MathJax-Span-215" style="font-family: STIXVariants;">|</span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.56em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.298em; border-left: 0px solid; width: 0px; height: 1.198em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="true"><mrow><mo>|</mo><mi>z</mi><mo>|</mo></mrow><mo>=</mo><mrow><mo>|</mo><mi>z</mi><mo>-</mo><mn>1</mn><mo>|</mo></mrow></mstyle></math></span></span><script type="math/asciimath" id="MathJax-Element-3">|z|=|z-1|</script></td><td><input name="plot" id="1" checked="" type="checkbox"></td><td><input class="btn btn-block" name="del" id="del1" value="X" type="button"></td></tr></tbody>',2,'2 Lines','','data:image/png;base64,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')
+
+    db.session.add(graph1)
+    db.session.commit()
+
+if __name__ == "__main__":
+    setup_database()

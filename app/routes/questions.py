@@ -170,7 +170,8 @@ def answers(topic, q_type):
         abort(404)
     if current_user.is_authenticated and current_user.role == 'student':
         # Only add a mark to database if user is a logged in student
-        mark = Mark(sum(scores), len(scores), question_id, current_user.user_id)
+        mark = Mark(sum(scores), len(scores), question_id, 
+                    current_user.user_id)
         db.session.add(mark)
         # Get student by user id
         s = Student.query.filter_by(user_id=current_user.user_id).first()

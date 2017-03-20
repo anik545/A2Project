@@ -68,6 +68,7 @@ $(document).ready(function() {
             graph_id: queryDict['id']
         },function(data){
             $('#load-modal').modal('hide')
+            console.log(data.exprlist)
             $('#expressions').html(data.exprlist)
             calculator.setState(data.desmosdata)
         }).fail(function(){

@@ -171,7 +171,7 @@ class Graph(db.Model):
     """Model for graph from loci plotter."""
 
     graph_id = db.Column('graph_id', db.Integer, primary_key=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String,nullable=False)
     # Description is not necessary, so nullable is true
     description = db.Column(db.String, nullable=True)
     # Graph data from desmos, very large string

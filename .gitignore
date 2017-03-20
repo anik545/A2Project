@@ -1,8 +1,6 @@
 *.pyc
 *.dll
-
 .DS_Store
 .vscode/
 __pycache__/
-
 venv/
