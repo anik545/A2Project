@@ -97,17 +97,21 @@ def det_question():
 
 
 def inv_question():
-    """Return random question and answer pair for fiunding the inverse."""
+    """Return random question and answer pair for finding the inverse."""
     # Generate random matrices until one with an inverse is found
     while True:
         # Create random 3x3 matrix
         mat = Matrix(
             [[random.randint(1, 10) for x in range(3)] for y in range(3)]
-                )
+            )
         if mat.determinant() != 0:
             # If Matrix with valid inverse is created, break
             break
     # Calculate answer and generate question
-    answer = mat.inverse().tostr()
     question = 'Find the Inverse of `'+str(mat.get_rows())+'`'
+    answer = mat.inverse().tostr()
     return (question, answer)
+
+if __name__ == '__main__':
+    q = MatrixQuestion.get_question('inv')
+    print(q.get_q())

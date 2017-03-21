@@ -66,7 +66,7 @@ def answers(topic, q_type):
         if q_type == 'det':
             # For determinant questions (non-matrix answers)
             # Get all input answers from form
-            inputs = [request.form.get(str(x), 0) for x in range(10)]
+            inputs = [request.args.get(str(x), 0) for x in range(10)]
             # Convert all inputs to ints
             inputs = [int(x) if x else 0 for x in inputs]
             # Initialise empty scores array
@@ -75,7 +75,7 @@ def answers(topic, q_type):
             for n, x in enumerate(answers):
                 # check corresponding input answer
                 # Add one to scores array if input answer matches
-                if x == inputs[n]:
+                if int(x) == inputs[n]:
                     scores.append(1)
                 else:
                     scores.append(0)
@@ -149,15 +149,19 @@ def answers(topic, q_type):
             for x in range(len(answers)):
                 # Get form inputs
                 # Add string representation of complex number answer to inputs
-                inputs.append(
-                    str(request.args.get(str(x)+'re', 0)) + '+' +
-                    str(request.args.get(str(x) + 'im', 0))+'j')
+                re = str(request.args.get(str(x)+'re', 0).replace(' ', ''))
+                im = str(request.args.get(str(x)+'im', 0).replace(' ', ''))
+                if '-' in im:   # If imaginary part is negative
+                    inputs.append(re+im+'j')
+                else:   # If imaginary part is positive, use '+'
+                    inputs.append(re+'+'+im+'j')
             # Initialise scores list
             scores = []
             # Loop over answers
             for n, x in enumerate(answers):
                 # Convert both input answer and stored answer to complex number
                 # Check if both answers match and add 1 or 0 to scores
+                print(x,inputs[n])
                 if complex(x) == complex(inputs[n]):
                     scores.append(1)
                 else:
@@ -170,7 +174,7 @@ def answers(topic, q_type):
         abort(404)
     if current_user.is_authenticated and current_user.role == 'student':
         # Only add a mark to database if user is a logged in student
-        mark = Mark(sum(scores), len(scores), question_id, 
+        mark = Mark(sum(scores), len(scores), question_id,
                     current_user.user_id)
         db.session.add(mark)
         # Get student by user id
