@@ -15,7 +15,7 @@ app.config.from_object('config')
 login_manager = LoginManager()
 login_manager.init_app(app)
 # The view which flask login redirects to if user is not logged in and trys to access restricted view
-login_manager.login_view = 'login'
+login_manager.login_view = 'user.login'
 
 # Initialize database with sqlalchemy
 db = SQLAlchemy(app)

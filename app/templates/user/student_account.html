@@ -52,6 +52,26 @@
       {% endfor %}
     {% endif %}
   {% endwith %}
+  {% if changeform.errors %}
+  <ul class="errors">
+      {% for field_name, field_errors in changeform.errors|dictsort if field_errors %}
+          {% for error in field_errors %}
+              <li>{{ changeform[field_name].label }}: {{ error }}</li>
+          {% endfor %}
+      {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if pwform.errors %}
+  <ul class="errors">
+      {% for field_name, field_errors in pwform.errors|dictsort if field_errors %}
+          {% for error in field_errors %}
+              <li>{{ pwform[field_name].label }}: {{ error }}</li>
+          {% endfor %}
+      {% endfor %}
+  </ul>
+  {% endif %}
+
 
   <section id="links">
   <!-- Form for students to link to teachers -->

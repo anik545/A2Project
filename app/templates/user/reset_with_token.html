@@ -27,7 +27,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">Confirm Password</label>
                     <div class="col-md-9">
-                        {{ form.password(class="form-control") }}
+                        {{ form.confirm_password(class="form-control") }}
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,6 +38,16 @@
           </div>
         </div>
       </form>
+      {% if form.errors %}
+      <ul class="errors">
+          {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+              {% for error in field_errors %}
+                  <li>{{ form[field_name].label }}: {{ error }}</li>
+              {% endfor %}
+          {% endfor %}
+      </ul>
+      {% endif %}
+
     </div>
   </div>
 </div>

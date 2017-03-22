@@ -28,6 +28,7 @@
         <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('help') }}">Help</a>
         <br>
 
+        <div>
         {# Show log in buttons if user isnt logged in, else show other buttons #}
         {% if not current_user.is_authenticated %}
           <div class = "col-sm-6">
@@ -44,16 +45,18 @@
           <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.account') }}">Account</a>
           </div>
         {% endif %}
-    </div>
-    {# show all flashed messages #}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
+        </div>
+        {# show all flashed messages #}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert-info alert-dismissable fade in">
+                <div class="alert alert-info alert-dismissable fade in" style="margin-top:55px">
                   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                   {{ message }}
                 </div>
                 {% endfor %}
-        {% endif %}
-    {% endwith %}
+            {% endif %}
+        {% endwith %}
+
+    </div>
 {% endblock %}

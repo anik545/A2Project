@@ -63,7 +63,7 @@ def logout():
     db.session.commit()
     # Log out user and return to home page
     logout_user()
-    return render_template('index.html')
+    return redirect('main')
 
 
 @user.route('/register', methods=['GET', 'POST'])
@@ -169,6 +169,7 @@ def reset_with_token(token):
     if form.validate_on_submit():
         # Get User from database based on email (from decoded token)
         user = User.query.filter_by(email=email).first_or_404()
+        print(user)
         # Change user's password
         user.password = generate_password_hash(form.password.data)
         # Add updated user to database
@@ -249,23 +250,22 @@ def account():
                     # If add_student returns none, then student is already linked
                     flash('Already linked to this teacher')
                     # Go back to account page
-                    return render_template('user/student_account.html', student=u,
-                                            qs=QUESTIONS, linkform=linkform,
-                                            changeform=changeform, pwform=pwform)
+                    return render_template('user/student_account.html',
+                        student=u, qs=QUESTIONS, linkform=linkform, changeform=changeform, pwform=pwform)
                 # If student not already linked, commit link to database
                 db.session.add(a)
                 db.session.commit()
                 flash('Successfully linked')
                 # Go back to account page
-                return render_template('user/student_account.html', student=u,
-                                        qs=QUESTIONS, linkform=linkform,
-                                        changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html',
+                    student=u, qs=QUESTIONS, linkform=linkform,
+                    changeform=changeform, pwform=pwform)
             else:
                 flash('No teacher with that code')
                 # Go back to account page with appropriate message
-                return render_template('user/student_account.html', student=u,
-                                        qs=QUESTIONS, linkform=linkform,
-                                        changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html',
+                    student=u, qs=QUESTIONS, linkform=linkform,
+                    changeform=changeform, pwform=pwform)
         if changeform.change_submit.data and changeform.validate_on_submit():
             # If user is changing details, check password is correct
             if u.check_pw(changeform.password.data):
@@ -278,15 +278,15 @@ def account():
                 db.session.commit()
                 flash('Details changed successfully')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u,
-                                        qs=QUESTIONS, linkform=linkform,
-                                        changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html',
+                    student=u, qs=QUESTIONS, linkform=linkform,
+                    changeform=changeform, pwform=pwform)
             else:
                 flash('Incorrect password')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u,
-                                        qs=QUESTIONS, linkform=linkform,
-                                        changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html',
+                    student=u, qs=QUESTIONS, linkform=linkform,
+                    changeform=changeform, pwform=pwform)
         if pwform.pw_submit.data and pwform.validate_on_submit():
             # Make sure old password was input correctly
             if u.check_pw(pwform.old_password.data):
@@ -297,15 +297,15 @@ def account():
                 db.session.commit()
                 flash('Password changed successfully')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u,
-                                        qs=QUESTIONS, linkform=linkform,
-                                        changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html',
+                    student=u, qs=QUESTIONS, linkform=linkform,
+                    changeform=changeform, pwform=pwform)
             else:
                 flash('Incorrect password')
                 # Go back to account page with message
-                return render_template('user/student_account.html', student=u,
-                                        qs=QUESTIONS, linkform=linkform,
-                                        changeform=changeform, pwform=pwform)
+                return render_template('user/student_account.html',
+                    student=u, qs=QUESTIONS, linkform=linkform,
+                    changeform=changeform, pwform=pwform)
         return render_template('user/student_account.html', student=u,
                                 qs=QUESTIONS, linkform=linkform,
                                 changeform=changeform, pwform=pwform)
@@ -348,16 +348,14 @@ def account():
                 db.session.commit()
                 # Go back to account page with message
                 flash('Details changed successfully')
-                return render_template('user/teacher_account.html', teacher=u,
-                                        students=students, setform=setform,
-                                        qs=QUESTIONS, pwform=pwform,
-                                        changeform=changeform)
+                return render_template('user/teacher_account.html',
+                    teacher=u, students=students, setform=setform,
+                    qs=QUESTIONS, pwform=pwform, changeform=changeform)
             else:
                 flash('Incorrect password')
-                return render_template('user/teacher_account.html', teacher=u,
-                                        students=students, setform=setform,
-                                        qs=QUESTIONS, pwform=pwform,
-                                        changeform=changeform)
+                return render_template('user/teacher_account.html',
+                    teacher=u, students=students, setform=setform,
+                    qs=QUESTIONS, pwform=pwform, changeform=changeform)
         if pwform.pw_submit.data and pwform.validate_on_submit():
             if u.check_pw(pwform.old_password.data):
                 # Get form data and update users password
@@ -366,20 +364,17 @@ def account():
                 db.session.commit()
                 # Go back to account page with success message
                 flash('Password changed successfully')
-                return render_template('user/teacher_account.html', teacher=u,
-                                        students=students, setform=setform,
-                                        qs=QUESTIONS, pwform=pwform,
-                                        changeform=changeform)
+                return render_template('user/teacher_account.html',
+                    teacher=u, students=students, setform=setform,
+                    qs=QUESTIONS, pwform=pwform, changeform=changeform)
             else:
                 # Go back to account page with error message
                 flash('Incorrect password')
-                return render_template('user/teacher_account.html', teacher=u,
-                                        students=students, setform=setform,
-                                        qs=QUESTIONS, pwform=pwform,
-                                        changeform=changeform)
-        return render_template('user/teacher_account.html', teacher=u,
-                                students=students, setform=setform,
-                                qs=QUESTIONS, pwform=pwform,
-                                changeform=changeform)
+                return render_template('user/teacher_account.html',
+                    teacher=u, students=students, setform=setform,
+                    qs=QUESTIONS, pwform=pwform, changeform=changeform)
+        return render_template('user/teacher_account.html',
+            teacher=u, students=students, setform=setform, qs=QUESTIONS,
+            pwform=pwform, changeform=changeform)
     else:
         return abort(500)
