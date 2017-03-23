@@ -2,8 +2,8 @@
 var w = $('#box').width();
 var h = $('#box').height();
 // Make sure the axes have the same scale
-var x_ax=w/20;
-var y_ax=h/20;
+var x_ax=w/150;
+var y_ax=h/150;
 var board_atts = {
         boundingbox: [-x_ax, y_ax, x_ax, -y_ax],
         axis: true,
@@ -62,8 +62,13 @@ $(document).ready(function(){
         // Get form input
         calc = $('#calc_in').val()
         // Send data to server as GET request at /_addcalc
+        letters_list = []
+        for(var letter in points){letters_list.push(letter)};
+        console.log(letters_list);
+        console.log(JSON.stringify(letters_list));
         $.getJSON($SCRIPT_ROOT + '/_addcalc',{
             eq:calc,
+            letters:JSON.stringify(letters_list)
         }, function(data){ // Function for recieved data
             // Increment letter
             letter = String.fromCharCode(letter.charCodeAt()+1);

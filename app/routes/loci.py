@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify, abort, Blueprint
 from flask_login import login_required, current_user
-
+import json
 from ..pyscripts.complex_loci import get_implicit
 
 from ..models import Graph, User
@@ -95,10 +95,14 @@ def operations():
 def addcalc():
     # Get equation requested
     eq_str = request.args.get('eq', None)
+    letters = json.loads(request.args.get('letters', None))
     # Convert to sympy object
     eq = sympify(eq_str)
     # Get all the variables in the expression
     vars_ = eq.free_symbols
+    correct_variables = set({str(v) for v in vars_}).issubset(set(letters ))
+    if not correct_variables:
+        return abort(500)
     # get real and imaginary parts of expression
     real = str(re(eq).expand(complex=True))
     imag = str(im(eq).expand(complex=True))
@@ -115,4 +119,5 @@ def addcalc():
     real = real.replace('**', '^').replace('sin', 'Math.sin').replace('cos',  'Math.cos').replace('atan2', 'Math.atan')
     imag = imag.replace('**', '^').replace('sin', 'Math.sin').replace('cos',  'Math.cos').replace('atan2', 'Math.atan')
     # Return the real and imaginary parts of calculated points as JSON
+    print(real,imag)
     return jsonify(x=real, y=imag)
