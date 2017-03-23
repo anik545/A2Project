@@ -92,13 +92,16 @@ $(document).ready(function(){
             alert('Invalid calculation')
         });
     });
-    $('#box').on('click',function(){
+    $('#box').on('click change mouseup mousedown',function(){
         // When box is clicked, update the table which displays the points
         // The box being clicked means a points is moved
+        console.log('aa');
         for (var letter in points) {
             // get x and y of all points
+
             var x = parseFloat(points[letter].X())
             var y = parseFloat(points[letter].Y())
+            console.log(x,y)
             if ($('#label'+letter).length>0) {
                 // Change table cell of calculated points
                 $('#label'+letter).html(x.toFixed(2)+'+'+y.toFixed(2)+'i')
