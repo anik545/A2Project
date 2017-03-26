@@ -2,7 +2,8 @@ import os
 import shutil
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
+from pygments.formatters import HtmlFormatter, RtfFormatter
+import pdfkit
 
 root_dir = '.'
 
@@ -10,6 +11,8 @@ out_dir = 'prints'
 if os.path.exists(out_dir):
     shutil.rmtree(out_dir)
 os.makedirs(out_dir)
+os.makedirs(os.path.join(out_dir, 'html'))
+os.makedirs(os.path.join(out_dir, 'rtf'))
 
 py = get_lexer_by_name('python')
 js = get_lexer_by_name('js')
@@ -17,8 +20,6 @@ html = get_lexer_by_name('html+jinja')
 css = get_lexer_by_name('css')
 
 endings = {'.py': py, '.js': js, '.html': html, '.css': css}
-
-formatter = HtmlFormatter(noclasses=True)
 
 full_file_content = ''
 full_output_file = 'full_code.html'
@@ -38,15 +39,37 @@ for subdir, dirs, files in os.walk(root_dir, topdown=True):
         lexer = endings.get(filetype, None)
         relative_path = os.path.relpath(full_path, '.')
         p = '>'.join(relative_path.split(os.sep))
-        p = os.path.join(out_dir, p.split('.')[0])
+        p_html = os.path.join(out_dir, 'html', p.split('.')[0])
+        p_rtf = os.path.join(out_dir, 'rtf', p.split('.')[0])
         if lexer:
-            with open(full_path, 'r') as read_file,  open(p + '.html', 'w') as write_file:
-                heading = '<p style="font-size:14pt;font-family:sans-serif"><strong>'+full_path+'</strong></p>'
-                code = heading+highlight(read_file.read(), lexer, formatter)
-                full_file_content += code+'<br>'
-                write_file.write(code)
+            with open(full_path, 'r') as read_file,  open(p_html+'.html', 'w') as write_file_html, open(p_rtf+'.rtf','w') as write_file_rtf:
+                source = read_file.read()
+
+                heading_html = '<p style="font-size:14pt;font-family:sans-serif"><strong>'+full_path+'</strong></p>'
+                code_html = heading_html+highlight(source, lexer, HtmlFormatter(noclasses=True))
+                full_file_content += code_html+'<br>'
+                write_file_html.write(code_html)
+
+                heading_rtf = full_path+'\n'
+                code_rtf = highlight(heading_rtf+source, lexer, RtfFormatter())
+                write_file_rtf.write(code_rtf)
+
 
 with open('full_code.html', 'w') as final:
     final.write(full_file_content)
 
+'''
+options = {
+    'page-size': 'Letter',
+    'margin-top': '0.75in',
+    'margin-right': '0.75in',
+    'margin-bottom': '0.75in',
+    'margin-left': '0.75in',
+    'encoding': "UTF-8",
+    'no-outline': None,
+    'page-width': '8.2in'
+}
+
+pdfkit.from_file(full_output_file, 'code.pdf', options=options)
+'''
 #https://cloudconvert.com/html-to-rtf
