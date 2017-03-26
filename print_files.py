@@ -3,7 +3,6 @@ import shutil
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter, RtfFormatter
-import pdfkit
 import cloudconvert
 
 root_dir = '.'
@@ -72,20 +71,3 @@ process = api.convert({
 })
 process.wait()
 process.download()
-
-
-'''
-options = {
-    'page-size': 'Letter',
-    'margin-top': '0.75in',
-    'margin-right': '0.75in',
-    'margin-bottom': '0.75in',
-    'margin-left': '0.75in',
-    'encoding': "UTF-8",
-    'no-outline': None,
-    'page-width': '8.2in'
-}
-
-pdfkit.from_file(full_output_file, 'code.pdf', options=options)
-'''
-#https://cloudconvert.com/html-to-rtf
