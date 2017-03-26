@@ -4,6 +4,7 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter, RtfFormatter
 import pdfkit
+import cloudconvert
 
 root_dir = '.'
 
@@ -57,6 +58,21 @@ for subdir, dirs, files in os.walk(root_dir, topdown=True):
 
 with open('full_code.html', 'w') as final:
     final.write(full_file_content)
+
+api = cloudconvert.Api('ovnSmHPCubqsa2n4mJRNFUDXbe6MaAdr9qQOD0A7zOPbHryiOM2wafxwrWUX4Z5bRt1VJmvWujKIQsuQxTNhBw')
+
+output_format = "rtf"
+
+process = api.convert({
+    "inputformat": "html",
+    "outputformat": output_format,
+    "input": "upload",
+    "timeout": 0,
+    "file": open(full_output_file, 'rb')
+})
+process.wait()
+process.download()
+
 
 '''
 options = {
