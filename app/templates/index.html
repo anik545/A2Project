@@ -11,49 +11,59 @@
 {% endblock %}
 
 {% block main %}
-    <div class="col-lg-12" style="margin-top:15px;">
-        {% if current_user.is_authenticated %}
+  <div class="col-lg-12" style="margin-top:15px;">
+    {% if current_user.is_authenticated %}
         Logged in as {{ current_user.fname }}&nbsp;{{ current_user.lname }}
-        {% endif %}
+    {% endif %}
 
-        <!--Links to all other pages-->
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.loci') }}">Loci Plotter</a>
-        <br>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.operations') }}">Complex Number Operations</a>
-        <br>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('matrix_blueprint.matrix') }}">Matrix Calculator</a>
-        <br>
-        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('questions.questions') }}">Questions</a>
+    <!--Links to all other pages-->
+    <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.loci') }}">
+      Loci Plotter</a>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('loci.operations') }}">
+      Complex Number Operations</a>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('matrix_blueprint.matrix') }}">
+      Matrix Calculator</a>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('questions.questions') }}">
+      Questions</a>
 
-        <div>
-        {# Show log in buttons if user isnt logged in, else show other buttons #}
-        {% if not current_user.is_authenticated %}
-          <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.login') }}">Log In</a>
-          </div>
-          <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.register') }}">Sign Up</a>
-          </div>
-        {% else %}
-          <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.logout') }}">Log Out</a>
-          </div>
-          <div class = "col-sm-6">
-          <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.account') }}">Account</a>
-          </div>
-        {% endif %}
-        </div>
-        {# show all flashed messages #}
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-info alert-dismissable fade in" style="margin-top:55px">
-                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                  {{ message }}
-                </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
+    <div>
+    {# Show log in buttons if user isnt logged in, else show other buttons #}
+    {% if not current_user.is_authenticated %}
+      <div class = "col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.login') }}">
+          Log In
+        </a>
+      </div>
+      <div class = "col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.register') }}">
+          Sign Up
+        </a>
+      </div>
+    {% else %}
+      <div class = "col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.logout') }}">
+          Log Out
+        </a>
+      </div>
+      <div class = "col-sm-6">
+      <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('user.account') }}">Account</a>
+      </div>
+    {% endif %}
     </div>
+    {# show all flashed messages #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissable fade in" style="margin-top:55px">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+  </div>
 {% endblock %}

@@ -21,11 +21,11 @@ css = get_lexer_by_name('css')
 
 endings = {'.py': py, '.js': js, '.html': html, '.css': css}
 
-full_file_content = ''
+full_file_content = '<h1 style="font-family:sans-serif">Project Files</h1>'
 full_output_file = 'full_code.html'
 
 exclude_dirs = ['.', '__', 'venv', 'board', 'img', 'image-picker', out_dir, 'tests']
-exclude_files = [full_output_file, 'print_files', 'TODO', 'ttt.html', 'cttt.html', '.db', '.dll', 'open_idle', '.pdf', 'create_db']
+exclude_files = [full_output_file, 'print_files', 'TODO', 'ttt.html', 'cttt.html', '.db', '.dll', 'open_idle', '.pdf', 'create_db', 'mathpreview']
 
 for subdir, dirs, files in os.walk(root_dir, topdown=True):
     dirs[:] = [d for d in dirs if all([d.startswith(string) is False for string in exclude_dirs]) is True]
@@ -46,8 +46,8 @@ for subdir, dirs, files in os.walk(root_dir, topdown=True):
                 source = read_file.read()
 
                 heading_html = '<p style="font-size:14pt;font-family:sans-serif"><strong>'+full_path+'</strong></p>'
-                code_html = heading_html+highlight(source, lexer, HtmlFormatter(noclasses=True))
-                full_file_content += code_html+'<br>'
+                code_html = heading_html+highlight(source, lexer, HtmlFormatter(noclasses=True, cssstyles='font-size:9pt'))
+                full_file_content += code_html
                 write_file_html.write(code_html)
 
                 heading_rtf = full_path+'\n'

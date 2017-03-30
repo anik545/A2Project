@@ -5,7 +5,8 @@
 {% block head %}
 {{ super() }}
 
-<script src="{{ url_for('static',filename='image-picker/image-picker.min.js') }}"></script>
+<script src="{{ url_for('static',filename='image-picker/image-picker.min.js') }}">
+</script>
 
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/account.css') }}">
 
@@ -163,7 +164,12 @@
     <form action="{{ url_for('loci.loci') }}" method="get" id="graphform">
       <select size="5" class="image-picker show-html" id="graph-select" form="graphform" name="id">
         {% for g in teacher.graphs.all() %}
-            <option data-img-label="{{ g.title }}<br>{{ g.description }}<br><button class='btn btn-block'>Load</button><br><input type='button' value='Delete' id='del-graph{{ g.graph_id }}' class='btn btn-block'>" data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}"></option>
+            <option data-img-label="{{ g.title }}<br>{{ g.description }}
+              <br><button class='btn btn-block'>Load</button><br>
+              <input type='button' value='Delete'
+              id='del-graph{{ g.graph_id }}' class='btn btn-block'>"
+              data-img-src="{{ g.image_url }}" value="{{ g.graph_id }}">
+            </option>
         {% endfor %}
       </select>
     </form>
@@ -241,5 +247,6 @@
 <script>
     $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
 </script>
-<script src="{{ url_for('static',filename='scripts/teacher_account.js') }}"></script>
+<script src="{{ url_for('static',filename='scripts/teacher_account.js') }}">
+</script>
 {% endblock %}

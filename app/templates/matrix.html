@@ -11,82 +11,82 @@
 
 {% block main %}
 <div id="outer">
-        <div id="inner">
-            <div align="center" id="matrices">
-                <form class="pure-form" method="post" action="matrix">
-                    <div id="A-input">
-                      {# Create 3x3 matrix of inputs with names corresponding to their position #}
-                        {% for x in ['0','1','2'] %}
-                            {% for y in ['0','1','2'] %}                      
-                            <input type="text" name="{{  'A'+x+y  }}" size="3" class="in" value="{{ request.form['A'+x+y] }}">
+  <div id="inner">
+    <div align="center" id="matrices">
+      <form class="pure-form" method="post" action="matrix">
+        <div id="A-input">
+        {# Create 3x3 matrix of inputs with names corresponding to their position #}
+          {% for x in ['0','1','2'] %}
+            {% for y in ['0','1','2'] %}
+              <input type="text" name="{{  'A'+x+y  }}" size="3" class="in" value="{{ request.form['A'+x+y] }}">
+            {% endfor %}
+            <br>
+          {% endfor %}
 
-                            {% endfor %}
-                            <br>
-                        {% endfor %}
-
-                        <input type="submit" value="Determinant" name="a-submit" class="pure-button">
-                        <br>
-                        <input type="submit" value="Inverse" name="a-submit" class="pure-button">
-                        <br>
-                        <input type="submit" value="Transpose" name="a-submit" class="pure-button">
-                        <br>
-                        <input type="submit" value="Triangle" name="a-submit" class="pure-button">
-                        <br>
-                    </div>
-
-                    <div id="operators">
-                        <input type="submit" value="X" name="submit" class="pure-button op-btn">
-                        <br>
-                        <input type="submit" value="+" name="submit" class="pure-button op-btn">
-                        <br>
-                        <input type="submit" value="-" name="submit" class="pure-button op-btn">
-                        <br>
-                        <input type="button" value="Clear All" onclick="window.location.reload()" class="pure-button clear-btn">
-                    </div>
-
-                    <div id="B-input">
-                      {# Create 3x3 matrix of inputs with names corresponding to their position #}
-                        {% for x in ['0','1','2'] %}
-                            {% for y in ['0','1','2'] %}
-                            <input type="text" name="{{  'B'+x+y  }}" size="3" class="in" value="{{ request.form['B'+x+y] }}">
-
-                            {% endfor %}
-                            <br>
-                        {% endfor %}
-                        <input type="submit" value="Determinant" name="b-submit" class="pure-button">
-                        <br>
-                        <input type="submit" value="Inverse" name="b-submit" class="pure-button">
-                        <br>
-                        <input type="submit" value="Transpose" name="b-submit" class="pure-button">
-                        <br>
-                        <input type="submit" value="Triangle" name="b-submit" class="pure-button">
-                        <br>
-                    </div>
-                </form>
-            </div>
-            <!-- anwer display div-->
-            <div id="answer" align="center">
-            {# div displays different things depending on result passed to template #}
-                {% if det_result %}
-                  <p id="det"> Determinant: {{ det_result }} </p>
-                {% endif %}
-                {% if Error %}
-                  <p id="error"> {{ Error }} </p>
-                {% endif %}
-                {% if matrix_result %}
-                  <p>Result:</p>
-                  <table class="matrix">
-                      {#  #}
-                      {% for row in matrix_result %}
-                      <tr>
-                          {% for value in row %}
-                            <td>{{ value }}</td>
-                          {% endfor %}
-                        </tr>
-                        {% endfor %}
-                      </table>
-                {% endif %}
-            </div>
+          <input type="submit" value="Determinant" name="a-submit" class="pure-button">
+          <br>
+          <input type="submit" value="Inverse" name="a-submit" class="pure-button">
+          <br>
+          <input type="submit" value="Transpose" name="a-submit" class="pure-button">
+          <br>
+          <input type="submit" value="Triangle" name="a-submit" class="pure-button">
+          <br>
         </div>
+
+        <div id="operators">
+          <input type="submit" value="X" name="submit" class="pure-button op-btn">
+          <br>
+          <input type="submit" value="+" name="submit" class="pure-button op-btn">
+          <br>
+          <input type="submit" value="-" name="submit" class="pure-button op-btn">
+          <br>
+          <input type="button" value="Clear All" onclick="window.location.reload()" class="pure-button clear-btn">
+        </div>
+
+        <div id="B-input">
+        {# Create 3x3 matrix of inputs with names corresponding to their position #}
+          {% for x in ['0','1','2'] %}
+            {% for y in ['0','1','2'] %}
+              <input type="text" name="{{  'B'+x+y  }}" size="3" class="in" value="{{ request.form['B'+x+y] }}">
+            {% endfor %}
+            <br>
+          {% endfor %}
+
+          <input type="submit" value="Determinant" name="b-submit" class="pure-button">
+          <br>
+          <input type="submit" value="Inverse" name="b-submit" class="pure-button">
+          <br>
+          <input type="submit" value="Transpose" name="b-submit" class="pure-button">
+          <br>
+          <input type="submit" value="Triangle" name="b-submit" class="pure-button">
+          <br>
+        </div>
+      </form>
     </div>
+            <!-- anwer display div-->
+    <div id="answer" align="center">
+    {# div displays different things depending on result passed to template #}
+        {% if det_result %}
+          <p id="det"> Determinant: {{ det_result }} </p>
+        {% endif %}
+
+        {% if Error %}
+          <p id="error"> {{ Error }} </p>
+        {% endif %}
+
+        {% if matrix_result %}
+          <p>Result:</p>
+          <table class="matrix">
+            {% for row in matrix_result %}
+            <tr>
+                {% for value in row %}
+                  <td>{{ value }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+          </table>
+        {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}
