@@ -63,7 +63,7 @@ def logout():
     db.session.commit()
     # Log out user and return to home page
     logout_user()
-    return redirect('main')
+    return redirect(url_for('main'))
 
 
 @user.route('/register', methods=['GET', 'POST'])
