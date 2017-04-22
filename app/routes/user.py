@@ -221,11 +221,6 @@ def delete_graph():
     return jsonify()  # return nothing (no error)
 
 
-@user.route('/_delete_task', methods=['POST'])
-def delete_task():
-    pass
-
-
 @user.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
