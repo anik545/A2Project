@@ -13,18 +13,3 @@ def user_loader(email):
 @app.route('/')
 def main():
     return render_template('index.html')
-
-
-@app.route('/help')
-def help():
-    return render_template('help.html')
-
-
-@app.route('/ttt')
-def ttt():
-    return render_template('ttt.html')
-
-
-@app.route('/cttt')
-def cttt():
-    return render_template('cttt.html')
