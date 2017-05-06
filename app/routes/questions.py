@@ -28,7 +28,7 @@ def show_questions(topic, q_type):
     q_number = request.args.get('n', 10)
     if topic == 'matrix':
         # Generate question objects
-        questions = [MatrixQuestion.get_question(q_type) for x in range(q_number)]
+        questions = [MatrixQuestion.create_question(q_type) for x in range(q_number)]
         # Get list of answers from question objects
         answers = [q.get_answer() for q in questions]
         # Check whether the answers are of type matrix or not
@@ -36,15 +36,15 @@ def show_questions(topic, q_type):
         # List of question strings from question objects
         # List of answer strings from question objects
         # Save both in server side session
-        session['questions'] = [q.get_q() for q in questions]
+        session['questions'] = [q.get_question() for q in questions]
         session['answers'] = [str(q.get_answer()) for q in questions]
         return render_template('questions/mat_questions.html',
                                 questions=enumerate(questions), answers=answers,
                                 mat_ans=matans, q_type=q_type, topic=topic)
     elif topic == 'complex':
-        questions = [ComplexQuestion.get_question(q_type) for x in range(q_number)]
+        questions = [ComplexQuestion.create_question(q_type) for x in range(q_number)]
         answers = [q.get_answer() for q in questions]
-        session['questions'] = [q.get_q() for q in questions]
+        session['questions'] = [q.get_question() for q in questions]
         session['answers'] = [str(q.get_answer()) for q in questions]
         return render_template('questions/complex_questions.html',
                                 questions=enumerate(questions), answers=answers,

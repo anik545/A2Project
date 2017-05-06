@@ -7,7 +7,7 @@ class BaseQuestion(object):
         self.answer = answer
         self.question_type = q_type
 
-    def get_q(self):
+    def get_question(self):
         """Return question as string."""
         return str(self.question)
 

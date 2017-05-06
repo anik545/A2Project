@@ -7,7 +7,7 @@ class MatrixQuestion(BaseQuestion):
     """Class for creating matrix questions, inherits from BaseQuestion."""
 
     @staticmethod
-    def get_question(q_type):
+    def create_question(q_type):
         """Return matrix question object given question type."""
         if q_type == 'add_sub':
             question, answer = add_sub_question()
@@ -113,5 +113,5 @@ def inv_question():
     return (question, answer)
 
 if __name__ == '__main__':
-    q = MatrixQuestion.get_question('inv')
-    print(q.get_q())
+    q = MatrixQuestion.create_question('inv')
+    print(q.get_question())

@@ -21,7 +21,7 @@ css = get_lexer_by_name('css')
 
 endings = {'.py': py, '.js': js, '.html': html, '.css': css}
 
-full_file_content = '<h1 style="font-family:sans-serif">Project Files</h1>'
+full_file_content = '<h1 style="font-family:arial">Project Files</h1>'
 full_output_file = 'full_code.html'
 
 exclude_dirs = ['.', '__', 'venv', 'board', 'img', 'image-picker', out_dir, 'tests']
@@ -45,8 +45,8 @@ for subdir, dirs, files in os.walk(root_dir, topdown=True):
             with open(full_path, 'r') as read_file,  open(p_html+'.html', 'w') as write_file_html, open(p_rtf+'.rtf','w') as write_file_rtf:
                 source = read_file.read()
 
-                heading_html = '<p style="font-size:14pt;font-family:sans-serif"><strong>'+full_path+'</strong></p>'
-                code_html = heading_html+highlight(source, lexer, HtmlFormatter(noclasses=True, cssstyles='font-size:9pt'))
+                heading_html = '<p style="font-size:14pt;font-family:arial"><strong>'+full_path+'</strong></p>'
+                code_html = heading_html+highlight(source, lexer, HtmlFormatter(noclasses=True, cssstyles='font-family:consolas,monaco,monospace;font-size:9pt;line-height:1'))
                 full_file_content += code_html
                 write_file_html.write(code_html)
 
@@ -62,6 +62,15 @@ api = cloudconvert.Api('ovnSmHPCubqsa2n4mJRNFUDXbe6MaAdr9qQOD0A7zOPbHryiOM2wafxw
 
 output_format = "rtf"
 
+###
+'''
+Settings for Word document after:
+font-size: 10
+margins: narrow
+
+
+'''
+###
 process = api.convert({
     "inputformat": "html",
     "outputformat": output_format,

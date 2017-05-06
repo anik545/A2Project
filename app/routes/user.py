@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from app import app, db, mail
 
 from ..forms import (ChangeDetailsForm, ChangePasswordForm,
-                     ChangePasswordForm1, LoginForm, RegisterForm,
+                     ChangePasswordAccountPageForm, LoginForm, RegisterForm,
                      RequestPasswordChangeForm, SetTaskForm, TeacherLinkForm)
 from ..models import Student, Task, Teacher, User, Graph
 from ..pyscripts.question_dict import QUESTIONS
@@ -231,7 +231,7 @@ def account():
         # Load all forms
         changeform = ChangeDetailsForm(obj=u)
         linkform = TeacherLinkForm()
-        pwform = ChangePasswordForm1()
+        pwform = ChangePasswordAccountPageForm()
         if linkform.link_submit.data and linkform.validate_on_submit():
             # If the links form is submitted, try to get the teacher with input code
             t = Teacher.query.filter_by(code=linkform.link_code.data).first()
@@ -313,7 +313,7 @@ def account():
         # Load forms
         setform = SetTaskForm(choices)
         changeform = ChangeDetailsForm(obj=u)
-        pwform = ChangePasswordForm1()
+        pwform = ChangePasswordAccountPageForm()
         if setform.set_submit.data and setform.validate_on_submit():
             # If setform submitted (form for setting tasks)
             # Get teacher object from user_id

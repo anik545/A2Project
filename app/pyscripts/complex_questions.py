@@ -8,7 +8,7 @@ class ComplexQuestion(BaseQuestion):
     """Class for creating matrix questions, inherits from BaseQuestion."""
 
     @staticmethod
-    def get_question(q_type):
+    def create_question(q_type):
         """Return a question object given a question type."""
         if q_type == 'add_sub':
             question, answer = add_sub_question()

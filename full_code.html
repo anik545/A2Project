@@ -1,4 +1,4 @@
-<h1 style="font-family:sans-serif">Project Files</h1><p style="font-size:14pt;font-family:sans-serif"><strong>./config.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #408080; font-style: italic"># CSRF form protection</span>
+<h1 style="font-family:sans-serif">Project Files</h1><p style="font-size:14pt;font-family:arial"><strong>./config.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #408080; font-style: italic"># CSRF form protection</span>
 WTF_CSRF_ENABLED <span style="color: #666666">=</span> <span style="color: #008000">False</span>
 <span style="color: #408080; font-style: italic"># Database connection</span>
 SQLALCHEMY_DATABASE_URI <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;sqlite:///database.db&#39;</span>
@@ -13,7 +13,7 @@ MAIL_USE_SSL <span style="color: #666666">=</span> <span style="color: #008000">
 MAIL_USERNAME <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;testapp545545&#39;</span>
 MAIL_PASSWORD <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;January28&#39;</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./run.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<p style="font-size:14pt;font-family:arial"><strong>./run.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app</span> <span style="color: #008000; font-weight: bold">import</span> app
 
 <span style="color: #008000; font-weight: bold">if</span> <span style="color: #19177C">__name__</span> <span style="color: #666666">==</span> <span style="color: #BA2121">&quot;__main__&quot;</span>:
@@ -21,7 +21,7 @@ MAIL_PASSWORD <span style="color: #666666">=</span> <span style="color: #BA2121"
     app<span style="color: #666666">.</span>debug <span style="color: #666666">=</span> <span style="color: #008000">True</span>
     app<span style="color: #666666">.</span>run(host<span style="color: #666666">=</span><span style="color: #BA2121">&#39;0.0.0.0&#39;</span>, port<span style="color: #666666">=</span>port)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/__init__.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> Flask
+<p style="font-size:14pt;font-family:arial"><strong>./app/__init__.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> Flask
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_login</span> <span style="color: #008000; font-weight: bold">import</span> LoginManager
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_sqlalchemy</span> <span style="color: #008000; font-weight: bold">import</span> SQLAlchemy
 
@@ -61,7 +61,7 @@ app<span style="color: #666666">.</span>register_blueprint(user)
 <span style="color: #408080; font-style: italic"># Import all other views and database models</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app</span> <span style="color: #008000; font-weight: bold">import</span> models, views
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/forms.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_wtf</span> <span style="color: #008000; font-weight: bold">import</span> FlaskForm
+<p style="font-size:14pt;font-family:arial"><strong>./app/forms.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_wtf</span> <span style="color: #008000; font-weight: bold">import</span> FlaskForm
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">wtforms</span> <span style="color: #008000; font-weight: bold">import</span> (BooleanField, PasswordField, SelectMultipleField,
                      SubmitField, TextField, validators, widgets)
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">wtforms.fields.html5</span> <span style="color: #008000; font-weight: bold">import</span> EmailField
@@ -148,7 +148,7 @@ app<span style="color: #666666">.</span>register_blueprint(user)
     confirm_password <span style="color: #666666">=</span> PasswordField(<span style="color: #BA2121">&#39;Confirm New Password&#39;</span>, [validators<span style="color: #666666">.</span>Required(), validators<span style="color: #666666">.</span>EqualTo(<span style="color: #BA2121">&#39;password&#39;</span>, message<span style="color: #666666">=</span><span style="color: #BA2121">&#39;Passwords do not match&#39;</span>)])
     pw_submit <span style="color: #666666">=</span> SubmitField(<span style="color: #BA2121">&#39;Go&#39;</span>)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/models.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app</span> <span style="color: #008000; font-weight: bold">import</span> db
+<p style="font-size:14pt;font-family:arial"><strong>./app/models.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app</span> <span style="color: #008000; font-weight: bold">import</span> db
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">datetime</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">werkzeug.security</span> <span style="color: #008000; font-weight: bold">import</span> generate_password_hash, check_password_hash
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">random</span>
@@ -342,7 +342,7 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
         <span style="color: #008000">self</span><span style="color: #666666">.</span>image_url <span style="color: #666666">=</span> image_url
         <span style="color: #008000">self</span><span style="color: #666666">.</span>date <span style="color: #666666">=</span> datetime<span style="color: #666666">.</span>date<span style="color: #666666">.</span>today()
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/views.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> render_template
+<p style="font-size:14pt;font-family:arial"><strong>./app/views.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> render_template
 
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app</span> <span style="color: #008000; font-weight: bold">import</span> app, login_manager
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app.models</span> <span style="color: #008000; font-weight: bold">import</span> User
@@ -357,25 +357,10 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
 <span style="color: #AA22FF">@app.route</span>(<span style="color: #BA2121">&#39;/&#39;</span>)
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
     <span style="color: #008000; font-weight: bold">return</span> render_template(<span style="color: #BA2121">&#39;index.html&#39;</span>)
-
-
-<span style="color: #AA22FF">@app.route</span>(<span style="color: #BA2121">&#39;/help&#39;</span>)
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">help</span>():
-    <span style="color: #008000; font-weight: bold">return</span> render_template(<span style="color: #BA2121">&#39;help.html&#39;</span>)
-
-
-<span style="color: #AA22FF">@app.route</span>(<span style="color: #BA2121">&#39;/ttt&#39;</span>)
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">ttt</span>():
-    <span style="color: #008000; font-weight: bold">return</span> render_template(<span style="color: #BA2121">&#39;ttt.html&#39;</span>)
-
-
-<span style="color: #AA22FF">@app.route</span>(<span style="color: #BA2121">&#39;/cttt&#39;</span>)
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">cttt</span>():
-    <span style="color: #008000; font-weight: bold">return</span> render_template(<span style="color: #BA2121">&#39;cttt.html&#39;</span>)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/__init__.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">.</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/__init__.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">.</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/base_question.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">BaseQuestion</span>(<span style="color: #008000">object</span>):
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/base_question.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">BaseQuestion</span>(<span style="color: #008000">object</span>):
     <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Base question which matrix and complex question inherit from.&quot;&quot;&quot;</span>
 
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, question, answer, q_type):
@@ -392,7 +377,7 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
         <span style="color: #BA2121; font-style: italic">&quot;&quot;&quot;Return answer.&quot;&quot;&quot;</span>
         <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>answer
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/complex_loci.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sympy</span> <span style="color: #008000; font-weight: bold">import</span> symbols, re, im, sqrt, atan, sympify, latex
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/complex_loci.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sympy</span> <span style="color: #008000; font-weight: bold">import</span> symbols, re, im, sqrt, atan, sympify, latex
 
 <span style="color: #408080; font-style: italic"># TODO instead of subbing Abs(), find sqrt(re(x)+im(x)) instead.</span>
 
@@ -509,7 +494,7 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
 <span style="color: #008000; font-weight: bold">if</span> <span style="color: #19177C">__name__</span> <span style="color: #666666">==</span> <span style="color: #BA2121">&#39;__main__&#39;</span>:
     <span style="color: #008000; font-weight: bold">print</span>(parse(<span style="color: #BA2121">&#39;arg(z+1)-arg(z-1)&#39;</span>))
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/complex_questions.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sympy</span> <span style="color: #008000; font-weight: bold">import</span> im, re
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/complex_questions.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sympy</span> <span style="color: #008000; font-weight: bold">import</span> im, re
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">random</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">cmath</span> <span style="color: #008000; font-weight: bold">import</span> phase
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app.pyscripts.base_question</span> <span style="color: #008000; font-weight: bold">import</span> BaseQuestion
@@ -593,7 +578,7 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
     question <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;Find, to two decimal places, the modulus and argument of  `&#39;</span><span style="color: #666666">+</span><span style="color: #008000">str</span>(a)<span style="color: #666666">.</span>replace(<span style="color: #BA2121">&#39;j&#39;</span>, <span style="color: #BA2121">&#39;i&#39;</span>)<span style="color: #666666">+</span><span style="color: #BA2121">&#39;`&#39;</span>
     <span style="color: #008000; font-weight: bold">return</span> (question, answer)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/matrices.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">fractions</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/matrices.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">fractions</span>
 
 
 <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">MatrixError</span>(<span style="color: #D2413A; font-weight: bold">Exception</span>):
@@ -799,7 +784,7 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
                 c_t[x][y] <span style="color: #666666">=</span> fractions<span style="color: #666666">.</span>Fraction(c_t[x][y] <span style="color: #666666">/</span> det)<span style="color: #666666">.</span>limit_denominator()
         <span style="color: #008000; font-weight: bold">return</span> Matrix(c_t)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/matrix_questions.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app.pyscripts.matrices</span> <span style="color: #008000; font-weight: bold">import</span> Matrix
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/matrix_questions.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app.pyscripts.matrices</span> <span style="color: #008000; font-weight: bold">import</span> Matrix
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">app.pyscripts.base_question</span> <span style="color: #008000; font-weight: bold">import</span> BaseQuestion
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">random</span>
 
@@ -917,7 +902,7 @@ links <span style="color: #666666">=</span> db<span style="color: #666666">.</sp
     q <span style="color: #666666">=</span> MatrixQuestion<span style="color: #666666">.</span>get_question(<span style="color: #BA2121">&#39;inv&#39;</span>)
     <span style="color: #008000; font-weight: bold">print</span>(q<span style="color: #666666">.</span>get_q())
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/pyscripts/question_dict.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>QUESTIONS <span style="color: #666666">=</span> [
+<p style="font-size:14pt;font-family:arial"><strong>./app/pyscripts/question_dict.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>QUESTIONS <span style="color: #666666">=</span> [
     {<span style="color: #BA2121">&#39;id&#39;</span>: <span style="color: #666666">0</span>, <span style="color: #BA2121">&quot;name&quot;</span>: <span style="color: #BA2121">&#39;Addition and Subtraction&#39;</span>, <span style="color: #BA2121">&quot;topic&quot;</span>: <span style="color: #BA2121">&#39;Matrix&#39;</span>, <span style="color: #BA2121">&quot;q_type&quot;</span>: <span style="color: #BA2121">&quot;add_sub&quot;</span>},
     {<span style="color: #BA2121">&#39;id&#39;</span>: <span style="color: #666666">1</span>, <span style="color: #BA2121">&quot;name&quot;</span>: <span style="color: #BA2121">&#39;Multiplication&#39;</span>, <span style="color: #BA2121">&quot;topic&quot;</span>: <span style="color: #BA2121">&#39;Matrix&#39;</span>, <span style="color: #BA2121">&quot;q_type&quot;</span>: <span style="color: #BA2121">&quot;mult&quot;</span>},
     {<span style="color: #BA2121">&#39;id&#39;</span>: <span style="color: #666666">2</span>, <span style="color: #BA2121">&#39;name&#39;</span>: <span style="color: #BA2121">&#39;Determinant&#39;</span>, <span style="color: #BA2121">&quot;topic&quot;</span>: <span style="color: #BA2121">&#39;Matrix&#39;</span>, <span style="color: #BA2121">&quot;q_type&quot;</span>: <span style="color: #BA2121">&quot;det&quot;</span>},
@@ -942,9 +927,9 @@ COMPLEX_QUESTIONS <span style="color: #666666">=</span> {
     <span style="color: #BA2121">&quot;mod_arg&quot;</span>: <span style="color: #666666">7</span>
 }
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/routes/__init__.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">.</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/routes/__init__.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">.</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/routes/loci.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> render_template, request, jsonify, abort, Blueprint
+<p style="font-size:14pt;font-family:arial"><strong>./app/routes/loci.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> render_template, request, jsonify, abort, Blueprint
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_login</span> <span style="color: #008000; font-weight: bold">import</span> login_required, current_user
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">json</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">..pyscripts.complex_loci</span> <span style="color: #008000; font-weight: bold">import</span> get_implicit
@@ -1068,7 +1053,7 @@ loci_blueprint <span style="color: #666666">=</span> Blueprint(<span style="colo
     <span style="color: #008000; font-weight: bold">print</span>(real,imag)
     <span style="color: #008000; font-weight: bold">return</span> jsonify(x<span style="color: #666666">=</span>real, y<span style="color: #666666">=</span>imag)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/routes/matrix.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> request, render_template, Blueprint
+<p style="font-size:14pt;font-family:arial"><strong>./app/routes/matrix.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> request, render_template, Blueprint
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">..pyscripts.matrices</span> <span style="color: #008000; font-weight: bold">import</span> Matrix
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">fractions</span> <span style="color: #008000; font-weight: bold">import</span> Fraction
 
@@ -1171,7 +1156,7 @@ matrix_blueprint <span style="color: #666666">=</span> Blueprint(<span style="co
     <span style="color: #408080; font-style: italic"># Return basic page if GET request (no form submitted yet)</span>
     <span style="color: #008000; font-weight: bold">return</span> render_template(<span style="color: #BA2121">&#39;matrix.html&#39;</span>, matrix_result<span style="color: #666666">=</span>result)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/routes/questions.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">ast</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/routes/questions.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">ast</span>
 
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> (Blueprint, abort, flash, jsonify, render_template,
                    request, session)
@@ -1379,7 +1364,7 @@ questions_blueprint <span style="color: #666666">=</span> Blueprint(<span style=
     <span style="color: #008000; font-weight: bold">return</span> jsonify(answers<span style="color: #666666">=</span>answers, inputs<span style="color: #666666">=</span>inputs, questions<span style="color: #666666">=</span>questions,
                     percent<span style="color: #666666">=</span>percent, scores<span style="color: #666666">=</span>scores)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/routes/user.py</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> (Blueprint, Flask, abort, flash, jsonify, redirect,
+<p style="font-size:14pt;font-family:arial"><strong>./app/routes/user.py</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask</span> <span style="color: #008000; font-weight: bold">import</span> (Blueprint, Flask, abort, flash, jsonify, redirect,
                    render_template, request, url_for)
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_login</span> <span style="color: #008000; font-weight: bold">import</span> current_user, login_required, login_user, logout_user
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">flask_mail</span> <span style="color: #008000; font-weight: bold">import</span> Message
@@ -1444,7 +1429,7 @@ serializer <span style="color: #666666">=</span> URLSafeTimedSerializer(app<span
     db<span style="color: #666666">.</span>session<span style="color: #666666">.</span>commit()
     <span style="color: #408080; font-style: italic"># Log out user and return to home page</span>
     logout_user()
-    <span style="color: #008000; font-weight: bold">return</span> redirect(<span style="color: #BA2121">&#39;main&#39;</span>)
+    <span style="color: #008000; font-weight: bold">return</span> redirect(url_for(<span style="color: #BA2121">&#39;main&#39;</span>))
 
 
 <span style="color: #AA22FF">@user.route</span>(<span style="color: #BA2121">&#39;/register&#39;</span>, methods<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;GET&#39;</span>, <span style="color: #BA2121">&#39;POST&#39;</span>])
@@ -1602,11 +1587,6 @@ serializer <span style="color: #666666">=</span> URLSafeTimedSerializer(app<span
     <span style="color: #008000; font-weight: bold">return</span> jsonify()  <span style="color: #408080; font-style: italic"># return nothing (no error)</span>
 
 
-<span style="color: #AA22FF">@user.route</span>(<span style="color: #BA2121">&#39;/_delete_task&#39;</span>, methods<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;POST&#39;</span>])
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">delete_task</span>():
-    <span style="color: #008000; font-weight: bold">pass</span>
-
-
 <span style="color: #AA22FF">@user.route</span>(<span style="color: #BA2121">&#39;/account&#39;</span>, methods<span style="color: #666666">=</span>[<span style="color: #BA2121">&#39;GET&#39;</span>, <span style="color: #BA2121">&#39;POST&#39;</span>])
 <span style="color: #AA22FF">@login_required</span>
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">account</span>():
@@ -1760,7 +1740,7 @@ serializer <span style="color: #666666">=</span> URLSafeTimedSerializer(app<span
     <span style="color: #008000; font-weight: bold">else</span>:
         <span style="color: #008000; font-weight: bold">return</span> abort(<span style="color: #666666">500</span>)
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/scripts/loci_plot.js</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">var</span> elt <span style="color: #666666">=</span> <span style="color: #008000">document</span>.getElementById(<span style="color: #BA2121">&#39;calculator&#39;</span>);
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/scripts/loci_plot.js</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">var</span> elt <span style="color: #666666">=</span> <span style="color: #008000">document</span>.getElementById(<span style="color: #BA2121">&#39;calculator&#39;</span>);
 <span style="color: #408080; font-style: italic">// Options for desmos grpah plotter</span>
 <span style="color: #008000; font-weight: bold">var</span> options <span style="color: #666666">=</span> {
     expressions<span style="color: #666666">:</span><span style="color: #008000; font-weight: bold">true</span>,
@@ -1920,7 +1900,7 @@ $(<span style="color: #008000">document</span>).ready(<span style="color: #00800
     <span style="color: #408080; font-style: italic">//modal made in jinja at start, then graphs added into html when one is saved</span>
 });
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/scripts/operations.js</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #408080; font-style: italic">// Get width and height of box in pixels</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/scripts/operations.js</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #408080; font-style: italic">// Get width and height of box in pixels</span>
 <span style="color: #008000; font-weight: bold">var</span> w <span style="color: #666666">=</span> $(<span style="color: #BA2121">&#39;#box&#39;</span>).width();
 <span style="color: #008000; font-weight: bold">var</span> h <span style="color: #666666">=</span> $(<span style="color: #BA2121">&#39;#box&#39;</span>).height();
 <span style="color: #408080; font-style: italic">// Make sure the axes have the same scale</span>
@@ -2086,7 +2066,7 @@ $(<span style="color: #008000">document</span>).ready(<span style="color: #00800
     });
 });
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/scripts/questions.js</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>$(<span style="color: #BA2121">&#39;#submit&#39;</span>).on(<span style="color: #BA2121">&#39;click&#39;</span>, <span style="color: #008000; font-weight: bold">function</span>() {
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/scripts/questions.js</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>$(<span style="color: #BA2121">&#39;#submit&#39;</span>).on(<span style="color: #BA2121">&#39;click&#39;</span>, <span style="color: #008000; font-weight: bold">function</span>() {
     <span style="color: #408080; font-style: italic">// When submit clicked, run function submit_answers</span>
     submit_answers()
 });
@@ -2135,7 +2115,7 @@ $(<span style="color: #008000">document</span>).ready(<span style="color: #00800
     })
 }
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/scripts/student_account.js</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #408080; font-style: italic">// js for sidebar formatting</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/scripts/student_account.js</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #408080; font-style: italic">// js for sidebar formatting</span>
 $(<span style="color: #BA2121">&#39;#nav&#39;</span>).affix({
     offset<span style="color: #666666">:</span> {
         top<span style="color: #666666">:</span> $(<span style="color: #BA2121">&#39;#nav&#39;</span>).offset().top
@@ -2183,7 +2163,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
   }
 });
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/scripts/teacher_account.js</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>$(<span style="color: #BA2121">&#39;#nav&#39;</span>).affix({
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/scripts/teacher_account.js</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>$(<span style="color: #BA2121">&#39;#nav&#39;</span>).affix({
     offset<span style="color: #666666">:</span> {
         top<span style="color: #666666">:</span> $(<span style="color: #BA2121">&#39;#nav&#39;</span>).offset().top
     }
@@ -2229,7 +2209,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
   }
 });
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/styles/account.css</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">affix</span> {
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/styles/account.css</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">affix</span> {
     <span style="color: #008000; font-weight: bold">top</span>: <span style="color: #666666">20</span><span style="color: #B00040">px</span>;
     <span style="color: #008000; font-weight: bold">width</span>: <span style="color: #666666">213</span><span style="color: #B00040">px</span>;
 }
@@ -2275,7 +2255,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 <span style="color: #008000; font-weight: bold">input</span><span style="color: #666666">[</span><span style="color: #008000; font-weight: bold">type</span><span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">checkbox</span><span style="color: #666666">]</span>:<span style="color: #AA22FF">checked</span> <span style="color: #666666">+</span> <span style="color: #008000; font-weight: bold">label</span>:<span style="color: #AA22FF">before</span> { <span style="color: #008000; font-weight: bold">content</span>: <span style="color: #BA2121">&quot;\f046&quot;</span>; } <span style="color: #408080; font-style: italic">/* checked icon */</span>
 <span style="color: #008000; font-weight: bold">input</span><span style="color: #666666">[</span><span style="color: #008000; font-weight: bold">type</span><span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">checkbox</span><span style="color: #666666">]</span>:<span style="color: #AA22FF">checked</span> <span style="color: #666666">+</span> <span style="color: #008000; font-weight: bold">label</span>:<span style="color: #AA22FF">before</span> { <span style="color: #008000; font-weight: bold">letter-spacing</span>: <span style="color: #666666">5</span><span style="color: #B00040">px</span>; } <span style="color: #408080; font-style: italic">/* allow space for check mark */</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/styles/complex_q.css</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">out_question</span>{
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/styles/complex_q.css</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">out_question</span>{
     <span style="color: #008000; font-weight: bold">width</span>: <span style="color: #666666">100</span><span style="color: #B00040">%</span>;
     <span style="color: #008000; font-weight: bold">padding</span>: <span style="color: #666666">10</span><span style="color: #B00040">px</span>;
     <span style="color: #008000; font-weight: bold">text-align</span>: <span style="color: #008000; font-weight: bold">center</span>;
@@ -2299,7 +2279,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     <span style="color: #008000; font-weight: bold">padding</span>: <span style="color: #666666">10</span><span style="color: #B00040">px</span>;
 }
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/styles/main.css</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">html</span> {
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/styles/main.css</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #008000; font-weight: bold">html</span> {
   <span style="color: #008000; font-weight: bold">position</span>: <span style="color: #008000; font-weight: bold">relative</span>;
   <span style="color: #008000; font-weight: bold">min-height</span>: <span style="color: #666666">100</span><span style="color: #B00040">%</span>;
 }
@@ -2374,7 +2354,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     <span style="color: #008000; font-weight: bold">border-radius</span>: <span style="color: #666666">6</span><span style="color: #B00040">px</span> <span style="color: #666666">0</span> <span style="color: #666666">6</span><span style="color: #B00040">px</span> <span style="color: #666666">6</span><span style="color: #B00040">px</span>;
 }
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/styles/matrix.css</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">in</span> {
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/styles/matrix.css</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">in</span> {
     <span style="color: #008000; font-weight: bold">width</span>: <span style="color: #666666">50</span><span style="color: #B00040">px</span>;
     <span style="color: #008000; font-weight: bold">height</span>: <span style="color: #666666">50</span><span style="color: #B00040">px</span>;
     <span style="color: #008000; font-weight: bold">text-align</span>: <span style="color: #008000; font-weight: bold">center</span>;
@@ -2462,7 +2442,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     <span style="color: #008000; font-weight: bold">margin-bottom</span>: <span style="color: #666666">100</span><span style="color: #B00040">px</span>;
 }
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/static/styles/questions.css</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">out_question</span>{
+<p style="font-size:14pt;font-family:arial"><strong>./app/static/styles/questions.css</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>.<span style="color: #0000FF; font-weight: bold">out_question</span>{
     <span style="color: #008000; font-weight: bold">width</span>: <span style="color: #666666">100</span><span style="color: #B00040">%</span>;
     <span style="color: #008000; font-weight: bold">padding</span>: <span style="color: #666666">10</span><span style="color: #B00040">px</span>;
     <span style="color: #008000; font-weight: bold">text-align</span>: <span style="color: #008000; font-weight: bold">center</span>;
@@ -2485,7 +2465,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     <span style="color: #008000; font-weight: bold">padding</span>: <span style="color: #666666">10</span><span style="color: #B00040">px</span>;
 }
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/index.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/index.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span>Home Page<span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -2515,7 +2495,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     &lt;<span style="color: #008000; font-weight: bold">br</span>&gt;
     &lt;<span style="color: #008000; font-weight: bold">a</span> <span style="color: #7D9029">class</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;btn btn-primary btn-lg btn-block&quot;</span> <span style="color: #7D9029">href</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;</span><span style="color: #BC7A00">{{</span> <span style="color: #19177C">url_for</span><span style="color: #666666">(</span><span style="color: #BA2121">&#39;questions.questions&#39;</span><span style="color: #666666">)</span> <span style="color: #BC7A00">}}</span><span style="color: #BA2121">&quot;</span>&gt;
       Questions&lt;/<span style="color: #008000; font-weight: bold">a</span>&gt;
-
+    &lt;<span style="color: #008000; font-weight: bold">br</span>&gt;
     &lt;<span style="color: #008000; font-weight: bold">div</span>&gt;
     <span style="color: #408080; font-style: italic">{# Show log in buttons if user isnt logged in, else show other buttons #}</span>
     <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000; font-weight: bold">not</span> <span style="color: #19177C">current_user.is_authenticated</span> <span style="color: #BC7A00">%}</span>
@@ -2555,7 +2535,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
   &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/layout.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">&lt;!DOCTYPE html&gt;</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/layout.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">&lt;!DOCTYPE html&gt;</span>
 <span style="color: #408080; font-style: italic">{# Jinja 2 Template which all other templates will inherit from #}</span>
 <span style="color: #408080; font-style: italic">{# Contains blocks which are overridden by child templates #}</span>
 <span style="color: #408080; font-style: italic">{# Child blocks call super() to get the common elements #}</span>
@@ -2657,7 +2637,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 
 &lt;/<span style="color: #008000; font-weight: bold">html</span>&gt;
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/loci.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/loci.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Loci Plotter <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -2845,7 +2825,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     &lt;/<span style="color: #008000; font-weight: bold">script</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/matrix.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/matrix.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span>Matrix Calculator<span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -2938,7 +2918,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/operations.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/operations.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Argand Diagram <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3041,14 +3021,14 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     &lt;<span style="color: #008000; font-weight: bold">script</span> <span style="color: #7D9029">type</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;text/javascript&quot;</span> <span style="color: #7D9029">src</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;</span><span style="color: #BC7A00">{{</span> <span style="color: #19177C">url_for</span><span style="color: #666666">(</span><span style="color: #BA2121">&#39;static&#39;</span><span style="color: #666666">,</span> <span style="color: #19177C">filename</span><span style="color: #666666">=</span><span style="color: #BA2121">&#39;scripts/operations.js&#39;</span><span style="color: #666666">)</span> <span style="color: #BC7A00">}}</span><span style="color: #BA2121">&quot;</span>&gt;&lt;/<span style="color: #008000; font-weight: bold">script</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/emails/confirm_email.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #008000; font-weight: bold">html</span>&gt;
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/emails/confirm_email.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #008000; font-weight: bold">html</span>&gt;
   &lt;<span style="color: #008000; font-weight: bold">body</span>&gt;
     &lt;<span style="color: #008000; font-weight: bold">p</span>&gt;Hi&lt;/<span style="color: #008000; font-weight: bold">p</span>&gt;
     &lt;<span style="color: #008000; font-weight: bold">p</span>&gt;Confirm Here: &lt;<span style="color: #008000; font-weight: bold">a</span> <span style="color: #7D9029">href</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;</span><span style="color: #BC7A00">{{</span> <span style="color: #19177C">confirm_url</span> <span style="color: #BC7A00">}}</span><span style="color: #BA2121">&quot;</span>&gt;<span style="color: #BC7A00">{{</span> <span style="color: #19177C">confirm_url</span> <span style="color: #BC7A00">}}</span>&lt;/<span style="color: #008000; font-weight: bold">a</span>&gt;&lt;/<span style="color: #008000; font-weight: bold">p</span>&gt;
   &lt;/<span style="color: #008000; font-weight: bold">body</span>&gt;
 &lt;/<span style="color: #008000; font-weight: bold">html</span>&gt;
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/emails/recover_email.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #008000; font-weight: bold">html</span>&gt;
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/emails/recover_email.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #008000; font-weight: bold">html</span>&gt;
   &lt;<span style="color: #008000; font-weight: bold">body</span>&gt;
     &lt;<span style="color: #008000; font-weight: bold">p</span>&gt;Hi&lt;/<span style="color: #008000; font-weight: bold">p</span>&gt;
     &lt;<span style="color: #008000; font-weight: bold">br</span>&gt;
@@ -3056,7 +3036,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
   &lt;/<span style="color: #008000; font-weight: bold">body</span>&gt;
 &lt;/<span style="color: #008000; font-weight: bold">html</span>&gt;
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/questions/complex_questions.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/questions/complex_questions.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Complex Numbers <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3114,7 +3094,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     &lt;/<span style="color: #008000; font-weight: bold">script</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/questions/mat_questions.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/questions/mat_questions.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Complex Numbers <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3176,7 +3156,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
     &lt;/<span style="color: #008000; font-weight: bold">script</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/questions/questions.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/questions/questions.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Questions <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3226,7 +3206,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
   &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/user/login.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/user/login.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Log In <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3318,7 +3298,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
   &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/user/reset.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/user/reset.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span>Forgot Password<span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3380,7 +3360,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/user/reset_with_token.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/user/reset_with_token.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span>Reset Password<span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3434,7 +3414,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/user/signup.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/user/signup.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Sign Up <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3543,7 +3523,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 &lt;/<span style="color: #008000; font-weight: bold">div</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/user/student_account.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/user/student_account.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Account <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 
@@ -3810,7 +3790,7 @@ $(<span style="color: #BA2121">&#39;input[type=&quot;button&quot;][id*=&quot;del
 &lt;/<span style="color: #008000; font-weight: bold">script</span>&gt;
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 </pre></div>
-<p style="font-size:14pt;font-family:sans-serif"><strong>./app/templates/user/teacher_account.html</strong></p><div class="highlight" style="background: #f8f8f8; font-size:9pt"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
+<p style="font-size:14pt;font-family:arial"><strong>./app/templates/user/teacher_account.html</strong></p><div class="highlight" style="background: #f8f8f8; font-family:consolas,monaco,monospace;font-size:9pt;line-height:1"><pre style="line-height: 125%"><span></span><span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #BA2121">&quot;layout.html&quot;</span> <span style="color: #BC7A00">%}</span>
 
 <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">block</span> <span style="color: #19177C">title</span> <span style="color: #BC7A00">%}</span> Account <span style="color: #BC7A00">{%</span> <span style="color: #008000; font-weight: bold">endblock</span> <span style="color: #BC7A00">%}</span>
 

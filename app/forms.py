@@ -77,7 +77,7 @@ class ChangeDetailsForm(FlaskForm):
     change_submit = SubmitField('Go')
 
 
-class ChangePasswordForm1(FlaskForm):
+class ChangePasswordAccountPageForm(FlaskForm):
     """Form for changing password from account page."""
 
     old_password = PasswordField('Old Password', [validators.Required()])
